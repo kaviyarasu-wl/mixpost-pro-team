@@ -4,15 +4,14 @@ namespace Inovector\Mixpost\Commands\Workspace;
 
 use Illuminate\Console\Command;
 use Inovector\Mixpost\Concerns\Command\AccountsOption;
-use Inovector\Mixpost\SocialProviders\Bluesky\Jobs\ImportAccountFollowersJob;
-use Inovector\Mixpost\SocialProviders\Linkedin\Jobs\ImportLinkedinPageFollowersJob;
 use Inovector\Mixpost\SocialProviders\Mastodon\Jobs\ImportMastodonFollowersJob;
 use Inovector\Mixpost\SocialProviders\Meta\Jobs\ImportFacebookPageFollowersJob;
 use Inovector\Mixpost\SocialProviders\Meta\Jobs\ImportInstagramFollowersJob;
 use Inovector\Mixpost\SocialProviders\Pinterest\Jobs\ImportPinterestFollowersJob;
-use Inovector\Mixpost\SocialProviders\Threads\Jobs\ImportAccountFollowersJob as ImportThreadsFollowersJob;
 use Inovector\Mixpost\SocialProviders\TikTok\Jobs\ImportTikTokFollowersJob;
 use Inovector\Mixpost\SocialProviders\Twitter\Jobs\ImportTwitterFollowersJob;
+use Inovector\Mixpost\SocialProviders\Linkedin\Jobs\ImportLinkedinPageFollowersJob;
+use Inovector\Mixpost\SocialProviders\Threads\Jobs\ImportAccountFollowersJob as ImportThreadsFollowersJob;
 
 class ImportAccountAudience extends Command
 {
@@ -34,7 +33,6 @@ class ImportAccountAudience extends Command
                 'pinterest' => ImportPinterestFollowersJob::class,
                 'tiktok' => ImportTikTokFollowersJob::class,
                 'linkedin_page' => ImportLinkedinPageFollowersJob::class,
-                'bluesky' => ImportAccountFollowersJob::class,
                 default => null,
             };
 

@@ -2,13 +2,13 @@
 
 namespace Inovector\Mixpost\Http\Base\Requests\Auth;
 
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as PasswordRule;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 use Inovector\Mixpost\Concerns\UsesUserModel;
 
 class ResetPassword extends FormRequest

@@ -21,7 +21,7 @@ class PageResource extends JsonResource
             'layout' => $this->layout,
             'status' => $this->status->value,
             'created_at' => Util::dateTimeFormat($this->created_at),
-            'blocks' => BlockResource::collection($this->whenLoaded('blocks')),
+            'blocks' => BlockResource::collection($this->whenLoaded('blocks'))
         ];
     }
 }

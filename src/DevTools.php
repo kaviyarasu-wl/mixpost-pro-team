@@ -27,11 +27,11 @@ class DevTools
     public static function ddIfWorkspaceAdmin(mixed ...$vars): void
     {
         if (WorkspaceManager::current() && self::getAuthGuard()
-            ->user()
-            ->hasWorkspace(
-                WorkspaceManager::current(),
-                WorkspaceUserRole::ADMIN
-            )) {
+                ->user()
+                ->hasWorkspace(
+                    WorkspaceManager::current(),
+                    WorkspaceUserRole::ADMIN
+                )) {
             dd($vars);
         }
     }

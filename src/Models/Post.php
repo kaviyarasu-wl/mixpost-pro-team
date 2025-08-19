@@ -24,13 +24,13 @@ use Inovector\Mixpost\Support\SocialProviderResponse;
 
 class Post extends Model
 {
-    use HasActivities;
-    use HasActivitiesNotificationSubscriptions;
     use HasFactory;
     use HasUuid;
     use OwnedByWorkspace;
     use SoftDeletes;
     use UsesUserModel;
+    use HasActivities;
+    use HasActivitiesNotificationSubscriptions;
 
     public $table = 'mixpost_posts';
 
@@ -40,7 +40,7 @@ class Post extends Model
         'status',
         'schedule_status',
         'scheduled_at',
-        'published_at',
+        'published_at'
     ];
 
     protected $casts = [
@@ -53,14 +53,14 @@ class Post extends Model
     protected function scheduledAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $this->attributes['scheduled_at'] ? Carbon::parse($this->attributes['scheduled_at'])->shiftTimezone('UTC') : null,
+            get: fn($value) => $this->attributes['scheduled_at'] ? Carbon::parse($this->attributes['scheduled_at'])->shiftTimezone('UTC') : null,
         );
     }
 
     protected function publishedAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $this->attributes['published_at'] ? Carbon::parse($this->attributes['published_at'])->shiftTimezone('UTC') : null,
+            get: fn($value) => $this->attributes['published_at'] ? Carbon::parse($this->attributes['published_at'])->shiftTimezone('UTC') : null,
         );
     }
 
@@ -110,7 +110,7 @@ class Post extends Model
     public function canSchedule(): bool
     {
         // TODO: check if original content is not empty
-        return $this->scheduled_at && ! $this->scheduled_at->isPast() && $this->accounts()->exists();
+        return $this->scheduled_at && !$this->scheduled_at->isPast() && $this->accounts()->exists();
     }
 
     public function isDraft(): bool
@@ -141,6 +141,13 @@ class Post extends Model
     public function isInHistory(): bool
     {
         return $this->isPublished() || $this->isFailed();
+    }
+
+    public function isLimitReached(): bool
+    {
+        $user = User::with('userSubscription')->find($this->user_id);
+
+        return $user?->userSubscription?->isExpired || $user?->userSubscription?->hasReachedPostLimit;
     }
 
     public function isScheduleProcessing(): bool
@@ -200,6 +207,22 @@ class Post extends Model
         $this->save();
     }
 
+    public function setUsageLimit(): void
+    {
+        $user = $this->user;
+        $user->userSubscription()->update([
+            'post_usage' => $user->userSubscription?->post_usage + 1
+        ]);
+    }
+
+    public function unSetUsageLimit(): void
+    {
+        $user = $this->user;
+        $user->userSubscription()->update([
+            'post_usage' => $user->userSubscription?->post_usage - 1
+        ]);
+    }
+
     public function setFailed(): void
     {
         $this->status = PostStatus::FAILED->value;
@@ -220,7 +243,7 @@ class Post extends Model
     {
         // TODO: Create a column for system error in `mixpost_post_accounts`
         $this->accounts()->updateExistingPivot($account->id, [
-            'errors' => json_encode($errors),
+            'errors' => json_encode($errors)
         ]);
     }
 }

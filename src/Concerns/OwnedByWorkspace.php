@@ -17,7 +17,7 @@ trait OwnedByWorkspace
         static::addGlobalScope(new WorkspaceOwnedScope);
 
         static::creating(function ($model) {
-            if (! $model->workspace_id && ! $model->relationLoaded('workspace')) {
+            if (!$model->workspace_id && !$model->relationLoaded('workspace')) {
                 $model->setRelation('workspace', WorkspaceManager::current());
                 $model->setAttribute('workspace_id', WorkspaceManager::current()->id);
             }

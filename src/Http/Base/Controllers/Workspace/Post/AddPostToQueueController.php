@@ -16,7 +16,7 @@ class AddPostToQueueController extends Controller
 
         $scheduledAt = $scheduledPost->scheduled_at
             ->tz(Settings::get('timezone'))
-            ->translatedFormat('D, M j, '.Util::timeFormat());
+            ->translatedFormat("D, M j, " . Util::timeFormat());
 
         return response()->json([
             'scheduled_at' => $scheduledAt,

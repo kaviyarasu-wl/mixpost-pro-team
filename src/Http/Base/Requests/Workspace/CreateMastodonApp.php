@@ -25,7 +25,7 @@ class CreateMastodonApp extends FormRequest
             return;
         }
 
-        $result = (new CreateMastodonAppAction)($this->input('server'));
+        $result = (new CreateMastodonAppAction())($this->input('server'));
 
         if (isset($result['error'])) {
             $errors = ['server' => [$result['error']]];

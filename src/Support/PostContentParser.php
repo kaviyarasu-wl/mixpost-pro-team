@@ -13,8 +13,10 @@ class PostContentParser
 {
     public function __construct(
         private readonly Account $account,
-        private readonly Post $post
-    ) {}
+        private readonly Post    $post
+    )
+    {
+    }
 
     public function getVersionContent(): array
     {
@@ -42,7 +44,7 @@ class PostContentParser
 
     public function formatBody(?string $text): string
     {
-        if (! $text) {
+        if (!$text) {
             return '';
         }
 
@@ -71,7 +73,7 @@ class PostContentParser
         $variables['platform'] = $this->account->providerName();
 
         return str_replace(
-            Arr::map(array_keys($variables), fn ($variable) => '{{'.$variable.'}}'),
+            Arr::map(array_keys($variables), fn($variable) => '{{' . $variable . '}}'),
             array_values($variables),
             $stripTags
         );

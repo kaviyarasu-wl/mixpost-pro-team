@@ -18,13 +18,13 @@ class HexRule implements ValidationRule
     {
         $pattern = '/^#([a-fA-F0-9]{6}';
 
-        if (! $this->forceFull) {
+        if (!$this->forceFull) {
             $pattern .= '|[a-fA-F0-9]{3}';
         }
 
         $pattern .= ')$/';
 
-        if (! preg_match($pattern, $value)) {
+        if (!preg_match($pattern, $value)) {
             $fail('mixpost::rules.hex.code_invalid')->translate();
         }
     }

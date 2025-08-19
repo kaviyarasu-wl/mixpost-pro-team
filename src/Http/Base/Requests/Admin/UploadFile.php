@@ -13,7 +13,7 @@ class UploadFile extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required', File::types($this->allowedTypes())],
+            'file' => ['required', File::types($this->allowedTypes())]
         ];
     }
 
@@ -41,7 +41,7 @@ class UploadFile extends FormRequest
     public function messages(): array
     {
         return [
-            'file.required' => __('mixpost::rules.file_required'),
+            'file.required' => __('mixpost::rules.file_required')
         ];
     }
 }

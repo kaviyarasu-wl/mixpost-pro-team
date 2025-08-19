@@ -14,21 +14,23 @@ use Inovector\Mixpost\Contracts\QueueWorkspaceAware;
 use Inovector\Mixpost\Models\PostActivity;
 use Inovector\Mixpost\Util;
 
-class NewPostActivity extends Notification implements QueueWorkspaceAware, ShouldQueue
+class NewPostActivity extends Notification implements ShouldQueue, QueueWorkspaceAware
 {
-    use Mail, Queueable, SerializesModels;
+    use Queueable, SerializesModels, Mail;
 
     public $deleteWhenMissingModels = true;
 
-    public function __construct(public readonly PostActivity $activity) {}
+    public function __construct(public readonly PostActivity $activity)
+    {
+    }
 
     public function shouldSend(object $notifiable, string $channel): bool
     {
-        if (! $post = $this->activity->post) {
+        if (!$post = $this->activity->post) {
             return false;
         }
 
-        if (! $post->workspace) {
+        if (!$post->workspace) {
             return false;
         }
 
@@ -60,7 +62,7 @@ class NewPostActivity extends Notification implements QueueWorkspaceAware, Shoul
 
     protected function getSubject(): string
     {
-        $default = __('mixpost::post_activity.new_post_activity').' ['.Str::limit($this->activity->post->uuid, 8).']';
+        $default = __('mixpost::post_activity.new_post_activity') . ' [' . Str::limit($this->activity->post->uuid, 8) . ']';
 
         $postContent = $this->activity->post->versions()
             ->original()
@@ -76,7 +78,7 @@ class NewPostActivity extends Notification implements QueueWorkspaceAware, Shoul
 
     protected function getAuthor(): string
     {
-        if (! $this->activity->user) {
+        if (!$this->activity->user) {
             return __('mixpost::system.system');
         }
 

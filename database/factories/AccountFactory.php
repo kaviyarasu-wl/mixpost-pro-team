@@ -27,7 +27,7 @@ class AccountFactory extends Factory
             'media' => ['disk' => 'public', 'path' => '/'],
             'data' => null,
             'authorized' => true,
-            'access_token' => ['access_token' => Str::random()],
+            'access_token' => ['access_token' => Str::random()]
         ];
     }
 }

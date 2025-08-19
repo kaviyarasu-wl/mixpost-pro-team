@@ -9,7 +9,7 @@ trait UsesPostActivities
 {
     public static function getActivity(string|Post $post, string $activityUuid): ?PostActivity
     {
-        if (! $post instanceof Post) {
+        if (!$post instanceof Post) {
             return Post::findByUuid($post)
                 ?->activities()
                 ->where('uuid', $activityUuid)

@@ -64,9 +64,4 @@ trait HasActivities
     {
         return $this->logActivity(0, PostActivityType::PUBLISHED_FAILED);
     }
-
-    public function logDeletedFromSocialPlatformActivity(int|User $user, array $data): PostActivity
-    {
-        return $this->logActivity($user, PostActivityType::DELETED_FROM_SOCIAL_PLATFORMS, $data);
-    }
 }

@@ -10,7 +10,7 @@ use Inovector\Mixpost\Http\Api\Resources\PostResource;
 use Inovector\Mixpost\Models\Post;
 use Inovector\Mixpost\Support\EagerLoadPostVersionsMedia;
 
-class PostPublished implements ShouldReceivePostModel, WebhookEvent
+class PostPublished implements WebhookEvent, ShouldReceivePostModel
 {
     use Dispatchable, SerializesModels;
 

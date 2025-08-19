@@ -20,12 +20,12 @@ class Block extends Model
         'name',
         'module',
         'content',
-        'status',
+        'status'
     ];
 
     protected $casts = [
         'content' => 'array',
-        'status' => ResourceStatus::class,
+        'status' => ResourceStatus::class
     ];
 
     public function scopeEnabled(Builder $query): void
@@ -35,11 +35,11 @@ class Block extends Model
 
     public function render(): string|Factory|View|Application
     {
-        $modules = scandir(__DIR__.'/../BlockModules');
+        $modules = scandir(__DIR__ . '/../BlockModules');
 
         foreach ($modules as $module) {
             if (str_contains($module, $this->module)) {
-                $module = 'Inovector\\Mixpost\\BlockModules\\'.$this->module;
+                $module = 'Inovector\\Mixpost\\BlockModules\\' . $this->module;
 
                 return app($module)->render($this);
             }

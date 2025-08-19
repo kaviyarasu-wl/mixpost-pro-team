@@ -4,7 +4,6 @@ namespace Inovector\Mixpost\Actions\Post;
 
 use Illuminate\Support\Facades\Bus;
 use Inovector\Mixpost\Jobs\AccountPublishPostJob;
-use Inovector\Mixpost\Models\Account;
 use Inovector\Mixpost\Models\Post;
 
 class PublishPost
@@ -17,7 +16,7 @@ class PublishPost
 
         $post->setScheduleProcessing();
 
-        $jobs = $post->accounts->map(function (Account $account) use ($post) {
+        $jobs = $post->accounts->map(function ($account) use ($post) {
             return new AccountPublishPostJob($account, $post);
         });
 
@@ -26,7 +25,6 @@ class PublishPost
             ->finally(function () use ($post) {
                 if ($post->hasErrors()) {
                     $post->setFailed();
-
                     return;
                 }
 

@@ -1,93 +1,87 @@
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue'
-import { debounce } from 'lodash'
-import { getWindowDimensions } from '@/helpers'
+import {nextTick, onMounted, onUnmounted, ref, watch} from "vue";
+import {maxBy, debounce} from "lodash";
+import {getWindowDimensions} from "@/helpers";
 
 const props = defineProps({
-  items: {
-    type: Array,
-    required: true
-  },
-  columns: {
-    type: Number,
-    default: 3
-  }
+    items: {
+        type: Array,
+        required: true
+    },
+    columns: {
+        type: Number,
+        default: 3,
+    }
 })
 
-const bottomRef = ref(null)
-const columnsList = ref([])
-const ready = ref(false)
+const bottomRef = ref(null);
+const columns = ref([]);
+const ready = ref(false);
 
 onMounted(() => {
-  redraw()
-  window.addEventListener('resize', resizeHandler)
-})
+    redraw();
+    window.addEventListener("resize", resizeHandler);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('resize', resizeHandler)
+    window.removeEventListener("resize", resizeHandler);
 })
 
 const resizeHandler = debounce(() => {
-  if (columnsList.value.length !== newColumns().length) {
-    redraw()
-  }
-}, 300)
+    if (columns.value.length !== newColumns().length) {
+        redraw();
+    }
+}, 300);
 
 const newColumns = () => {
-  let count = props.columns
+    let count = props.columns;
 
-  if (getWindowDimensions().width <= 768) {
-    count = 2
-  }
+    if (getWindowDimensions().width <= 768) {
+        count = 2;
+    }
 
-  const cols = []
+    const columns = []
 
-  for (let i = 0; i < count; i++) {
-    cols.push({ i, indexes: [] })
-  }
+    for (let i = 0; i < count; i++) {
+        columns.push({i: i, indexes: []})
+    }
 
-  return cols
+    return columns
 }
 
-const addItem = index => {
-  const columnIndex = index % columnsList.value.length
+const addItem = (index) => {
+    const columnIndex = index % columns.value.length;
 
-  columnsList.value[columnIndex].indexes.push(index)
+    columns.value[columnIndex].indexes.push(index);
 }
 
 const fill = () => {
-  for (let i = 0; i < props.items.length; i++) {
-    addItem(i)
-  }
+    for (let i = 0; i < props.items.length; i++) {
+        addItem(i);
+    }
 }
 
 const redraw = () => {
-  ready.value = false
-  columnsList.value.splice(0)
-  columnsList.value.push(...newColumns())
-  ready.value = true
-  fill()
+    ready.value = false;
+    columns.value.splice(0);
+    columns.value.push(...newColumns())
+    ready.value = true;
+    fill();
 }
 
-watch(
-  () => props.items,
-  () => {
-    redraw()
-  }
-)
+watch(() => props.items, () => {
+    redraw();
+});
 </script>
 <template>
-  <div class="flex -m-1" :class="{ 'opacity-0': !ready }">
-    <div
-      v-for="(column, index) in columnsList"
-      :key="index"
-      class="flex flex-col grow basis-0 px-1"
-    >
-      <div v-for="i in column.indexes" :key="i" :ref="`item_${i}`" class="py-1">
-        <slot :item="items[i]" :index="i">{{ items[i] }}</slot>
-      </div>
+    <div class="flex -m-1" :class="{'opacity-0': !ready}">
+        <div class="flex flex-col grow basis-0 px-1" v-for="(column, index) in columns" :key="index">
 
-      <div ref="bottomRef" class="grow -mt-20 pt-20 min-h-[100px] -z-10" :data-column="index" />
+            <div class="py-1" v-for="i in column.indexes" :key="i" :ref="`item_${i}`">
+                <slot v-bind:item="items[i]" :index="i">{{ items[i] }}</slot>
+            </div>
+
+            <div class="grow -mt-20 pt-20 min-h-[100px] -z-10" ref="bottomRef" :data-column="index"/>
+        </div>
     </div>
-  </div>
 </template>

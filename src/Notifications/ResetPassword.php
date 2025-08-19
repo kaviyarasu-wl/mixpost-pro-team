@@ -10,7 +10,7 @@ use Inovector\Mixpost\Concerns\Mail;
 
 class ResetPassword extends Notification implements ShouldQueue
 {
-    use Mail, Queueable;
+    use Queueable, Mail;
 
     public string $token;
 
@@ -28,7 +28,7 @@ class ResetPassword extends Notification implements ShouldQueue
     {
         $url = url(
             route('mixpost.password.reset', [
-                'token' => $this->token,
+                'token' => $this->token
             ], false)
         );
 
@@ -36,7 +36,7 @@ class ResetPassword extends Notification implements ShouldQueue
             ->subject(__('mixpost::auth.backend.notification.reset_password_notification'))
             ->line(__('mixpost::auth.backend.notification.password_reset_request_received'))
             ->action(__('mixpost::auth.reset_password'), $url)
-            ->line(__('mixpost::auth.backend.notification.password_reset_link_expiry', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
+            ->line(__('mixpost::auth.backend.notification.password_reset_link_expiry', ['count' => config('auth.passwords.' . config('auth.defaults.passwords') . '.expire')]))
             ->line(__('mixpost::auth.backend.notification.no_password_reset_required'));
     }
 }

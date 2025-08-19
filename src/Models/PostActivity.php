@@ -13,10 +13,10 @@ use Inovector\Mixpost\Enums\PostActivityType;
 
 class PostActivity extends Model
 {
-    use Comment;
     use HasFactory;
     use HasUuid;
     use UsesUserModel;
+    use Comment;
 
     public $table = 'mixpost_post_activities';
 
@@ -31,7 +31,7 @@ class PostActivity extends Model
 
     protected $casts = [
         'type' => PostActivityType::class,
-        'data' => 'array',
+        'data' => 'array'
     ];
 
     public function post(): BelongsTo

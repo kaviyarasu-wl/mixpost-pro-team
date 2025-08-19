@@ -23,7 +23,7 @@ class InstagramInsight extends Model
 
     protected $casts = [
         'type' => InstagramInsightType::class,
-        'date' => 'date',
+        'date' => 'date'
     ];
 
     public function scopeAccount($query, int $accountId)

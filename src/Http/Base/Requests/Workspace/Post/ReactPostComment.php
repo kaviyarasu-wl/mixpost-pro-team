@@ -25,7 +25,7 @@ class ReactPostComment extends PostFormRequest
             activityUuid: $this->route('activity')
         );
 
-        if (! $activity || ! $activity->isComment()) {
+        if (!$activity || !$activity->isComment()) {
             abort(404);
         }
 

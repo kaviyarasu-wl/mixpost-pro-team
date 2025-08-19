@@ -18,6 +18,6 @@ class Tag extends Model
     protected $fillable = [
         'uuid',
         'name',
-        'hex_color',
+        'hex_color'
     ];
 }

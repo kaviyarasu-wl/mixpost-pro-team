@@ -19,7 +19,7 @@ $middleware = array_merge(
     [
         HandleInertiaRequests::class,
         IdentifyWorkspaceForCallback::class,
-        CheckWorkspaceUser::class,
+        CheckWorkspaceUser::class
     ]
 );
 

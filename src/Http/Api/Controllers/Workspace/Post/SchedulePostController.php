@@ -15,7 +15,7 @@ class SchedulePostController extends Controller
         return response()->json([
             'success' => true,
             'scheduled_at' => $schedulePost->getDateTime()->toDateTimeString(),
-            'needs_approval' => $schedulePost->getPost()->isNeedsApproval(),
+            'needs_approval' => $schedulePost->getPost()->isNeedsApproval()
         ]);
     }
 }

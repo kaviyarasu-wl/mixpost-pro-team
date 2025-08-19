@@ -11,7 +11,7 @@ class UpdateWebhook extends WebhookFormRequest
     {
         $record = Webhook::firstOrFailByUuid($this->route('webhook'));
 
-        if (WorkspaceManager::current() && ! $record->isForWorkspace(WorkspaceManager::current())) {
+        if (WorkspaceManager::current() && !$record->isForWorkspace(WorkspaceManager::current())) {
             abort(404);
         }
 

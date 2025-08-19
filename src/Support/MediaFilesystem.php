@@ -4,35 +4,20 @@ namespace Inovector\Mixpost\Support;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use RuntimeException;
 
 class MediaFilesystem
 {
-    public static function copyFromDisk(string $sourceDisk, string $sourceFilepath, string $destinationFilePath): bool|int
+    public static function copyFromDisk(string $sourceFilepath, string $sourceDisk, string $targetFile): bool|int
     {
-        $stream = self::getStream($sourceDisk, $sourceFilepath);
-
-        try {
-            $result = File::put($destinationFilePath, $stream);
-        } finally {
-            if (is_resource($stream)) {
-                fclose($stream);
-            }
-        }
-
-        return $result;
+        return File::put($targetFile, self::getStream($sourceFilepath, $sourceDisk));
     }
 
-    public static function copyToDisk(string $destinationDisk, string $destinationFilePath, string $sourceFilePath): bool
+    public static function copyToDisk(string $targetDisk, string $targetFile, string $sourceFile): bool
     {
-        if (! File::exists($sourceFilePath)) {
-            throw new RuntimeException("Source file does not exist: $sourceFilePath");
-        }
-
-        return Storage::disk($destinationDisk)->put($destinationFilePath, File::get($sourceFilePath), 'public');
+        return Storage::disk($targetDisk)->put($targetFile, File::get($sourceFile), 'public');
     }
 
-    protected static function getStream(string $disk, string $filepath)
+    protected static function getStream(string $filepath, string $disk)
     {
         return Storage::disk($disk)->readStream($filepath);
     }

@@ -15,7 +15,7 @@ trait ManagesOAuth
         'boards:write_secret',
         'pins:read',
         'pins:read_secret',
-        'pins:write',
+        'pins:write'
     ];
 
     public function getAuthUrl(): string
@@ -28,7 +28,7 @@ trait ManagesOAuth
             'response_type' => 'code',
         ];
 
-        $url = 'https://www.pinterest.com/oauth';
+        $url = "https://www.pinterest.com/oauth";
 
         return $this->buildUrlFromBase($url, $params);
     }
@@ -47,7 +47,7 @@ trait ManagesOAuth
 
         if (isset($response['error'])) {
             return [
-                'error' => $response['error_description'],
+                'error' => $response['error_description']
             ];
         }
 
@@ -59,7 +59,7 @@ trait ManagesOAuth
         ];
     }
 
-    public function refreshToken(?string $refreshToken = null): SocialProviderResponse
+    public function refreshToken(string $refreshToken = null): SocialProviderResponse
     {
         $params = [
             'grant_type' => 'refresh_token',
@@ -84,7 +84,7 @@ trait ManagesOAuth
     protected function authHeader(): array
     {
         return [
-            'Authorization' => 'Basic '.base64_encode($this->clientId.':'.$this->clientSecret),
+            'Authorization' => 'Basic ' . base64_encode($this->clientId . ':' . $this->clientSecret)
         ];
     }
 }

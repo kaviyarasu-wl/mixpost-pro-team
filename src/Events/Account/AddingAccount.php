@@ -13,7 +13,6 @@ class AddingAccount
     use Dispatchable, SerializesModels;
 
     public ?Workspace $workspace;
-
     public SocialProvider $provider;
 
     public function __construct(SocialProvider $provider)

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static string|null getDefaultProviderName()
  * @method static array getProviderSelectionOptions()
  * @method static array getProviderSelectionOptionKeys()
- *
  * @see \Inovector\Mixpost\Abstracts\AIManager
  */
 class AIManager extends Facade

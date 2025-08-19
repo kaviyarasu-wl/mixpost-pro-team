@@ -21,7 +21,7 @@ class PostActivityResource extends JsonResource
             'text' => $this->text,
             'date_times' => $this->getFormatedDateTimeFromData(),
             'children_count' => $this->whenCounted('children'),
-            'is_child' => (bool) $this->parent_id,
+            'is_child' => (bool)$this->parent_id,
             'timestamps' => [
                 'Iso8601' => [
                     'created_at' => $this->created_at->utc()->toIso8601String(),
@@ -37,7 +37,7 @@ class PostActivityResource extends JsonResource
 
     protected function getReactions()
     {
-        if (! $this->resource->relationLoaded('reactions')) {
+        if (!$this->resource->relationLoaded('reactions')) {
             return [];
         }
 
@@ -46,18 +46,18 @@ class PostActivityResource extends JsonResource
 
     protected function getFormatedDateTimeFromData(): array
     {
-        if (! $this->data) {
+        if (!$this->data) {
             return [];
         }
 
         $dates = [];
 
         foreach ($this->data as $key => $value) {
-            if (! $value) {
+            if (!$value) {
                 continue;
             }
 
-            if (! Util::isTimestampString($value)) {
+            if (!Util::isTimestampString($value)) {
                 continue;
             }
 
@@ -66,7 +66,7 @@ class PostActivityResource extends JsonResource
             $dates[$key] = [
                 'Iso8601' => $timestamp->toIso8601String(),
                 'localized' => Util::dateTimeFormat($timestamp),
-            ];
+            ] ;
         }
 
         return $dates;

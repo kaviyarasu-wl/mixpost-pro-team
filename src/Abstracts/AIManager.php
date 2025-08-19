@@ -2,13 +2,13 @@
 
 namespace Inovector\Mixpost\Abstracts;
 
-use Exception;
 use Illuminate\Support\Arr;
 use Inovector\Mixpost\Configs\AIConfig;
-use Inovector\Mixpost\Contracts\AIProvider as AIProviderContract;
 use Inovector\Mixpost\Enums\ServiceGroup;
 use Inovector\Mixpost\Exceptions\DefaultAIProviderNotSelected;
 use Inovector\Mixpost\Facades\ServiceManager;
+use Inovector\Mixpost\Contracts\AIProvider as AIProviderContract;
+use Exception;
 
 abstract class AIManager
 {
@@ -16,8 +16,8 @@ abstract class AIManager
     {
         $default = app(AIConfig::class)->get('provider');
 
-        if (! $default) {
-            throw new DefaultAIProviderNotSelected;
+        if (!$default) {
+            throw new DefaultAIProviderNotSelected();
         }
 
         return $this->createConnection($default);
@@ -42,7 +42,7 @@ abstract class AIManager
     {
         $defaultProvider = $this->getDefaultProviderName();
 
-        if (! $defaultProvider) {
+        if (!$defaultProvider) {
             return false;
         }
 
@@ -58,7 +58,6 @@ abstract class AIManager
     {
         return array_reduce($this->providers(), function ($array, $provider) {
             $array[$provider::name()] = $provider::nameLocalized();
-
             return $array;
         }, []);
     }
@@ -74,13 +73,13 @@ abstract class AIManager
             return $provider::name() === $name;
         });
 
-        if (! $provider) {
+        if (!$provider) {
             throw new Exception("AI Provider [$name] is not registered.");
         }
 
-        $connection = (new $provider);
+        $connection = (new $provider());
 
-        if (! $connection instanceof AIProvider) {
+        if (!$connection instanceof AIProvider) {
             throw new Exception('The provider must be an instance of Inovector\Mixpost\Abstracts\AIProvider.');
         }
 

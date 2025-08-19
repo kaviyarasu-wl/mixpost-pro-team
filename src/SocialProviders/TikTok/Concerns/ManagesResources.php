@@ -12,7 +12,6 @@ use Inovector\Mixpost\Support\SocialProviderResponse;
 trait ManagesResources
 {
     public string $apiVersion = 'v2';
-
     public string $apiUrl = 'https://open.tiktokapis.com';
 
     public function getAccount(): SocialProviderResponse
@@ -53,7 +52,7 @@ trait ManagesResources
 
         $response = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
             ->get("$this->apiUrl/$this->apiVersion/user/info/", [
-                'fields' => 'open_id,union_id,avatar_url,display_name',
+                'fields' => 'open_id,union_id,avatar_url,display_name'
             ]);
 
         return $this->buildResponse($response, function () use ($response) {
@@ -65,8 +64,8 @@ trait ManagesResources
                 'username' => '',
                 'image' => $data['user']['avatar_url'],
                 'data' => [
-                    'union_id' => $data['user']['union_id'],
-                ],
+                    'union_id' => $data['user']['union_id']
+                ]
             ];
         });
     }
@@ -91,7 +90,7 @@ trait ManagesResources
             $data = $response->json('data');
 
             return [
-                'is_private' => ! in_array('PUBLIC_TO_EVERYONE', Arr::wrap($data['privacy_level_options'])),
+                'is_private' => !in_array('PUBLIC_TO_EVERYONE', Arr::wrap($data['privacy_level_options'])),
                 'username' => $data['creator_username'],
                 'privacy_levels' => $data['privacy_level_options'],
                 'comment_disabled' => $data['comment_disabled'],
@@ -117,7 +116,7 @@ trait ManagesResources
         return $this->buildResponse(
             $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
                 ->get("$this->apiUrl/$this->apiVersion/user/info/", [
-                    'fields' => 'follower_count,following_count,likes_count,video_count',
+                    'fields' => 'follower_count,following_count,likes_count,video_count'
                 ])
         );
     }
@@ -134,14 +133,14 @@ trait ManagesResources
             $this->updateToken($newAccessToken->context());
         }
 
-        if (! $media->count()) {
+        if (!$media->count()) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['video_not_selected']);
         }
 
         /** @var $mediaItem Media * */
         $mediaItem = $media->first();
 
-        if (! $mediaItem->isVideo()) {
+        if (!$mediaItem->isVideo()) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['supports_only_videos']);
         }
 
@@ -154,16 +153,16 @@ trait ManagesResources
             $params['brand_organic_toggle'] = Arr::get($params, "brand_organic_toggle.account-{$this->values['account_id']}");
             $params['brand_content_toggle'] = Arr::get($params, "brand_content_toggle.account-{$this->values['account_id']}");
 
-            if ($params['content_disclosure'] && (! $params['brand_organic_toggle'] || ! $params['brand_content_toggle'])) {
+            if ($params['content_disclosure'] && (!$params['brand_organic_toggle'] || !$params['brand_content_toggle'])) {
                 return $this->response(SocialProviderResponseStatus::ERROR, ['brand_content_toggle_required']);
             }
 
             $postInfo = [
                 'title' => $text,
                 'privacy_level' => $params['privacy_level'],
-                'disable_comment' => ! $params['allow_comments'],
-                'disable_duet' => ! $params['allow_duet'],
-                'disable_stitch' => ! $params['allow_stitch'],
+                'disable_comment' => !$params['allow_comments'],
+                'disable_duet' => !$params['allow_duet'],
+                'disable_stitch' => !$params['allow_stitch'],
                 'brand_content_toggle' => $params['brand_content_toggle'],
                 'brand_organic_toggle' => $params['brand_organic_toggle'],
                 'video_cover_timestamp_ms' => 0,
@@ -186,32 +185,32 @@ trait ManagesResources
         // TODO: Check video status/ Webhook
         // https://developers.tiktok.com/doc/content-posting-api-reference-get-video-status/
 
-        //        if (self::isInboxShareType()) {
-        //            return $uploadResponse;
-        //        }
-        //
-        //        if ($uploadResponse->hasError()) {
-        //            return $uploadResponse;
-        //        }
+//        if (self::isInboxShareType()) {
+//            return $uploadResponse;
+//        }
+//
+//        if ($uploadResponse->hasError()) {
+//            return $uploadResponse;
+//        }
 
-        //        do {
-        //            sleep(10);
-        //
-        //            $statusResponse = $this->getVideoStatus($uploadResponse->data['publish_id']);
+//        do {
+//            sleep(10);
+//
+//            $statusResponse = $this->getVideoStatus($uploadResponse->data['publish_id']);
 
-        //            if ($statusResponse->hasError()) {
-        //                return $statusResponse;
-        //            }
-        //
-        //        } while ($statusResponse->data['status'] === 'PROCESSING_UPLOAD');
-        //
-        //        if ($statusResponse->data['status'] === 'FAILED') {
-        //            return $this->response(SocialProviderResponseStatus::ERROR, $statusResponse->data);
-        //        }
-        //
-        //        return $this->response(SocialProviderResponseStatus::OK, [
-        //            'id' => Arr::first(Arr::wrap($statusResponse->data['publicaly_available_post_id']))
-        //        ]);
+//            if ($statusResponse->hasError()) {
+//                return $statusResponse;
+//            }
+//
+//        } while ($statusResponse->data['status'] === 'PROCESSING_UPLOAD');
+//
+//        if ($statusResponse->data['status'] === 'FAILED') {
+//            return $this->response(SocialProviderResponseStatus::ERROR, $statusResponse->data);
+//        }
+//
+//        return $this->response(SocialProviderResponseStatus::OK, [
+//            'id' => Arr::first(Arr::wrap($statusResponse->data['publicaly_available_post_id']))
+//        ]);
     }
 
     public function getVideoStatus(string $publishId): SocialProviderResponse
@@ -230,12 +229,12 @@ trait ManagesResources
             $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
                 ->asJson()
                 ->post("$this->apiUrl/$this->apiVersion/post/publish/status/fetch/", [
-                    'publish_id' => $publishId,
+                    'publish_id' => $publishId
                 ])
         );
     }
 
-    public function deletePost(string $id, array $params = []): SocialProviderResponse
+    public function deletePost($id): SocialProviderResponse
     {
         return $this->buildResponse(
             $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
@@ -256,7 +255,7 @@ trait ManagesResources
         }
 
         $data = $cursor ? [
-            'cursor' => $cursor,
+            'cursor' => $cursor
         ] : [];
 
         return $this->buildResponse(

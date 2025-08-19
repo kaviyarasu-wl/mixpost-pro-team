@@ -3,8 +3,8 @@
 namespace Inovector\Mixpost\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Inovector\Mixpost\Models\HashtagGroup;
 use Inovector\Mixpost\Models\Workspace;
+use Inovector\Mixpost\Models\HashtagGroup;
 
 class HashtagGroupFactory extends Factory
 {
@@ -16,7 +16,7 @@ class HashtagGroupFactory extends Factory
             'uuid' => $this->faker->uuid,
             'workspace_id' => Workspace::factory(),
             'name' => $this->faker->domainName,
-            'content' => $this->faker->paragraph,
+            'content' => $this->faker->paragraph
         ];
     }
 }

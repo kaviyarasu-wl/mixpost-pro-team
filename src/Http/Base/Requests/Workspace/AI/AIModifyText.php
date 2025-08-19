@@ -2,12 +2,14 @@
 
 namespace Inovector\Mixpost\Http\Base\Requests\Workspace\AI;
 
+use App\Helpers\UsageTracker;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Inovector\Mixpost\Configs\AIConfig;
 use Inovector\Mixpost\Events\AI\AITextGenerated;
 use Inovector\Mixpost\Facades\AIManager;
+use Inovector\Mixpost\Models\User;
 use Inovector\Mixpost\Responses\AIProviderResponse;
 
 class AIModifyText extends FormRequest
@@ -17,8 +19,8 @@ class AIModifyText extends FormRequest
     public function rules(): array
     {
         return [
-            'text' => ['required', 'string', 'max:1060'],
-            'character_limit' => ['required', 'integer', 'min:1', 'max:1000'],
+            'text' => ['required', 'string'],
+            'character_limit' => ['required', 'integer', 'min:1'],
             'command' => ['required', 'string', Rule::in(array_keys($this->commands()))],
         ];
     }
@@ -26,6 +28,14 @@ class AIModifyText extends FormRequest
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
+            $user = User::find(auth()->id());
+            try {
+                (new UsageTracker())->valid(['credit_ai_mode' => 'Good'], $user);
+            } catch (\Exception $e) {
+                $validator->errors()->add('subscription', $e->getMessage());
+                return;
+            }
+
             $this->generateResponse();
 
             if ($this->response->hasError()) {
@@ -41,10 +51,12 @@ class AIModifyText extends FormRequest
 
     private function generateResponse(): void
     {
+        $user = User::find(auth()->id());
+        $language = $user->language?->language ?? 'English';
         $agentInstructions = app(AIConfig::class)->get('instructions');
         $commandInstructions = $this->getCommandSpecificInstruction($this->input('command'));
         $characterLimit = "Ensure that the reply should be within {$this->input('character_limit')} characters.";
-        $languageOutputInstructions = 'Ensure that the reply should be in user language.';
+        $languageOutputInstructions = "Generate response in explicitly requested language, otherwise use {$language}.";
 
         $this->response = AIManager::connect()->generateText(
             prompt: strip_tags($this->input('text')),

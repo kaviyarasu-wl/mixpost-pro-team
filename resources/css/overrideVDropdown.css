@@ -1,7 +1,5 @@
-@reference "./app.css";
-
 :root {
-    --vs-disabled-bg: var('--color-stone-500');
+    --vs-disabled-bg: theme('colors.stone.500');
 }
 
 .v-popper--theme-dropdown .v-popper__inner {

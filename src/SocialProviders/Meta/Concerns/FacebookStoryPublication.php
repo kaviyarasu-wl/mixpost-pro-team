@@ -13,7 +13,7 @@ trait FacebookStoryPublication
 {
     protected function publishFacebookStory(Collection $media): SocialProviderResponse
     {
-        if (! $media->count()) {
+        if (!$media->count()) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['story_single_media_limit']);
         }
 
@@ -77,8 +77,8 @@ trait FacebookStoryPublication
                 'path' => Str::of($story['url'] ?? '')
                     ->after('https://facebook.com/stories/')
                     ->replace('?view_single=1', '')
-                    ->__toString(),
-            ],
+                    ->__toString()
+            ]
         ]);
     }
 
@@ -87,7 +87,7 @@ trait FacebookStoryPublication
         return $this->buildResponse(
             $this->getHttpClient()::post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/video_stories", [
                 'upload_phase' => 'start',
-                'access_token' => $this->accessToken(),
+                'access_token' => $this->accessToken()
             ])
         );
     }
@@ -103,7 +103,7 @@ trait FacebookStoryPublication
                     'offset' => 0,
                     'file_size' => $media->size,
                 ])
-                ->withBody($stream['stream'], 'application/octet-stream')
+                ->withBody($stream['stream'], "application/octet-stream")
                 ->post($uploadUrl);
         };
 
@@ -111,7 +111,7 @@ trait FacebookStoryPublication
 
         Util::closeAndDeleteStreamResource($stream);
 
-        if (! $result) {
+        if (!$result) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['request_timeout']);
         }
 
@@ -123,7 +123,7 @@ trait FacebookStoryPublication
         $result = $this->getHttpClient()::post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/video_stories", [
             'access_token' => $this->accessToken(),
             'video_id' => $videoId,
-            'upload_phase' => 'finish',
+            'upload_phase' => 'finish'
         ]);
 
         return $this->buildResponse($result);
@@ -134,7 +134,7 @@ trait FacebookStoryPublication
         return $this->buildResponse(
             $this->getHttpClient()::post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/photo_stories", [
                 'photo_id' => $photoId,
-                'access_token' => $this->accessToken(),
+                'access_token' => $this->accessToken()
             ])
         );
     }

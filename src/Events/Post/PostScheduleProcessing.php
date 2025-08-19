@@ -11,5 +11,8 @@ class PostScheduleProcessing implements ShouldReceivePostModel
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public readonly Post $post) {}
+    public function __construct(public readonly Post $post)
+    {
+
+    }
 }

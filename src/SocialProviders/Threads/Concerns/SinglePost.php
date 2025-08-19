@@ -10,9 +10,9 @@ use RuntimeException;
 
 trait SinglePost
 {
+    use UsesAccessToken;
     use ManagesContainer;
     use ManagesContainerPublishing;
-    use UsesAccessToken;
 
     public function createSinglePost(?Media $mediaItem = null, array $data = []): SocialProviderResponse
     {
@@ -21,7 +21,7 @@ trait SinglePost
 
             $containerResponse = $this->createPostContainer($mediaItem, $data, $isTextPost);
 
-            if (! $isTextPost) {
+            if (!$isTextPost) {
                 $this->waitForContainerCompletion($containerResponse);
             }
 
@@ -40,7 +40,7 @@ trait SinglePost
     {
         $response = $this->createContainer(
             mediaItem: $mediaItem,
-            data: ! $isTextPost
+            data: !$isTextPost
                 ? array_merge(['is_carousel_item' => false], $data)
                 : $data
         );

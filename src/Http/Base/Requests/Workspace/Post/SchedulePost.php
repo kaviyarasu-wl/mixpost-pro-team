@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use Inovector\Mixpost\Concerns\Approval;
 use Inovector\Mixpost\Events\Post\PostScheduled;
 use Inovector\Mixpost\Events\Post\SchedulingPost;
+use Inovector\Mixpost\Models\Media;
 use Inovector\Mixpost\Models\Post;
 
 class SchedulePost extends FormRequest
@@ -18,7 +19,7 @@ class SchedulePost extends FormRequest
     public function rules(): array
     {
         return [
-            'postNow' => ['required', 'boolean'],
+            'postNow' => ['required', 'boolean']
         ];
     }
 
@@ -27,6 +28,10 @@ class SchedulePost extends FormRequest
         $this->post = Post::firstOrFailByUuid($this->route('post'));
 
         $validator->after(function ($validator) {
+            if ($this->post->isLimitReached()) {
+                $validator->errors()->add('subscription', 'Reached plan limit or expired');
+            }
+
             if ($this->post->isInHistory()) {
                 $validator->errors()->add('in_history', 'in_history');
             }
@@ -41,8 +46,8 @@ class SchedulePost extends FormRequest
                 $this->post->setAttribute('scheduled_at', Carbon::now()->utc()->addMinute());
             }
 
-            if (! $this->post->canSchedule()) {
-                $validator->errors()->add('cannot_scheduled', __('mixpost::post.post_cannot_scheduled')."\n".__('mixpost::post.past_date'));
+            if (!$this->post->canSchedule()) {
+                $validator->errors()->add('cannot_scheduled', __('mixpost::post.post_cannot_scheduled') . "\n" . __('mixpost::post.past_date'));
             }
         });
     }
@@ -52,6 +57,8 @@ class SchedulePost extends FormRequest
         SchedulingPost::dispatch($this->post, $this);
 
         $this->post->setScheduled($this->getDateTime(), $this->determineSchedulePostStatus());
+
+        $this->post->setUsageLimit();
 
         PostScheduled::dispatch($this->post);
     }

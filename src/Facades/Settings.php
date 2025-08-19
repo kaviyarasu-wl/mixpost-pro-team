@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static array form()
  * @method static array rules()
- * @method mixed get(string $name, ?int $userId = null)
+ * @method static get(string $name, ?int $userId = null)
  * @method static getFromCache(string $name, mixed $default = null, ?int $userId = null)
  * @method static array all(?int $userId = null)
  * @method static void forget(string $name, ?int $userId = null)

@@ -2,11 +2,12 @@
 
 namespace Inovector\Mixpost;
 
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Inovector\Mixpost\Jobs\WorkspaceArtisanJob;
 use Inovector\Mixpost\Models\WebhookDelivery;
 use Inovector\Mixpost\Models\Workspace;
+use Closure;
+use Illuminate\Support\Facades\Schema;
 
 class Schedule
 {
@@ -18,11 +19,15 @@ class Schedule
 
         $schedule->command('mixpost:prune-temporary-directory')->hourly();
 
+        if (! Schema::hasTable('mixpost_workspaces')) {
+            return;
+        }
+
         $query = $query ?? Workspace::query()->select(['id', 'name']);
 
         $query
             ->each(function (Workspace $workspace) use ($schedule, $customCommands): void {
-                if (! $workspace->valid()) {
+                if (!$workspace->valid()) {
                     return;
                 }
 
@@ -49,7 +54,7 @@ class Schedule
                 $schedule
                     ->job(new WorkspaceArtisanJob($workspace, 'mixpost:check-and-refresh-account-token'))
                     ->name("$workspace->name - mixpost:check-and-refresh-account-token")
-                    ->everyTenMinutes();
+                    ->everyFifteenMinutes();
 
                 $schedule
                     ->job(new WorkspaceArtisanJob($workspace, 'mixpost:prune-trashed-posts'))

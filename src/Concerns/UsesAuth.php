@@ -14,7 +14,7 @@ trait UsesAuth
         return Auth::guard(self::getAuthGuardName());
     }
 
-    public static function getAuthGuardName(): ?string
+    public static function getAuthGuardName(): string|null
     {
         return Util::config('auth_guard');
     }

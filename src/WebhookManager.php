@@ -13,7 +13,6 @@ use Inovector\Mixpost\Events\Post\PostScheduled;
 class WebhookManager
 {
     protected static array $customSystemEvents = [];
-
     protected static array $customWorkspaceEvents = [];
 
     public static function systemEvents(): array
@@ -61,7 +60,6 @@ class WebhookManager
     {
         return array_reduce($events, function ($array, $event) {
             $array[$event::name()] = $event::nameLocalized();
-
             return $array;
         }, []);
     }
@@ -70,7 +68,6 @@ class WebhookManager
     {
         if (is_array($event)) {
             self::$customSystemEvents = array_merge(self::$customSystemEvents, $event);
-
             return;
         }
 
@@ -81,7 +78,6 @@ class WebhookManager
     {
         if (is_array($event)) {
             self::$customWorkspaceEvents = array_merge(self::$customWorkspaceEvents, $event);
-
             return;
         }
 

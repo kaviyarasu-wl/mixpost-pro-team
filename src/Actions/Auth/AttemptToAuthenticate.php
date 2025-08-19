@@ -11,11 +11,13 @@ class AttemptToAuthenticate
 {
     use UsesAuth;
 
-    public function __construct(protected readonly LoginRateLimiter $limiter) {}
+    public function __construct(protected readonly LoginRateLimiter $limiter)
+    {
+    }
 
     public function handle(Request $request, callable $next)
     {
-        if (! self::getAuthGuard()->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        if (!self::getAuthGuard()->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
             $this->throwFailedAuthenticationException($request);
         }
 

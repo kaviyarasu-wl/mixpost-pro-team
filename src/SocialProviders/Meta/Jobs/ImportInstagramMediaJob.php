@@ -20,17 +20,17 @@ use Inovector\Mixpost\Models\ImportedPost;
 use Inovector\Mixpost\SocialProviders\Meta\InstagramProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportInstagramMediaJob implements QueueWorkspaceAware, ShouldQueue
+class ImportInstagramMediaJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
     public Account $account;
-
     public array $params;
 
     public function __construct(Account $account, array $params = [])
@@ -45,7 +45,7 @@ class ImportInstagramMediaJob implements QueueWorkspaceAware, ShouldQueue
             return;
         }
 
-        if (! $this->account->isServiceActive()) {
+        if (!$this->account->isServiceActive()) {
             return;
         }
 
@@ -57,7 +57,6 @@ class ImportInstagramMediaJob implements QueueWorkspaceAware, ShouldQueue
 
         /**
          * @see InstagramProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = $this->connectProvider($this->account)->getMedia($this->params['pagination_after'] ?? '');
@@ -116,7 +115,7 @@ class ImportInstagramMediaJob implements QueueWorkspaceAware, ShouldQueue
                     'like_count' => $item['like_count'],
                     'comments_count' => $item['comments_count'],
                 ]),
-                'created_at' => Carbon::parse($item['timestamp'], 'UTC')->toDateString(),
+                'created_at' => Carbon::parse($item['timestamp'], 'UTC')->toDateString()
             ];
         });
 

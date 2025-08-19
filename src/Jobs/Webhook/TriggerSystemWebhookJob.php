@@ -19,9 +19,7 @@ class TriggerSystemWebhookJob implements ShouldQueue
     public $deleteWhenMissingModels = true;
 
     public Webhook $webhook;
-
     public WebhookEvent $event;
-
     public ?WebhookDelivery $parentDelivery = null;
 
     public function __construct(Webhook $webhook, WebhookEvent $event, ?WebhookDelivery $parentDelivery = null)
@@ -33,7 +31,7 @@ class TriggerSystemWebhookJob implements ShouldQueue
 
     public function handle(): void
     {
-        if (! $this->webhook->isActive()) {
+        if (!$this->webhook->isActive()) {
             return;
         }
 
@@ -46,12 +44,12 @@ class TriggerSystemWebhookJob implements ShouldQueue
         $delivery->attempt();
         $this->parentDelivery?->attempt();
 
-        if (! $delivery->isSucceeded() && $this->webhook->max_attempts > 1 && ! $this->parentDelivery?->isAttemptLimitReached()) {
+        if (!$delivery->isSucceeded() && $this->webhook->max_attempts > 1 && !$this->parentDelivery?->isAttemptLimitReached()) {
             $parentDelivery = $this->parentDelivery ?: $delivery;
 
             $delay = pow(2, $parentDelivery->attempts) * 60; // 2 minutes, 4 minutes, 8 minutes, ...
 
-            if (! $this->parentDelivery) {
+            if (!$this->parentDelivery) {
                 $delivery->updateResendAt(Carbon::now()->utc()->addSeconds($delay));
             }
 

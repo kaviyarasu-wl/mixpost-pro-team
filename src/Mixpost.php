@@ -7,58 +7,35 @@ use Closure;
 class Mixpost
 {
     public static string $localeDirection = 'ltr';
-
     public static ?Closure $reportCallback = null;
-
     protected static string $enterpriseConsoleUrl = '';
-
     protected static string $registrationUrl = '';
-
     protected static string $createWorkspaceUrl = '';
-
     protected static string $workspaceSettingsUrl = '';
-
     protected static string $workspaceBillingUrl = '';
-
     protected static string $workspaceUpgradeUrl = '';
-
     protected static string $stopImpersonatingUrl = '';
-
     protected static bool $impersonating = false;
-
     protected static bool $multipleWorkspaceEnabled = false;
-
     protected static array $globalMiddlewares = [];
-
     protected static array $webAppMiddlewares = [];
-
     protected static array $webDashboardMiddlewares = [];
-
     protected static array $workspaceMiddlewares = [];
-
     protected static array $aiMiddlewares = [];
-
     protected static mixed $customWorkspaceModel = null;
-
     protected static mixed $customUserResource = null;
-
     protected static string $bladePathHeadScripts = '';
-
     protected static string $bladePathBodyScripts = '';
-
     protected static string $enterpriseVersion = '';
-
     protected static bool $systemWebhookEnabled = false;
-
     protected static ?string $deleteAccountRoute = null;
-
     protected static ?Closure $enterpriseConfig = null;
 
     public static function report(Closure $callback): static
     {
         static::$reportCallback = $callback;
 
-        return new static;
+        return new static();
     }
 
     public static function enterpriseConsoleUrl(string $url): void

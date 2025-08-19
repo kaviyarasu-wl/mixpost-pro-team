@@ -1,126 +1,124 @@
-import { onMounted, onUnmounted, shallowRef } from 'vue'
-import emitter from '@/Services/emitter'
-import useSettings from './useSettings'
-import useBroadcast from './useBroadcast'
-import { parseDateTime } from '../helpers'
-import useDateLocalize from './useDateLocalize'
-import usePostActivity from './usePostActivity'
+import {onMounted, onUnmounted, shallowRef} from "vue";
+import emitter from "@/Services/emitter";
+import useSettings from "./useSettings";
+import useBroadcast from "./useBroadcast";
+import {parseDateTime} from "../helpers";
+import useDateLocalize from "./useDateLocalize";
+import usePostActivity from "./usePostActivity";
 
-const usePostBroadcast = ({ props, context }) => {
-  const { timeZone, timeFormat } = useSettings()
-  const { connectBroadcastPrivate, leaveBroadcastChannel } = useBroadcast()
-  const { translatedFormat } = useDateLocalize()
-  const {
-    VIEW_DEFAULT: ACTIVITY_VIEW_DEFAULT,
-    VIEW_THREAD: ACTIVITY_VIEW_THREAD,
-    currentView: currentActivityView,
-    threadParentComment: activityThreadParentComment,
-    getItem: getActivityItem,
-    addItem: addActivityItem,
-    removeItem: removeActivityItem,
-    destroyThread: destroyActivityThread
-  } = usePostActivity({ context })
+const usePostBroadcast = ({props, context}) => {
+    const {timeZone, timeFormat} = useSettings();
+    const {connectBroadcastPrivate, leaveBroadcastChannel} = useBroadcast();
+    const {translatedFormat} = useDateLocalize();
+    const {
+        VIEW_DEFAULT: ACTIVITY_VIEW_DEFAULT,
+        VIEW_THREAD: ACTIVITY_VIEW_THREAD,
+        currentView: currentActivityView,
+        threadParentComment: activityThreadParentComment,
+        getItem: getActivityItem,
+        addItem: addActivityItem,
+        removeItem: removeActivityItem,
+        destroyThread: destroyActivityThread,
+    } = usePostActivity({context});
 
-  const broadcastConnection = shallowRef(null)
+    const broadcastConnection = shallowRef(null);
 
-  const dateTimeFormat = datetime => {
-    const { zonedDateTime, format } = parseDateTime(datetime, timeZone, timeFormat)
+    const dateTimeFormat = (datetime) => {
+        const {zonedDateTime, format} = parseDateTime(datetime, timeZone, timeFormat);
 
-    return translatedFormat(zonedDateTime, format)
-  }
-
-  const listenToPostActivity = () => {
-    const getActivityView = activity => {
-      return !activity.is_child ? ACTIVITY_VIEW_DEFAULT : ACTIVITY_VIEW_THREAD
+        return translatedFormat(zonedDateTime, format);
     }
 
-    if (!broadcastConnection.value) return
+    const listenToPostActivity = () => {
+        const getActivityView = (activity) => {
+            return !activity.is_child ? ACTIVITY_VIEW_DEFAULT : ACTIVITY_VIEW_THREAD;
+        }
 
-    broadcastConnection.value.listen('Post.PostActivityCreated', activity => {
-      const activityView = getActivityView(activity)
+        if (!broadcastConnection.value) return;
 
-      if (!context.activity[activityView].isInitialized) return
-      if (currentActivityView.value === ACTIVITY_VIEW_DEFAULT && activity.is_child) return
+        broadcastConnection.value.listen('Post.PostActivityCreated', (activity) => {
+            const activityView = getActivityView(activity);
 
-      // Localize timestamps
-      activity.timestamps.localized.created_at = dateTimeFormat(
-        activity.timestamps['Iso8601'].created_at
-      )
+            if (!context.activity[activityView].isInitialized) return;
+            if (currentActivityView.value === ACTIVITY_VIEW_DEFAULT && activity.is_child) return;
 
-      // Localize all date_times keys
-      Object.keys(activity.date_times).forEach(key => {
-        const value = activity.date_times[key]
-        activity.date_times[key].localized = dateTimeFormat(value.Iso8601)
-      })
+            // Localize timestamps
+            activity.timestamps.localized.created_at = dateTimeFormat(activity.timestamps['Iso8601'].created_at);
 
-      const item = getActivityItem({ view: activityView, id: activity.id })
-      if (item) return
+            // Localize all date_times keys
+            Object.keys(activity.date_times).forEach(key => {
+                const value = activity.date_times[key];
+                activity.date_times[key].localized = dateTimeFormat(value.Iso8601);
+            });
 
-      addActivityItem({ view: activityView, activity })
+            const item = getActivityItem({view: activityView, id: activity.id});
+            if (item) return;
 
-      emitter.emit('postActivityCreated')
-    })
+            addActivityItem({view: activityView, activity});
 
-    broadcastConnection.value.listen('Post.PostCommentUpdated', activity => {
-      const activityView = getActivityView(activity)
-      if (!context.activity[activityView].isInitialized) return
+            emitter.emit('postActivityCreated');
+        });
 
-      const { id, text, children_count } = activity
+        broadcastConnection.value.listen('Post.PostCommentUpdated', (activity) => {
+            const activityView = getActivityView(activity);
+            if (!context.activity[activityView].isInitialized) return;
 
-      const item = getActivityItem({ view: activityView, id })
-      if (item) item.text = text
-      item.children_count = children_count
-    })
+            const {id, text, children_count} = activity;
 
-    broadcastConnection.value.listen('Post.PostCommentReactionsUpdated', activity => {
-      const activityView = getActivityView(activity)
-      if (!context.activity[activityView].isInitialized) return
+            const item = getActivityItem({view: activityView, id});
+            if (item) item.text = text;
+            item.children_count = children_count;
+        });
 
-      const { id, reactions } = activity
+        broadcastConnection.value.listen('Post.PostCommentReactionsUpdated', (activity) => {
+            const activityView = getActivityView(activity);
+            if (!context.activity[activityView].isInitialized) return;
 
-      const item = getActivityItem({ view: activityView, id })
-      if (item) item.reactions = reactions
-    })
+            const {id, reactions} = activity;
 
-    broadcastConnection.value.listen('Post.PostCommentDeleted', data => {
-      const { id } = data
+            const item = getActivityItem({view: activityView, id});
+            if (item) item.reactions = reactions;
+        });
 
-      removeActivityItem({ view: ACTIVITY_VIEW_DEFAULT, id })
-      removeActivityItem({ view: ACTIVITY_VIEW_THREAD, id })
+        broadcastConnection.value.listen('Post.PostCommentDeleted', (data) => {
+            const {id} = data;
 
-      if (activityThreadParentComment.value && activityThreadParentComment.value.id === id) {
-        destroyActivityThread()
-      }
-    })
-  }
+            removeActivityItem({view: ACTIVITY_VIEW_DEFAULT, id});
+            removeActivityItem({view: ACTIVITY_VIEW_THREAD, id});
 
-  const connectToBroadcast = () => {
-    if (!props.post) {
-      return
+            if (activityThreadParentComment.value && activityThreadParentComment.value.id === id) {
+                destroyActivityThread();
+            }
+        });
     }
 
-    if (broadcastConnection.value) {
-      return
+    const connectToBroadcast = () => {
+        if (!props.post) {
+            return;
+        }
+
+        if (broadcastConnection.value) {
+            return;
+        }
+
+        broadcastConnection.value = connectBroadcastPrivate(`mixpost_posts.${props.post.id}`);
+
+        listenToPostActivity();
     }
 
-    broadcastConnection.value = connectBroadcastPrivate(`mixpost_posts.${props.post.id}`)
+    onMounted(() => {
+        connectToBroadcast();
+    });
 
-    listenToPostActivity()
-  }
+    onUnmounted(() => {
+        if (props.post) {
+            leaveBroadcastChannel(`mixpost_posts.${props.post.id}`);
+        }
+    });
 
-  onMounted(() => {
-    connectToBroadcast()
-  })
-
-  onUnmounted(() => {
-    if (props.post) {
-      leaveBroadcastChannel(`mixpost_posts.${props.post.id}`)
+    return {
+        connectToBroadcast,
     }
-  })
-
-  return {
-    connectToBroadcast
-  }
 }
 
-export default usePostBroadcast
+export default usePostBroadcast;

@@ -38,10 +38,10 @@ trait Comment
             ->where('reaction', $reaction)
             ->first();
 
-        if (! $record) {
+        if (!$record) {
             $this->reactions()->create([
                 'reaction' => $reaction,
-                'user_id' => $userId,
+                'user_id' => $userId
             ]);
 
             return PostCommentReactionToggleType::CREATED;
@@ -61,7 +61,7 @@ trait Comment
             ->map(function ($reactions, $reaction) {
                 return [
                     'reaction' => $reaction,
-                    'users' => $reactions->pluck('user')->map(fn ($user) => $user->only('id', 'name')), // TODO: fix this when the user has been deleted from db
+                    'users' => $reactions->pluck('user')->map(fn($user) => $user->only('id', 'name')),
                     'count' => $reactions->count(),
                 ];
             })

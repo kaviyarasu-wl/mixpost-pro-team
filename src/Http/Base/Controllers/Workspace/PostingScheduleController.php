@@ -14,7 +14,7 @@ class PostingScheduleController extends Controller
     public function index(): Response
     {
         return Inertia::render('Workspace/PostingSchedule', [
-            'times' => fn () => PostingSchedule::timesUserTimezone(),
+            'times' => fn() => PostingSchedule::timesUserTimezone()
         ]);
     }
 

@@ -2,10 +2,10 @@
 
 namespace Inovector\Mixpost\Concerns\Model;
 
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Inovector\Mixpost\Models\UserToken;
+use DateTimeInterface;
 
 trait UserHasTokens
 {
@@ -14,7 +14,7 @@ trait UserHasTokens
         return $this->hasMany(UserToken::class, 'user_id');
     }
 
-    public function createToken(string $name, ?DateTimeInterface $expiresAt = null): array
+    public function createToken(string $name, DateTimeInterface $expiresAt = null): array
     {
         $plainTextToken = $this->generateTokenString();
 
@@ -26,7 +26,7 @@ trait UserHasTokens
 
         return [
             'model' => $token,
-            'plain_text_token' => $plainTextToken,
+            'plain_text_token' => $plainTextToken
         ];
     }
 

@@ -23,7 +23,7 @@ class Workspace extends Model
     protected $fillable = [
         'uuid',
         'name',
-        'hex_color',
+        'hex_color'
     ];
 
     public function execute(Closure $closure): mixed
@@ -38,7 +38,7 @@ class Workspace extends Model
             WorkspaceManager::setCurrent($originalWorkspace);
         }
 
-        if (! $originalWorkspace) {
+        if (!$originalWorkspace) {
             WorkspaceManager::forgetCurrent();
         }
 
@@ -56,12 +56,12 @@ class Workspace extends Model
         $query->latest('updated_at');
     }
 
-    public function attachUser(?int $id = null, WorkspaceUserRole $role = WorkspaceUserRole::MEMBER, bool $canApprove = false): void
+    public function attachUser(int $id = null, WorkspaceUserRole $role = WorkspaceUserRole::MEMBER, bool $canApprove = false): void
     {
         $this->users()->attach($id, [
             'role' => $role,
             'joined' => Carbon::now('UTC'),
-            'can_approve' => $canApprove,
+            'can_approve' => $canApprove
         ]);
     }
 

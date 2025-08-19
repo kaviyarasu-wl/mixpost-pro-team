@@ -8,13 +8,15 @@ use Inovector\Mixpost\TwoFactorAuthProvider;
 
 class ConfirmTwoFactorAuth
 {
-    public function __construct(private readonly TwoFactorAuthProvider $provider) {}
+    public function __construct(private readonly TwoFactorAuthProvider $provider)
+    {
+    }
 
     public function __invoke($user, ?string $code): void
     {
         if (empty($user->twoFactorAuthSecretKey()) ||
             empty($code) ||
-            ! $this->provider->verify($user->twoFactorAuthSecretKey(), $code)) {
+            !$this->provider->verify($user->twoFactorAuthSecretKey(), $code)) {
             throw ValidationException::withMessages([
                 'code' => [__('The provided two factor authentication code was invalid.')],
             ]);

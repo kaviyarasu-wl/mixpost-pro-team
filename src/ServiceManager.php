@@ -11,28 +11,22 @@ use Illuminate\Support\Str;
 use Inovector\Mixpost\Collection\ServiceCollection;
 use Inovector\Mixpost\Exceptions\ServiceNotRegistered;
 use Inovector\Mixpost\Models\Service as ServiceModel;
-use Inovector\Mixpost\Services\AdobeExpressService;
-use Inovector\Mixpost\Services\BitlyService;
-use Inovector\Mixpost\Services\Bluesky\BlueskyService;
+use Inovector\Mixpost\Services\ClaudeService;
 use Inovector\Mixpost\Services\FacebookService;
 use Inovector\Mixpost\Services\GoogleService;
 use Inovector\Mixpost\Services\LinkedInService;
 use Inovector\Mixpost\Services\OpenAIService;
-use Inovector\Mixpost\Services\PexelsService;
 use Inovector\Mixpost\Services\PinterestService;
-use Inovector\Mixpost\Services\ShlinkService;
 use Inovector\Mixpost\Services\TenorService;
 use Inovector\Mixpost\Services\ThreadsService;
 use Inovector\Mixpost\Services\TikTokService;
 use Inovector\Mixpost\Services\TwitterService;
 use Inovector\Mixpost\Services\UnsplashService;
-use Inovector\Mixpost\Services\YourlsService;
 use Inovector\Mixpost\Support\Log;
 
 class ServiceManager
 {
     protected static mixed $retrievalAction = null;
-
     protected mixed $config;
 
     protected ?ServiceCollection $cacheServices = null;
@@ -47,7 +41,6 @@ class ServiceManager
         return [
             FacebookService::class,
             ThreadsService::class,
-            BlueskyService::class,
             GoogleService::class,
             TwitterService::class,
             LinkedInService::class,
@@ -56,11 +49,7 @@ class ServiceManager
             UnsplashService::class,
             TenorService::class,
             OpenAIService::class,
-            PexelsService::class,
-            AdobeExpressService::class,
-            BitlyService::class,
-            YourlsService::class,
-            ShlinkService::class,
+            ClaudeService::class,
         ];
     }
 
@@ -73,41 +62,39 @@ class ServiceManager
         return $this->cacheServices = new ServiceCollection($this->registeredServices());
     }
 
-    public function getServiceClass(string $name): ?string
+    public function getServiceClass(string $name): string|null
     {
         $service = Arr::first($this->services()->getClasses(), function ($serviceClass) use ($name) {
             return $serviceClass::name() === $name;
         });
 
-        if (! $service) {
+        if (!$service) {
             throw new ServiceNotRegistered($name);
         }
 
         return $service;
     }
 
-    public function isActive(string|array|null $name = null): array|bool
+    public function isActive(string|array $name = null): array|bool
     {
         if (is_string($name)) {
-            return (bool) $this->get($name, 'active');
+            return (bool)$this->get($name, 'active');
         }
 
         if (is_array($name)) {
             return array_reduce($name, function ($array, $serviceName) {
                 $array[$serviceName] = $this->isActive($serviceName);
-
                 return $array;
             }, []);
         }
 
         return array_reduce($this->services()->getCollection(), function ($array, $service) {
             $array[$service['name']] = $this->isActive($service['name']);
-
             return $array;
         }, []);
     }
 
-    public function isConfigured(string|array|null $name = null): array|bool
+    public function isConfigured(string|array $name = null): array|bool
     {
         if (is_string($name)) {
             $requiredInputs = array_keys(Arr::where($this->getServiceClass($name)::formRules(), function ($rules) {
@@ -124,19 +111,17 @@ class ServiceManager
         if (is_array($name)) {
             return array_reduce($name, function ($array, $serviceName) {
                 $array[$serviceName] = $this->isConfigured($serviceName);
-
                 return $array;
             }, []);
         }
 
         return array_reduce($this->services()->getCollection(), function ($array, $service) {
             $array[$service['name']] = $this->isConfigured($service['name']);
-
             return $array;
         }, []);
     }
 
-    public function exposedConfiguration(string|array|null $name = null): array
+    public function exposedConfiguration(string|array $name = null): array
     {
         if (is_string($name)) {
             return Arr::only($this->get($name, 'configuration'), $this->getServiceClass($name)::$exposedFormAttributes);
@@ -145,14 +130,12 @@ class ServiceManager
         if (is_array($name)) {
             return array_reduce($name, function ($array, $serviceName) {
                 $array[$serviceName] = $this->exposedConfiguration($serviceName);
-
                 return $array;
             }, []);
         }
 
         return array_reduce($this->services()->getCollection(), function ($array, $service) {
             $array[$service['name']] = $this->exposedConfiguration($service['name']);
-
             return $array;
         }, []);
     }
@@ -165,7 +148,7 @@ class ServiceManager
         ]);
     }
 
-    public function get(string $name, ?string $key = null): mixed
+    public function get(string $name, null|string $key = null)
     {
         if ($retrievalAction = self::$retrievalAction) {
             $result = call_user_func(self::$retrievalAction, $name, $key);
@@ -205,7 +188,7 @@ class ServiceManager
         });
 
         // Decrypt the configuration from the cache
-        if (! is_array($value['configuration'] ?? [])) {
+        if (!is_array($value['configuration'] ?? [])) {
             try {
                 $value = array_merge($value, [
                     'configuration' => json_decode(Crypt::decryptString($value['configuration']), true),
@@ -228,7 +211,6 @@ class ServiceManager
     {
         return array_reduce($this->services()->getCollection(), function ($array, $service) {
             $array[$service['name']] = $this->get($service['name']);
-
             return $array;
         }, []);
     }
@@ -257,13 +239,13 @@ class ServiceManager
 
     protected function resolveCacheKey(string $name): string
     {
-        return $this->config->get('mixpost.cache_prefix').".services.$name";
+        return $this->config->get('mixpost.cache_prefix') . ".services.$name";
     }
 
     protected function logDecryptionError(string $name, DecryptException $exception): void
     {
         Log::error("The application key cannot decrypt the service configuration: {$exception->getMessage()}", [
-            'service_name' => $name,
+            'service_name' => $name
         ]);
     }
 }

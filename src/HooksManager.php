@@ -14,7 +14,7 @@ class HooksManager
 
     public function doAction(string $hook, ...$args): void
     {
-        if (! isset($this->actions[$hook])) {
+        if (!isset($this->actions[$hook])) {
             return;
         }
 

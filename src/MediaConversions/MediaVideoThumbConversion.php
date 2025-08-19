@@ -4,13 +4,10 @@ namespace Inovector\Mixpost\MediaConversions;
 
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
-use Illuminate\Support\Facades\File;
-use Inovector\Mixpost\Abstracts\Image;
 use Inovector\Mixpost\Abstracts\MediaConversion;
-use Inovector\Mixpost\Support\ImageResizer;
 use Inovector\Mixpost\Support\MediaConversionData;
-use Inovector\Mixpost\Support\TemporaryFile;
-use Inovector\Mixpost\Util;
+use Inovector\Mixpost\Support\MediaFilesystem;
+use Inovector\Mixpost\Support\MediaTemporaryDirectory;
 
 class MediaVideoThumbConversion extends MediaConversion
 {
@@ -38,48 +35,34 @@ class MediaVideoThumbConversion extends MediaConversion
         return $this;
     }
 
-    public function handle(): ?MediaConversionData
+    public function handle(): MediaConversionData|null
     {
-        if (! Util::isFFmpegInstalled()) {
-            return null;
-        }
+        // Create & copy to temporary directory
+        $temporaryDirectory = MediaTemporaryDirectory::create();
 
-        $temporaryFile = TemporaryFile::make()->fromDisk(
-            sourceDisk: $this->getFromDisk(),
-            sourceFilepath: $this->getFilepath()
-        );
+        $file = $temporaryDirectory->path($this->getFilepath());
+        $thumbFilepath = $this->getFilePathWithSuffix('jpg', $file);
 
-        $thumbFilepath = $this->getFilePathWithSuffix('jpg', $temporaryFile->path());
+        MediaFilesystem::copyFromDisk($this->getFilepath(), $this->getFromDisk(), $file);
 
         // Convert
         $ffmpeg = FFMpeg::create([
-            'ffmpeg.binaries' => Util::config('ffmpeg_path'),
-            'ffprobe.binaries' => Util::config('ffprobe_path'),
+            'ffmpeg.binaries' => config('mixpost.ffmpeg_path'),
+            'ffprobe.binaries' => config('mixpost.ffprobe_path'),
         ]);
 
-        $video = $ffmpeg->open($temporaryFile->path());
-        $duration = $ffmpeg->getFFProbe()->format($temporaryFile->path())->get('duration');
-
-        // Ensure $seconds is within valid bounds
-        $seconds = ($duration > 0 && $this->atSecond > 0) ? min($this->atSecond, floor($duration)) : 0;
+        $video = $ffmpeg->open($file);
+        $duration = $ffmpeg->getFFProbe()->format($file)->get('duration');
+        $seconds = (int)$duration <= $this->atSecond ? 0 : $this->atSecond;
 
         $frame = $video->frame(TimeCode::fromSeconds($seconds));
         $frame->save($thumbFilepath);
 
-        // Sometimes the frame is not saved, so we save it again with the first frame
-        // This is a workaround for the issue
-        if ($this->atSecond !== 0 && ! File::exists($thumbFilepath)) {
-            $frame = $video->frame(TimeCode::fromSeconds(0));
-            $frame->save($thumbFilepath);
-        }
+        // Copy
+        MediaFilesystem::copyToDisk($this->getToDisk(), $this->getPath(), $thumbFilepath);
 
-        // Resize the thumbnail and save it to the destination disk
-        ImageResizer::make($thumbFilepath)
-            ->disk($this->getToDisk())
-            ->path($this->getPath())
-            ->resize(Image::MEDIUM_WIDTH, Image::MEDIUM_HEIGHT);
-
-        $temporaryFile->directory()->delete();
+        // Delete temporary directory
+        $temporaryDirectory->delete();
 
         return MediaConversionData::conversion($this);
     }

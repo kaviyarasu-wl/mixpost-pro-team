@@ -22,12 +22,12 @@ class PostResource extends JsonResource
             'scheduled_at' => [
                 'date' => $this->scheduled_at?->tz(Settings::get('timezone'))->toDateString(),
                 'time' => $this->scheduled_at?->tz(Settings::get('timezone'))->format('H:i'),
-                'human' => $this->scheduled_at?->tz(Settings::get('timezone'))->translatedFormat('D, M j, '.Util::timeFormat()),
+                'human' => $this->scheduled_at?->tz(Settings::get('timezone'))->translatedFormat("D, M j, " . Util::timeFormat())
             ],
             'published_at' => [
-                'human' => $this->published_at?->tz(Settings::get('timezone'))->translatedFormat('D, M j, '.Util::timeFormat()),
+                'human' => $this->published_at?->tz(Settings::get('timezone'))->translatedFormat("D, M j, " . Util::timeFormat())
             ],
-            'trashed' => $this->trashed(),
+            'trashed' => $this->trashed()
         ];
     }
 

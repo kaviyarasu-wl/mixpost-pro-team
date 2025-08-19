@@ -21,7 +21,7 @@ class PageFactory extends Factory
             'meta_title' => $this->faker->sentence,
             'meta_description' => $this->faker->sentence,
             'layout' => 'default',
-            'status' => ResourceStatus::ENABLED,
+            'status' => ResourceStatus::ENABLED
         ];
     }
 }

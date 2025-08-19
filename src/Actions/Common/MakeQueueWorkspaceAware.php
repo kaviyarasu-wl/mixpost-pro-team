@@ -29,7 +29,7 @@ class MakeQueueWorkspaceAware
         app('queue')->createPayloadUsing(function ($connectionName, $queue, $payload) {
             $queueable = $payload['data']['command'];
 
-            if (! $this->isWorkspaceAware($queueable)) {
+            if (!$this->isWorkspaceAware($queueable)) {
                 return [];
             }
 
@@ -87,13 +87,14 @@ class MakeQueueWorkspaceAware
     {
         $workspaceId = $this->getEventPayload($event)['mixpost_workspace_id'] ?? null;
 
-        if (! $workspaceId) {
+        if (!$workspaceId) {
             $event->job->delete();
 
             throw CurrentWorkspaceCouldNotBeDeterminedInWorkspaceAwareJob::noIdSet($event);
         }
 
-        if (! $workspace = Workspace::find($workspaceId)) {
+
+        if (!$workspace = Workspace::find($workspaceId)) {
             $event->job->delete();
 
             throw CurrentWorkspaceCouldNotBeDeterminedInWorkspaceAwareJob::noWorkspaceFound($event);
@@ -113,7 +114,7 @@ class MakeQueueWorkspaceAware
 
         $job = Arr::get($queueableToJobs, $queueable::class);
 
-        if (! $job) {
+        if (!$job) {
             return $queueable;
         }
 

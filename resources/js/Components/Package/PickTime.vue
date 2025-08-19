@@ -1,193 +1,240 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { format, addHours, parseISO } from 'date-fns'
-import { utcToZonedTime } from 'date-fns-tz'
-import useSettings from '@/Composables/useSettings'
-import { isTimePast, convertTime12to24 } from '@/helpers'
-import DialogModal from '@/Components/Modal/DialogModal.vue'
-import PrimaryButton from '@/Components/Button/PrimaryButton.vue'
-import SecondaryButton from '@/Components/Button/SecondaryButton.vue'
-import ExclamationCircleIcon from '@/Icons/ExclamationCircle.vue'
-import { Link } from '@inertiajs/vue3'
-import FlatPickr from 'vue-flatpickr-component'
-import 'flatpickr/dist/flatpickr.css'
+import {inject, ref, onMounted, watch} from "vue";
+import {useI18n} from "vue-i18n";
+import {format, addHours, parseISO} from "date-fns"
+import {utcToZonedTime} from "date-fns-tz";
+import useSettings from "@/Composables/useSettings";
+import {isTimePast, convertTime12to24} from "@/helpers";
+import DialogModal from "@/Components/Modal/DialogModal.vue"
+import PrimaryButton from "@/Components/Button/PrimaryButton.vue"
+import SecondaryButton from "@/Components/Button/SecondaryButton.vue"
+import ExclamationCircleIcon from "@/Icons/ExclamationCircle.vue"
+import {Link} from '@inertiajs/vue3'
+import FlatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
 import '@css/overrideFlatPickr.css'
-import useDateTimePicker from '@/Composables/useDateTimePicker.js'
 
 const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false
-  },
-  date: {
-    type: String,
-    default: ''
-  },
-  time: {
-    type: String,
-    default: ''
-  },
-  isSubmitActive: {
-    type: Boolean,
-    default: true
-  }
+    show: {
+        type: Boolean,
+        default: false,
+    },
+    date: {
+        type: String,
+        default: '',
+    },
+    time: {
+        type: String,
+        default: '',
+    },
+    isSubmitActive: {
+        type: Boolean,
+        default: true
+    }
 })
 
-const emit = defineEmits(['close', 'update'])
+const emit = defineEmits(['close', 'update']);
 
 const { t: $t } = useI18n()
 
-const selectedDate = ref()
-const selectedTime = ref()
-const hasErrors = ref(false)
+const date = ref();
+const time = ref();
+const hasErrors = ref(false);
 
-const timePicker = ref()
+const timePicker = ref();
 
-const { timeZone, timeFormat } = useSettings()
-const { getLocaleConfig, getPrevArrow, getNextArrow } = useDateTimePicker()
+const {timeZone, timeFormat, weekStartsOn} = useSettings();
+
+const workspaceCtx = inject('workspaceCtx');
 
 const setDateTime = () => {
-  if (props.show) {
-    if (!props.date && !props.time) {
-      // Display the next time if the date and time are null
-      const currentTime = utcToZonedTime(new Date().toISOString(), timeZone)
+    if (props.show) {
+        if (!props.date && !props.time) {
+            // Display the next time if the date and time are null
+            const currentTime = utcToZonedTime(new Date().toISOString(), timeZone)
 
-      const [nextDate, nextHour] = format(addHours(currentTime, 1), 'yyyy-MM-dd H').split(' ')
+            const [nextDate, nextHour] = format(addHours(currentTime, 1), 'yyyy-MM-dd H').split(' ');
 
-      selectedDate.value = nextDate
-      selectedTime.value = `${nextHour}:00`
+            date.value = nextDate
+            time.value = `${nextHour}:00`
 
-      return
+            return;
+        }
+
+        date.value = props.date;
+        time.value = props.time;
     }
-
-    selectedDate.value = props.date
-    selectedTime.value = props.time
-  }
 }
 
 const validate = () => {
-  return new Promise(resolve => {
-    // Prevent time value in the past
-    const selected = new Date(parseISO(`${selectedDate.value} ${selectedTime.value}`))
+    return new Promise(resolve => {
+        // Prevent time value in the past
+        const selected = new Date(parseISO(`${date.value} ${time.value}`));
 
-    if (isTimePast(selected, timeZone)) {
-      hasErrors.value = true
+        if (isTimePast(selected, timeZone)) {
+            hasErrors.value = true;
 
-      resolve(false)
-      return
-    }
+            resolve(false);
+            return;
+        }
 
-    hasErrors.value = false
+        hasErrors.value = false;
 
-    resolve(true)
-  })
+        resolve(true);
+    });
 }
 
 onMounted(() => {
-  setDateTime()
-})
+    setDateTime();
+});
 
-watch(
-  () => props.show,
-  () => {
+watch(() => props.show, () => {
     if (props.show) {
-      setDateTime()
+        setDateTime();
     }
-  }
-)
+});
 
-watch([selectedDate, selectedTime], () => {
-  validate()
-})
+watch([date, time], () => {
+    validate();
+});
 
 const confirm = async () => {
-  const hour = timePicker.value.querySelector('.flatpickr-hour').value
-  const minutes = timePicker.value.querySelector('.flatpickr-minute').value
+    const hour = timePicker.value.querySelector('.flatpickr-hour').value;
+    const minutes = timePicker.value.querySelector('.flatpickr-minute').value;
 
-  if (timeFormat === 24) {
-    selectedTime.value = `${hour}:${minutes}` // we make sure we have the data that was entered manually (on keyup)
-  }
+    if (timeFormat === 24) {
+        time.value = `${hour}:${minutes}`; // we make sure we have the data that was entered manually (on keyup)
+    }
 
-  if (timeFormat === 12) {
-    const ampm = timePicker.value.querySelector('.flatpickr-am-pm').innerText
+    if (timeFormat === 12) {
+        const ampm = timePicker.value.querySelector('.flatpickr-am-pm').innerText;
 
-    selectedTime.value = convertTime12to24(`${hour}:${minutes} ${ampm}`) // we make sur sure we have the data that was entered manually (on keyup)
-  }
+        time.value = convertTime12to24(`${hour}:${minutes} ${ampm}`); // we make sur sure we have the data that was entered manually (on keyup)
+    }
 
-  const isValid = await validate()
+    const isValid = await validate();
 
-  if (!isValid) {
-    return
-  }
+    if (!isValid) {
+        return;
+    }
 
-  emit('update', {
-    date: selectedDate.value,
-    time: selectedTime.value
-  })
+    emit('update', {
+        date: date.value,
+        time: time.value
+    })
 
-  close()
+    close();
 }
 
 const close = () => {
-  selectedDate.value = ''
-  selectedTime.value = ''
-  emit('close')
-}
+    date.value = '';
+    time.value = '';
+    emit('close');
+};
 
 const configDatePicker = {
-  inline: true,
-  dateFormat: 'Y-m-d',
-  minDate: 'today',
-  allowInput: false,
-  monthSelectorType: 'static',
-  yearSelectorType: 'static',
-  static: true,
-  locale: getLocaleConfig(),
-  prevArrow: getPrevArrow(),
-  nextArrow: getNextArrow()
+    inline: true,
+    dateFormat: 'Y-m-d',
+    minDate: "today",
+    allowInput: false,
+    monthSelectorType: 'static',
+    yearSelectorType: 'static',
+    static: true,
+    locale: {
+        firstDayOfWeek: weekStartsOn,
+        weekdays: {
+            shorthand: [
+                $t('calendar.weekdays.sunday.short'),
+                $t('calendar.weekdays.monday.short'),
+                $t('calendar.weekdays.tuesday.short'),
+                $t('calendar.weekdays.wednesday.short'),
+                $t('calendar.weekdays.thursday.short'),
+                $t('calendar.weekdays.friday.short'),
+                $t('calendar.weekdays.saturday.short'),
+            ],
+            longhand: [
+                $t('calendar.weekdays.sunday.full'),
+                $t('calendar.weekdays.monday.full'),
+                $t('calendar.weekdays.tuesday.full'),
+                $t('calendar.weekdays.wednesday.full'),
+                $t('calendar.weekdays.thursday.full'),
+                $t('calendar.weekdays.friday.full'),
+                $t('calendar.weekdays.saturday.full'),
+            ],
+        },
+        months: {
+            shorthand: [
+                $t('calendar.months.january.short'),
+                $t('calendar.months.february.short'),
+                $t('calendar.months.march.short'),
+                $t('calendar.months.april.short'),
+                $t('calendar.months.may.short'),
+                $t('calendar.months.june.short'),
+                $t('calendar.months.july.short'),
+                $t('calendar.months.august.short'),
+                $t('calendar.months.september.short'),
+                $t('calendar.months.october.short'),
+                $t('calendar.months.november.short'),
+                $t('calendar.months.december.short'),
+            ],
+            longhand: [
+                $t('calendar.months.january.full'),
+                $t('calendar.months.february.full'),
+                $t('calendar.months.march.full'),
+                $t('calendar.months.april.full'),
+                $t('calendar.months.may.full'),
+                $t('calendar.months.june.full'),
+                $t('calendar.months.july.full'),
+                $t('calendar.months.august.full'),
+                $t('calendar.months.september.full'),
+                $t('calendar.months.october.full'),
+                $t('calendar.months.november.full'),
+                $t('calendar.months.december.full'),
+            ],
+        },
+    },
+    prevArrow: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>',
+    nextArrow: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>'
 }
 
 const configTimePicker = {
-  inline: true,
-  timeFormat: 'H:i',
-  noCalendar: true,
-  enableTime: true,
-  time_24hr: timeFormat === 24
+    inline: true,
+    timeFormat: 'H:i',
+    noCalendar: true,
+    enableTime: true,
+    time_24hr: timeFormat === 24
 }
 </script>
 <template>
-  <DialogModal :show="show" max-width="sm" :closeable="true" @close="close">
-    <template #body>
-      <div v-if="show" class="pickTime flex flex-col">
-        <FlatPickr v-model="selectedDate" :config="configDatePicker" />
+    <DialogModal :show="show"
+                 max-width="sm"
+                 :closeable="true"
+                 @close="close">
+        <template #body>
+            <div v-if="show" class="pickTime flex flex-col">
+                <FlatPickr v-model="date" :config="configDatePicker"/>
 
-        <div class="flex items-center justify-center mx-auto mt-lg">
-          <div class="mr-xs text-gray-400">{{ $t('general.time') }}</div>
-          <div ref="timePicker" class="w-auto">
-            <FlatPickr v-model="selectedTime" :config="configTimePicker" />
-          </div>
-        </div>
-        <div class="text-sm flex items-center justify-center mt-sm">
-          <div class="mr-1">{{ timeZone }}</div>
-          <Link
-            v-tooltip="$t('post.post_scheduled_timezone')"
-            :href="route('mixpost.profile.index')"
-          >
-            <ExclamationCircleIcon class="w-4! h-4!" />
-          </Link>
-        </div>
-        <div v-if="hasErrors" class="mt-xs text-center text-red-500">
-          {{ $t('post.past_selected_date') }}
-        </div>
-      </div>
-    </template>
+                <div class="flex items-center justify-center mx-auto mt-lg">
+                    <div class="mr-xs text-gray-400">{{ $t('general.time') }}</div>
+                    <div class="w-auto" ref="timePicker">
+                        <FlatPickr v-model="time" :config="configTimePicker"/>
+                    </div>
+                </div>
+                <div class="text-sm flex items-center justify-center mt-sm">
+                    <div class="mr-1">{{ timeZone }}</div>
+                    <Link :href="route('mixpost.profile.index', {workspace: workspaceCtx.id})" v-tooltip="$t('post.post_scheduled_timezone')">
+                        <ExclamationCircleIcon class="!w-4 !h-4"/>
+                    </Link>
+                </div>
+                <div v-if="hasErrors" class="mt-xs text-center text-red-500">{{ $t('post.past_selected_date') }}
+                </div>
+            </div>
+        </template>
 
-    <template #footer>
-      <SecondaryButton class="mr-xs" @click="close">{{ $t('general.cancel') }}</SecondaryButton>
-      <PrimaryButton :disabled="hasErrors || !isSubmitActive" @click="confirm"
-        >{{ $t('post.pick_time') }}
-      </PrimaryButton>
-    </template>
-  </DialogModal>
+        <template #footer>
+            <SecondaryButton @click="close" class="mr-xs">{{ $t('general.cancel') }}</SecondaryButton>
+            <PrimaryButton @click="confirm" :disabled="hasErrors || !isSubmitActive">{{ $t('post.pick_time') }}
+            </PrimaryButton>
+        </template>
+    </DialogModal>
 </template>

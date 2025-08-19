@@ -24,7 +24,7 @@ class UserResource extends JsonResource
                 return [
                     'role' => $this->pivot->role,
                     'can_approve' => boolval($this->pivot->can_approve),
-                    'joined_at' => Util::dateTimeFormat(Carbon::parse($this->pivot->joined)),
+                    'joined_at' => Util::dateTimeFormat(Carbon::parse($this->pivot->joined))
                 ];
             }),
         ];
@@ -32,9 +32,10 @@ class UserResource extends JsonResource
 
     protected function getSettings()
     {
-        if (! $this->resource->relationLoaded('settings')) {
+        if (!$this->resource->relationLoaded('settings')) {
             return [];
         }
+
 
         return $this->settings->pluck('payload', 'name');
     }

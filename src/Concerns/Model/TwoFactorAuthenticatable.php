@@ -24,8 +24,8 @@ trait TwoFactorAuthenticatable
     public function hasTwoFactorAuthEnabled(): bool
     {
         if ($this->twoFactorAuth) {
-            return ! is_null($this->twoFactorAuth->secret_key) &&
-                ! is_null($this->twoFactorAuth->confirmed_at);
+            return !is_null($this->twoFactorAuth->secret_key) &&
+                !is_null($this->twoFactorAuth->confirmed_at);
         }
 
         return false;

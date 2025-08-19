@@ -12,7 +12,6 @@ class PostScheduleAtUpdated
     use Dispatchable, SerializesModels;
 
     public Post $post;
-
     public ?Carbon $oldScheduledAtValue;
 
     public function __construct(Post $post, ?Carbon $oldScheduledAtValue = null)

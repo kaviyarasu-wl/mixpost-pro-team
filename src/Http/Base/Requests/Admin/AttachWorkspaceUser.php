@@ -17,16 +17,16 @@ class AttachWorkspaceUser extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'exists:'.app(self::getUserClass())->getTable().',id'],
-            'role' => ['required', Rule::in(Arr::map(WorkspaceUserRole::cases(), fn ($item) => $item->value))],
-            'can_approve' => ['required', 'boolean'],
+            'user_id' => ['required', "exists:" . app(self::getUserClass())->getTable() . ",id"],
+            'role' => ['required', Rule::in(Arr::map(WorkspaceUserRole::cases(), fn($item) => $item->value))],
+            'can_approve' => ['required', 'boolean']
         ];
     }
 
     public function messages(): array
     {
         return [
-            'user_id.exists' => __('mixpost::user.select_user'),
+            'user_id.exists' => __('mixpost::user.select_user')
         ];
     }
 

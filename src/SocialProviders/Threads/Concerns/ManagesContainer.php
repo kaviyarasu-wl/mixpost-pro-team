@@ -11,7 +11,7 @@ trait ManagesContainer
 {
     public function createContainer(?Media $mediaItem = null, array $data = []): SocialProviderResponse
     {
-        if (! Arr::has($data, 'media_type')) {
+        if (!Arr::has($data, 'media_type')) {
             $data['media_type'] = $mediaItem ? ($mediaItem->isVideo() ? 'VIDEO' : 'IMAGE') : 'TEXT';
         }
 
@@ -19,13 +19,9 @@ trait ManagesContainer
             $data[$mediaItem->isVideo() ? 'video_url' : 'image_url'] = $mediaItem->getUrl();
         }
 
-        if ($mediaItem && $mediaItem->alt_text) {
-            $data['alt_text'] = $mediaItem->alt_text;
-        }
-
         return $this->buildResponse(
             $this->getHttpClient()::withToken($this->accessToken())
-                ->post("$this->graphUrl/$this->graphVersion/{$this->values['provider_id']}/threads", $data)
+                ->post("$this->graphUrl/$this->graphVersion/me/threads", $data)
         );
     }
 
@@ -43,7 +39,7 @@ trait ManagesContainer
     {
         return $this->buildResponse(
             $this->getHttpClient()::withToken($this->accessToken())
-                ->post("$this->graphUrl/$this->graphVersion/{$this->values['provider_id']}/threads_publish",
+                ->post("$this->graphUrl/$this->graphVersion/me/threads_publish",
                     array_merge(['creation_id' => $creationId], $data)
                 )
         );

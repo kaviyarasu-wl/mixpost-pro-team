@@ -17,8 +17,8 @@ use Inovector\Mixpost\Util;
 class TwitterProvider extends SocialProvider
 {
     use ManagesConfig;
-    use ManagesOAuth;
     use ManagesRateLimit;
+    use ManagesOAuth;
     use ManagesResources;
 
     public array $callbackResponseKeys = ['oauth_token', 'oauth_verifier'];
@@ -53,9 +53,9 @@ class TwitterProvider extends SocialProvider
             ->simultaneousPosting(Util::config('social_provider_options.twitter.simultaneous_posting_on_multiple_accounts'))
             ->minTextChar(1)
             ->maxTextChar(Util::config('social_provider_options.twitter.post_character_limit'))
-            ->minPhotos(1)
-            ->minVideos(1)
-            ->minGifs(1)
+            // ->minPhotos(0)
+            // ->minVideos(1)
+            // ->minGifs(1)
             ->maxPhotos(Util::config('social_provider_options.twitter.media_limit.photos'))
             ->maxVideos(Util::config('social_provider_options.twitter.media_limit.videos'))
             ->maxGifs(Util::config('social_provider_options.twitter.media_limit.gifs'))
@@ -67,11 +67,6 @@ class TwitterProvider extends SocialProvider
         return "https://twitter.com/$accountResource->username/status/{$accountResource->pivot->provider_post_id}";
     }
 
-    public static function externalAccountUrl(AccountResource $accountResource): string
-    {
-        return "https://x.com/$accountResource->username";
-    }
-
     public static function mapErrorMessage(string $key): string
     {
         return match ($key) {
@@ -79,10 +74,5 @@ class TwitterProvider extends SocialProvider
             'upload_failed' => __('mixpost::service.twitter.upload_failed'),
             default => $key,
         };
-    }
-
-    public static function supportPostDeletion(): bool|array
-    {
-        return true;
     }
 }

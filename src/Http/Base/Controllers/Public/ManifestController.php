@@ -31,7 +31,7 @@ class ManifestController extends Controller
             'start_url' => route('mixpost.home'),
             'display' => 'standalone',
             'background_color' => '#ffffff',
-            'theme_color' => Theme::primaryColor(),
+            'theme_color' => Theme::primaryColor()
         ];
 
         return response()->json($array);

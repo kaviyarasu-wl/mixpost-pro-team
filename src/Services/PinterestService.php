@@ -15,21 +15,21 @@ class PinterestService extends Service
         return ServiceGroup::SOCIAL;
     }
 
-    public static function form(): array
+    static function form(): array
     {
         return [
             'client_id' => '',
             'client_secret' => '',
-            'environment' => 'sandbox',
+            'environment' => 'sandbox'
         ];
     }
 
     public static function formRules(): array
     {
         return [
-            'client_id' => ['required'],
-            'client_secret' => ['required'],
-            'environment' => ['required', Rule::in(['sandbox', 'production'])],
+            "client_id" => ['required'],
+            "client_secret" => ['required'],
+            'environment' => ['required', Rule::in(['sandbox', 'production'])]
         ];
     }
 

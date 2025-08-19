@@ -23,7 +23,7 @@ class MediaFactory extends Factory
             'path' => '',
             'size' => $size,
             'size_total' => $size,
-            'conversions' => [],
+            'conversions' => []
         ];
     }
 }

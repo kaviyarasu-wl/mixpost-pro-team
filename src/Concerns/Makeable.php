@@ -9,3 +9,4 @@ trait Makeable
         return new static(...$arguments);
     }
 }
+

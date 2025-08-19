@@ -30,7 +30,7 @@ class UpdatePostComment extends PostFormRequest
 
             $isAuthor = $this->activity?->user_id === Auth::id();
 
-            if ($this->activity && ! $isAuthor) {
+            if ($this->activity && !$isAuthor) {
                 $validator->errors()->add('user', 'You are not allowed to update this comment.');
             }
         });
@@ -38,7 +38,7 @@ class UpdatePostComment extends PostFormRequest
 
     public function handle(): bool
     {
-        if (! $this->activity || ! $this->activity->isComment()) {
+        if (!$this->activity || !$this->activity->isComment()) {
             abort(404);
         }
 

@@ -13,7 +13,7 @@ class WorkspaceOwnedScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         /** Ignore this scope on Horizon request **/
-        if (! Util::isHorizonRequest()) {
+        if (!Util::isHorizonRequest()) {
             $builder->where('workspace_id', '=', WorkspaceManager::current()->id);
         }
     }

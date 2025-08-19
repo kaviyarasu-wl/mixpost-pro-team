@@ -1,14 +1,14 @@
-import { computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
+import {computed} from "vue";
+import {usePage} from "@inertiajs/vue3";
 
 const useEnterpriseConsole = () => {
-  const enterpriseConsole = computed(() => {
-    return usePage().props.mixpost.enterpriseConsole
-  })
+    const enterpriseConsole = computed(() => {
+        return usePage().props.mixpost.enterpriseConsole;
+    })
 
-  return {
-    enterpriseConsole
-  }
+    return {
+        enterpriseConsole
+    }
 }
 
-export default useEnterpriseConsole
+export default useEnterpriseConsole;

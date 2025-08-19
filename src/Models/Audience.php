@@ -8,8 +8,8 @@ use Inovector\Mixpost\Concerns\OwnedByWorkspace;
 
 class Audience extends Model
 {
-    use HasFactory;
     use OwnedByWorkspace;
+    use HasFactory;
 
     public $table = 'mixpost_audience';
 
@@ -20,7 +20,7 @@ class Audience extends Model
     ];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'date'
     ];
 
     public $timestamps = false;

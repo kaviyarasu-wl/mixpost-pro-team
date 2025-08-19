@@ -23,7 +23,7 @@ class FacebookInsight extends Model
 
     protected $casts = [
         'type' => FacebookInsightType::class,
-        'date' => 'date',
+        'date' => 'date'
     ];
 
     public function scopeAccount($query, int $accountId)

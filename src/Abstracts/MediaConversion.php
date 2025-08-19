@@ -2,20 +2,17 @@
 
 namespace Inovector\Mixpost\Abstracts;
 
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inovector\Mixpost\Contracts\MediaConversion as MediaConversionContract;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Inovector\Mixpost\Support\MediaConversionData;
 
 abstract class MediaConversion implements MediaConversionContract
 {
     protected string $name;
-
     protected string $fromDisk;
-
     protected string $toDisk = '';
-
     protected string $filepath;
 
     public function __construct(string $name)
@@ -83,7 +80,7 @@ abstract class MediaConversion implements MediaConversionContract
     {
         $extension = $extension ?: $this->getFileExtension();
 
-        return str_replace('.'.$this->getFileExtension(), '', $filepath ?: $this->getFilePath())."-$this->name.$extension";
+        return str_replace('.' . $this->getFileExtension(), '', $filepath ?: $this->getFilePath()) . "-$this->name.$extension";
     }
 
     public function isImage(): bool
@@ -103,7 +100,7 @@ abstract class MediaConversion implements MediaConversionContract
 
     public function perform(): ?MediaConversionData
     {
-        if (! $this->canPerform()) {
+        if (!$this->canPerform()) {
             return null;
         }
 

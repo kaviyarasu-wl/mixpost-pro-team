@@ -15,9 +15,9 @@ class AIConfigController extends Controller
     public function form(): Response
     {
         return Inertia::render('Admin/Configs/AIConfig', [
-            'configs' => (new AIConfig)->all(),
+            'configs' => (new AIConfig())->all(),
             'providers' => AIManager::getProviderSelectionOptions(),
-            'isConfigured' => AIManager::isAnyServiceActive(),
+            'is_configured' => AIManager::isAnyServiceActive(),
         ]);
     }
 

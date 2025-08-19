@@ -10,9 +10,9 @@ use Illuminate\Queue\SerializesModels;
 use Inovector\Mixpost\Contracts\QueueWorkspaceAware;
 use Inovector\Mixpost\Models\PostActivity;
 
-class PostCommentReactionsUpdated implements QueueWorkspaceAware, ShouldBroadcast
+class PostCommentReactionsUpdated implements ShouldBroadcast, QueueWorkspaceAware
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels, InteractsWithSockets;
 
     public $deleteWhenMissingModels = true;
 
@@ -25,15 +25,15 @@ class PostCommentReactionsUpdated implements QueueWorkspaceAware, ShouldBroadcas
 
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('mixpost_posts.'.$this->activity->post?->uuid);
+        return new PrivateChannel('mixpost_posts.' . $this->activity->post?->uuid);
     }
 
     public function broadcastWith(): array
     {
         return [
             'id' => $this->activity->uuid,
-            'is_child' => (bool) $this->activity->parent_id,
-            'reactions' => $this->activity->load(['reactions.user'])->groupedReactions(),
+            'is_child' => (bool)$this->activity->parent_id,
+            'reactions' => $this->activity->load(['reactions.user'])->groupedReactions()
         ];
     }
 }

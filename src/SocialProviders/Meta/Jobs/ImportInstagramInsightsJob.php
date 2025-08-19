@@ -22,12 +22,13 @@ use Inovector\Mixpost\Models\InstagramInsight;
 use Inovector\Mixpost\SocialProviders\Meta\InstagramProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportInstagramInsightsJob implements QueueWorkspaceAware, ShouldQueue
+class ImportInstagramInsightsJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
@@ -47,7 +48,7 @@ class ImportInstagramInsightsJob implements QueueWorkspaceAware, ShouldQueue
             return;
         }
 
-        if (! $this->account->isServiceActive()) {
+        if (!$this->account->isServiceActive()) {
             return;
         }
 
@@ -59,7 +60,6 @@ class ImportInstagramInsightsJob implements QueueWorkspaceAware, ShouldQueue
 
         /**
          * @see InstagramProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = match ($this->metricType) {
@@ -98,12 +98,13 @@ class ImportInstagramInsightsJob implements QueueWorkspaceAware, ShouldQueue
                 $this->importInsightsTimeSeries(InstagramInsightType::fromName(Str::upper($insight['name'])), $insight['values']);
             }
 
-            //            if ($this->metricType === 'total_value') {
-            //                $this->importInsightsTotalValue(InstagramInsightType::fromName(Str::upper($insight['name'])), $insight['total_value']);
-            //            }
+//            if ($this->metricType === 'total_value') {
+//                $this->importInsightsTotalValue(InstagramInsightType::fromName(Str::upper($insight['name'])), $insight['total_value']);
+//            }
         }
 
-        //        ImportInstagramInsightsJob::dispatch($this->account, 'total_value')->delay(60 * 60); // 1 hour
+
+//        ImportInstagramInsightsJob::dispatch($this->account, 'total_value')->delay(60 * 60); // 1 hour
     }
 
     protected function importInsightsTimeSeries(InstagramInsightType $type, array $items): void

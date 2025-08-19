@@ -4,4 +4,7 @@ namespace Inovector\Mixpost\Exceptions;
 
 use Exception;
 
-class FailedTwoFactorLoginResponse extends Exception {}
+class FailedTwoFactorLoginResponse extends Exception
+{
+
+}

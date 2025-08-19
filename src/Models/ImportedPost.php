@@ -18,13 +18,13 @@ class ImportedPost extends Model
         'provider_post_id',
         'content',
         'metrics',
-        'created_at',
+        'created_at'
     ];
 
     protected $casts = [
         'content' => 'array',
         'metrics' => 'array',
-        'created_at' => 'datetime',
+        'created_at' => 'datetime'
     ];
 
     public $timestamps = false;

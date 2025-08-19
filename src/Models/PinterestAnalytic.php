@@ -22,7 +22,7 @@ class PinterestAnalytic extends Model
 
     protected $casts = [
         'metrics' => 'array',
-        'date' => 'date',
+        'date' => 'date'
     ];
 
     public function scopeAccount($query, int $accountId)

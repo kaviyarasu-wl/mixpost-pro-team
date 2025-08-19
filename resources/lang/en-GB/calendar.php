@@ -5,6 +5,8 @@ return [
     'today' => 'Today',
     'month' => 'Month',
     'week' => 'Week',
+    'year' => 'Year',
+    'posts_on_date' => '{0} No posts on :date|{1} :count post scheduled on :date|[2,*] :count posts scheduled on :date',
     'weekdays' => [
         'sunday' => [
             'full' => 'Sunday',

@@ -19,6 +19,6 @@ class StoreProviderEntities extends FormRequest
     {
         StoringAccountEntities::dispatch($this->route('provider'), $this->input('items'));
 
-        (new StoreProviderEntitiesAsAccountsAction)($this->route('provider'), $this->input('items'));
+        (new StoreProviderEntitiesAsAccountsAction())($this->route('provider'), $this->input('items'));
     }
 }

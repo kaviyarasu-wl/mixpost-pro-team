@@ -51,7 +51,7 @@ class Util
 
     public static function dateTimeFormat(Carbon $datetime, DateTimeZone|string|null $tz = null): string
     {
-        $format = $datetime->year === now($tz)->year ? 'M j, '.self::timeFormat() : 'M j, Y, '.self::timeFormat();
+        $format = $datetime->year === now($tz)->year ? 'M j, ' . self::timeFormat() : 'M j, Y, ' . self::timeFormat();
 
         return $datetime->tz($tz ?: Settings::get('timezone'))->translatedFormat($format);
     }
@@ -71,7 +71,7 @@ class Util
 
     public static function removeHtmlTags($string): string
     {
-        if (! $string) {
+        if (!$string) {
             return '';
         }
 
@@ -82,7 +82,7 @@ class Util
 
     public static function isAdminConsole(Request $request): bool
     {
-        return $request->route() && Str::contains($request->route()->getPrefix(), (Util::corePath().'/admin'));
+        return $request->route() && Str::contains($request->route()->getPrefix(), (Util::corePath() . '/admin'));
     }
 
     public static function isPublicDomainUrl(string $url): bool
@@ -120,12 +120,12 @@ class Util
 
     public static function estimateDelayByFileSize(int $fileSize): array
     {
-        $initial = (int) round(max(15, $fileSize / 1000000)); // Set a delay proportional to the file size
-        $max = (int) round(min(5 * 60, $fileSize / 500000)); // Set a max delay proportional to the file size
+        $initial = (int)round(max(15, $fileSize / 1000000)); // Set a delay proportional to the file size
+        $max = (int)round(min(5 * 60, $fileSize / 500000)); // Set a max delay proportional to the file size
 
         return [
             'initial' => $initial,
-            'max' => $max,
+            'max' => $max
         ];
     }
 
@@ -172,7 +172,7 @@ class Util
             // Increase delay for the next iteration, maxing out at maxDelay
             $delay = min($delay * 2, $maxDelay);
             // Add a random jitter to the delay
-            $delay += rand(-(int) ($delay * 0.1), (int) ($delay * 0.1));
+            $delay += rand(-(int)($delay * 0.1), (int)($delay * 0.1));
 
             $attempt++;
         }
@@ -184,22 +184,11 @@ class Util
     {
         $key = is_null($connection) ? Config::get('database.default') : $connection;
 
-        return strtolower(Config::get('database.connections.'.$key.'.driver'));
+        return strtolower(Config::get('database.connections.' . $key . '.driver'));
     }
 
     public static function isMysqlDatabase(?string $connection = null): bool
     {
         return self::getDatabaseDriver($connection) === 'mysql';
-    }
-
-    public static function isFFmpegInstalled(): bool
-    {
-        $ffmpegPath = Util::config('ffmpeg_path');
-        $ffprobePath = Util::config('ffprobe_path');
-
-        return file_exists($ffmpegPath) &&
-            file_exists($ffprobePath) &&
-            basename($ffmpegPath) == 'ffmpeg' &&
-            basename($ffprobePath) == 'ffprobe';
     }
 }

@@ -15,7 +15,7 @@ class TwoFactorAuthSessionController extends Controller
 
     public function create(TwoFactorLoginRequest $request): Response|RedirectResponse
     {
-        if (! $request->hasChallengedUser()) {
+        if (!$request->hasChallengedUser()) {
             return redirect()->route('mixpost.login');
         }
 
@@ -28,7 +28,7 @@ class TwoFactorAuthSessionController extends Controller
 
         if ($code = $request->validRecoveryCode()) {
             $user->twoFactorReplaceRecoveryCode($code);
-        } elseif (! $request->hasValidCode()) {
+        } elseif (!$request->hasValidCode()) {
             return redirect()
                 ->back()
                 ->withErrors(['code' => __('mixpost::auth.provided_two_factor_code_invalid')]);

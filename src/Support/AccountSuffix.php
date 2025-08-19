@@ -17,7 +17,7 @@ class AccountSuffix
             self::key() => [
                 'value' => $value,
                 'edited' => $edited,
-            ],
+            ]
         ];
     }
 

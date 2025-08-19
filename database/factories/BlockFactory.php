@@ -16,9 +16,9 @@ class BlockFactory extends Factory
             'name' => $this->faker->sentence,
             'module' => 'Editor',
             'content' => [
-                'body' => '<p>'.$this->faker->paragraph.'</p>',
+                'body' => '<p>' . $this->faker->paragraph . '</p>'
             ],
-            'status' => ResourceStatus::ENABLED,
+            'status' => ResourceStatus::ENABLED
         ];
     }
 }

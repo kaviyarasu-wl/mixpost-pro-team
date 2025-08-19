@@ -12,6 +12,6 @@ class Keyword implements Filter
     {
         $lowerValue = Str::lower($value);
 
-        return $builder->where('name', 'LIKE', '%'.$lowerValue.'%');
+        return $builder->where('name', 'LIKE', '%' . $lowerValue . '%');
     }
 }

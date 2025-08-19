@@ -1,41 +1,26 @@
 <script setup>
-import Radio from '@/Components/Form/Radio.vue'
-import ProviderOptionWrap from '@/Components/ProviderVersionOptions/ProviderOptionWrap.vue'
+import Radio from "@/Components/Form/Radio.vue";
+import ProviderOptionWrap from "@/Components/ProviderVersionOptions/ProviderOptionWrap.vue";
 
-defineProps({
-  options: {
-    type: Object,
-    required: true
-  },
-  activeVersion: {
-    type: Number,
-    default: 0
-  },
-  versions: {
-    type: Array,
-    required: true
-  }
-})
-
-const provider = 'facebook_page'
+const props = defineProps(['options', 'activeVersion', 'versions'])
 </script>
 <template>
-  <ProviderOptionWrap :title="$t('service.facebook.page_options')" :provider="provider">
-    <div>
-      <div class="flex items-center space-x-sm">
-        <label>
-          <Radio v-model:checked="options.type" value="post" />
-          {{ $t(`service.${provider}.post`) }}
-        </label>
-        <label>
-          <Radio v-model:checked="options.type" value="reel" />
-          {{ $t(`service.${provider}.reel`) }}
-        </label>
-        <label>
-          <Radio v-model:checked="options.type" value="story" />
-          {{ $t(`service.${provider}.story`) }}
-        </label>
-      </div>
-    </div>
-  </ProviderOptionWrap>
+    <ProviderOptionWrap :title="$t('service.facebook.page_options')" provider="facebook_page">
+        <div>
+            <div class="flex items-center space-x-sm">
+                <label>
+                    <Radio v-model:checked="options.type"  value="post"/>
+                    {{ $t('service.meta.post') }}
+                </label>
+                <label>
+                    <Radio v-model:checked="options.type" value="reel"/>
+                    {{ $t('service.meta.reel') }}
+                </label>
+                <label>
+                    <Radio v-model:checked="options.type" value="story"/>
+                    {{ $t('service.meta.story') }}
+                </label>
+            </div>
+        </div>
+    </ProviderOptionWrap>
 </template>

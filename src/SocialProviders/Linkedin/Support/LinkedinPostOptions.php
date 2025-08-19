@@ -2,13 +2,12 @@
 
 namespace Inovector\Mixpost\SocialProviders\Linkedin\Support;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Support\SocialProviderPostOptions;
+use Inovector\Mixpost\Contracts\SocialProviderPostOptions;
 
-class LinkedinPostOptions extends SocialProviderPostOptions
+class LinkedinPostOptions implements SocialProviderPostOptions
 {
-    public function rules(FormRequest $request): array
+    public function rules(): array
     {
         return [
             'visibility' => ['required', 'in:PUBLIC,CONNECTIONS'],

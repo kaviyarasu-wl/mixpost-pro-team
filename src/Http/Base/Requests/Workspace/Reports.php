@@ -7,7 +7,6 @@ use Illuminate\Validation\Rule;
 use Inovector\Mixpost\Contracts\ProviderReports;
 use Inovector\Mixpost\Facades\WorkspaceManager;
 use Inovector\Mixpost\Models\Account;
-use Inovector\Mixpost\Reports\BlueskyReports;
 use Inovector\Mixpost\Reports\FacebookGroupReports;
 use Inovector\Mixpost\Reports\FacebookPageReports;
 use Inovector\Mixpost\Reports\InstagramReports;
@@ -26,7 +25,7 @@ class Reports extends FormRequest
     {
         return [
             'account_id' => ['required', 'integer', WorkspaceManager::existsRule('mixpost_accounts', 'id')],
-            'period' => ['required', 'string', Rule::in(['7_days', '30_days', '90_days'])],
+            'period' => ['required', 'string', Rule::in(['7_days', '30_days', '90_days'])]
         ];
     }
 
@@ -46,17 +45,16 @@ class Reports extends FormRequest
             'linkedin_page' => LinkedinPageReports::class,
             'tiktok' => TikTokReports::class,
             'youtube' => YoutubeReports::class,
-            'bluesky' => BlueskyReports::class,
             default => null
         };
 
-        if (! $providerReports) {
+        if (!$providerReports) {
             return [];
         }
 
-        $providerReports = (new $providerReports);
+        $providerReports = (new $providerReports());
 
-        if (! $providerReports instanceof ProviderReports) {
+        if (!$providerReports instanceof ProviderReports) {
             throw new \Exception('The provider reports must be an instance of ProviderReports');
         }
 

@@ -18,12 +18,13 @@ use Inovector\Mixpost\Models\Audience;
 use Inovector\Mixpost\SocialProviders\Meta\InstagramProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportInstagramFollowersJob implements QueueWorkspaceAware, ShouldQueue
+class ImportInstagramFollowersJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
@@ -40,7 +41,7 @@ class ImportInstagramFollowersJob implements QueueWorkspaceAware, ShouldQueue
             return;
         }
 
-        if (! $this->account->isServiceActive()) {
+        if (!$this->account->isServiceActive()) {
             return;
         }
 
@@ -52,7 +53,6 @@ class ImportInstagramFollowersJob implements QueueWorkspaceAware, ShouldQueue
 
         /**
          * @see InstagramProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = $this->connectProvider($this->account)->getAccountMetrics();
@@ -83,9 +83,9 @@ class ImportInstagramFollowersJob implements QueueWorkspaceAware, ShouldQueue
 
         Audience::updateOrCreate([
             'account_id' => $this->account->id,
-            'date' => Carbon::today('UTC'),
+            'date' => Carbon::today('UTC')
         ], [
-            'total' => $response->followers_count ?? 0,
+            'total' => $response->followers_count ?? 0
         ]);
     }
 }

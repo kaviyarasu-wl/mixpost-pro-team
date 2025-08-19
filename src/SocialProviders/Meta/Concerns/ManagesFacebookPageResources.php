@@ -11,16 +11,16 @@ use Inovector\Mixpost\Support\SocialProviderResponse;
 
 trait ManagesFacebookPageResources
 {
-    use FacebookComments;
     use FacebookPostPublication;
     use FacebookReelPublication;
     use FacebookStoryPublication;
+    use FacebookComments;
 
     public function getAccount(): SocialProviderResponse
     {
         $response = $this->getHttpClient()::get("$this->apiUrl/$this->apiVersion/me", [
             'fields' => 'id,name,username,picture{url},location',
-            'access_token' => $this->getAccessToken()['page_access_token'],
+            'access_token' => $this->getAccessToken()['page_access_token']
         ]);
 
         return $this->buildResponse($response, function () use ($response) {
@@ -31,7 +31,7 @@ trait ManagesFacebookPageResources
                 'name' => $data['name'],
                 'username' => $data['username'] ?? '',
                 'image' => Arr::get($data, 'picture.data.url'),
-                'data' => AccountSuffix::schema(strval(Arr::get($data, 'location.city'))),
+                'data' => AccountSuffix::schema(strval(Arr::get($data, 'location.city')))
             ];
         });
     }
@@ -40,8 +40,8 @@ trait ManagesFacebookPageResources
     {
         $response = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
             ->get("$this->apiUrl/$this->apiVersion/me/accounts", [
-                'fields' => 'id,name,username,picture{url},location'.($withAccessToken ? ',access_token' : ''),
-                'limit' => 200,
+                'fields' => 'id,name,username,picture{url},location' . ($withAccessToken ? ',access_token' : ''),
+                'limit' => 200
             ]);
 
         return $this->buildResponse($response, function () use ($response, $withAccessToken) {
@@ -56,7 +56,7 @@ trait ManagesFacebookPageResources
 
                 if ($withAccessToken) {
                     $array['access_token'] = [
-                        'access_token' => $item['access_token'],
+                        'access_token' => $item['access_token']
                     ];
                 }
 
@@ -81,7 +81,7 @@ trait ManagesFacebookPageResources
     {
         $response = $this->getHttpClient()::get("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}", [
             'fields' => 'fan_count,followers_count',
-            'access_token' => $this->getAccessToken()['page_access_token'],
+            'access_token' => $this->getAccessToken()['page_access_token']
         ]);
 
         return $this->buildResponse($response);
@@ -120,26 +120,14 @@ trait ManagesFacebookPageResources
     public function getStories(): SocialProviderResponse
     {
         $result = $this->getHttpClient()::get("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/stories", [
-            'access_token' => $this->accessToken(),
+            'access_token' => $this->accessToken()
         ]);
 
         return $this->buildResponse($result);
     }
 
-    public function deletePost(string $id, array $params = []): SocialProviderResponse
+    public function deletePost($id): SocialProviderResponse
     {
-        $response = $this->getHttpClient()::delete("$this->apiUrl/$this->apiVersion/$id", [
-            'access_token' => $this->accessToken(),
-        ]);
-
-        if ($response->json('error.code') === 100) {
-            /**
-             * Handle 100 error codes when attempting to delete a post that no longer exists on the platform.
-             * This occurs when we have a stored post_provider_id but the post has already been deleted directly on the platform.
-             */
-            return $this->response(SocialProviderResponseStatus::OK, []);
-        }
-
-        return $this->buildResponse($response);
+        return $this->response(SocialProviderResponseStatus::OK, []);
     }
 }

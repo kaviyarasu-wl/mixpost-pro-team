@@ -2,7 +2,6 @@
 
 namespace Inovector\Mixpost\Abstracts;
 
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -11,38 +10,35 @@ use Illuminate\Support\Str;
 use Inovector\Mixpost\Concerns\UsesSocialProviderResponse;
 use Inovector\Mixpost\Contracts\AccountResource;
 use Inovector\Mixpost\Contracts\SocialProvider as SocialProviderContract;
-use Inovector\Mixpost\Contracts\SocialProviderPostOptions as SocialProviderPostOptionsContract;
+use Exception;
 use Inovector\Mixpost\Enums\SocialProviderContentType;
 use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
 use Inovector\Mixpost\Models\Account;
 use Inovector\Mixpost\Support\SocialProviderPostOptions;
+use Inovector\Mixpost\Contracts\SocialProviderPostOptions as SocialProviderPostOptionsContract;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
 abstract class SocialProvider implements SocialProviderContract
 {
     use UsesSocialProviderResponse;
 
-    /**
-     * Some providers support one account (e.g., X, TikTok).
-     * Others, like Facebook, need a user account to manage entities.
-     */
+    // For some social service providers, it is enough that the user himself can manage the content.
+    // But some providers, such as Facebook, require a user account to select some entities to manage (pages or groups).
+    // When you need to change this value, just overwrite it in the provider class that extends this class.
+    // In case of `false` value, `getEntities()` method is required.
     public bool $onlyUserAccount = true;
 
     public array $callbackResponseKeys = [];
-
     protected array $accessToken = [];
 
     protected Request $request;
-
     protected string $clientId = '';
-
     protected string $clientSecret = '';
-
     protected string $redirectUrl;
 
     protected array $values = [];
 
-    const ACCESS_TOKEN_SESSION_NAME = 'mixpost_provider_access_token'; // TODO: remove this line?
+    const ACCESS_TOKEN_SESSION_NAME = 'mixpost_provider_access_token';
 
     public function __construct(Request $request, string $clientId, string $clientSecret, string $redirectUrl, array $values = [])
     {
@@ -77,22 +73,23 @@ abstract class SocialProvider implements SocialProviderContract
         return $this->request->only($this->callbackResponseKeys);
     }
 
+    // Use this method into web app. For example, in Controllers..etc.
     public function setAccessToken(array $token = []): void
     {
         $this->accessToken = $token;
 
-        $this->request->session()->put(self::ACCESS_TOKEN_SESSION_NAME, $token); // TODO: remove this line?
+        $this->request->session()->put(self::ACCESS_TOKEN_SESSION_NAME, $token);
     }
 
     public function getAccessToken()
     {
-        if (! empty($this->accessToken)) {
+        if (!empty($this->accessToken)) {
             return $this->accessToken;
         }
 
-        $token = $this->request->session()->get(self::ACCESS_TOKEN_SESSION_NAME); // TODO: remove this line?
+        $token = $this->request->session()->get(self::ACCESS_TOKEN_SESSION_NAME);
 
-        if (! $token) {
+        if (!$token) {
             throw new Exception('Missing Access Token.');
         }
 
@@ -110,14 +107,14 @@ abstract class SocialProvider implements SocialProviderContract
     public function forgetAccessToken(): void
     {
         $this->accessToken = [];
-        $this->request->session()->forget(self::ACCESS_TOKEN_SESSION_NAME); // TODO: remove this line?
+        $this->request->session()->forget(self::ACCESS_TOKEN_SESSION_NAME);
     }
 
     public function hasRefreshToken(): bool
     {
         $refreshToken = Arr::get($this->getAccessToken(), 'refresh_token');
 
-        return ! empty($refreshToken);
+        return !empty($refreshToken);
     }
 
     public function tokenIsAboutToExpire(): bool
@@ -125,7 +122,7 @@ abstract class SocialProvider implements SocialProviderContract
         $expires_in = $this->getAccessToken()['expires_in'];
 
         $expiresAt = Carbon::createFromTimestamp($expires_in, 'UTC');
-        $minutesAhead = Carbon::now('UTC')->addMinutes(12);
+        $minutesAhead = Carbon::now('UTC')->addMinutes(10);
 
         return $expiresAt->lte($minutesAhead);
     }
@@ -153,7 +150,7 @@ abstract class SocialProvider implements SocialProviderContract
 
     public function buildUrlFromBase(string $url, array $params): string
     {
-        return $url.'?'.http_build_query($params, '', '&');
+        return $url . '?' . http_build_query($params, '', '&');
     }
 
     public function rateLimitExceedContext(int $retryAfter, ?string $customText = null): array
@@ -164,13 +161,13 @@ abstract class SocialProvider implements SocialProviderContract
         return [
             'rate_limit_exceed' => true,
             'message' => $customText ?? $defaultText,
-            'next_attempt_at' => $date,
+            'next_attempt_at' => $date
         ];
     }
 
     public static function postOptions(): SocialProviderPostOptionsContract
     {
-        return new SocialProviderPostOptions;
+        return new SocialProviderPostOptions();
     }
 
     public static function externalPostUrl(AccountResource $accountResource): string
@@ -181,11 +178,6 @@ abstract class SocialProvider implements SocialProviderContract
     public static function contentType(): SocialProviderContentType
     {
         return SocialProviderContentType::SINGLE;
-    }
-
-    public static function supportAnalytics(): bool
-    {
-        return true;
     }
 
     public static function mapErrorMessage(string $key): string

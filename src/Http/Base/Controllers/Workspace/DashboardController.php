@@ -13,7 +13,8 @@ class DashboardController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('Workspace/Dashboard', [
-            'accounts' => fn () => AccountResource::collection(Account::oldest()->get())->resolve(),
+            'accounts' => fn() => AccountResource::collection(Account::oldest()->get())->resolve(),
+            'user' => auth()->user(),
         ]);
     }
 }

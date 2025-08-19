@@ -12,7 +12,7 @@ trait FacebookReelPublication
 {
     protected function publishFacebookReel(string $text, Collection $media): SocialProviderResponse
     {
-        if (! $media->count() || ! $media->first()->isVideo()) {
+        if (!$media->count() || !$media->first()->isVideo()) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['reel_supports_one_video']);
         }
 
@@ -44,7 +44,7 @@ trait FacebookReelPublication
             'id' => $processingResult->id,
             'data' => [
                 'reel' => true,
-            ],
+            ]
         ]);
     }
 
@@ -53,7 +53,7 @@ trait FacebookReelPublication
         return $this->buildResponse(
             $this->getHttpClient()::post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/video_reels", [
                 'upload_phase' => 'start',
-                'access_token' => $this->accessToken(),
+                'access_token' => $this->accessToken()
             ])
         );
     }
@@ -69,7 +69,7 @@ trait FacebookReelPublication
                     'offset' => 0,
                     'file_size' => $media->size,
                 ])
-                ->withBody($stream['stream'], 'application/octet-stream')
+                ->withBody($stream['stream'], "application/octet-stream")
                 ->post($uploadUrl);
         };
 
@@ -77,7 +77,7 @@ trait FacebookReelPublication
 
         Util::closeAndDeleteStreamResource($stream);
 
-        if (! $result) {
+        if (!$result) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['request_timeout']);
         }
 

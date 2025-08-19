@@ -26,12 +26,12 @@ class TwoFactorLoginRequest extends FormRequest
     public function hasValidCode(): bool
     {
         return $this->input('code') && tap(app(TwoFactorAuthProvider::class)->verify(
-            $this->challengedUser()->twoFactorAuthSecretKey(), $this->input('code')
-        ), function ($result) {
-            if ($result) {
-                $this->session()->forget('login.id');
-            }
-        });
+                $this->challengedUser()->twoFactorAuthSecretKey(), $this->input('code')
+            ), function ($result) {
+                if ($result) {
+                    $this->session()->forget('login.id');
+                }
+            });
     }
 
     public function challengedUser()
@@ -40,8 +40,8 @@ class TwoFactorLoginRequest extends FormRequest
             return $this->challengedUser;
         }
 
-        if (! $this->session()->has('login.id') ||
-            ! $user = self::getUserClass()::find($this->session()->get('login.id'))) {
+        if (!$this->session()->has('login.id') ||
+            !$user = self::getUserClass()::find($this->session()->get('login.id'))) {
             throw ValidationException::withMessages([
                 'code' => [__('mixpost::auth.two_factor_auth_code_invalid')],
             ]);
@@ -52,7 +52,7 @@ class TwoFactorLoginRequest extends FormRequest
 
     public function validRecoveryCode(): ?string
     {
-        if (! $this->input('recovery_code')) {
+        if (!$this->input('recovery_code')) {
             return null;
         }
 
@@ -77,7 +77,7 @@ class TwoFactorLoginRequest extends FormRequest
 
     public function remember()
     {
-        if (! $this->remember) {
+        if (!$this->remember) {
             $this->remember = $this->session()->pull('login.remember', false);
         }
 

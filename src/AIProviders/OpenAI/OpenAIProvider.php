@@ -30,8 +30,11 @@ class OpenAIProvider extends AIProvider
 
     public function generateText(string $prompt, string $instructions = ''): AIProviderResponse
     {
+        // Get the selected model from configuration, fallback to default if not set
+        $model = $this->getServiceConfiguration('model') ?? 'gpt-4o-mini';
+
         $result = $this->client()->chat()->create([
-            'model' => 'gpt-4o-mini',
+            'model' => $model,
             'messages' => [
                 ['role' => 'system', 'content' => $instructions],
                 ['role' => 'user', 'content' => $prompt],
@@ -45,7 +48,7 @@ class OpenAIProvider extends AIProvider
 
     public function generateImage(): AIProviderResponse
     {
-        return AIProviderResponse::withStatus(AIProviderResponseStatus::OK);
+        // TODO: Implement generateImage() method.
     }
 
     protected function client(): OpenAIClient

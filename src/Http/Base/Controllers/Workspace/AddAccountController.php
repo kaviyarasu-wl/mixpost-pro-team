@@ -10,6 +10,8 @@ use Inertia\Inertia;
 use Inovector\Mixpost\Events\Account\AddingAccount;
 use Inovector\Mixpost\Facades\SocialProviderManager;
 use Inovector\Mixpost\Facades\WorkspaceManager;
+use Inovector\Mixpost\Models\Account;
+use Inovector\Mixpost\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
 class AddAccountController extends Controller
@@ -17,6 +19,11 @@ class AddAccountController extends Controller
     public function __invoke(HttpRequest $request): Response|RedirectResponse
     {
         $providerName = $request->route('provider');
+
+        $accountLimit = User::find(auth()->id())->userSubscription?->plan?->account_limit ?? 0;
+        if (Account::getCurrentUserAccounts()->count() >= $accountLimit) {
+            return back()->with('error', 'You have reached the maximum number of accounts.');
+        }
 
         $provider = SocialProviderManager::connect($providerName, ['state' => WorkspaceManager::current()->uuid]);
 

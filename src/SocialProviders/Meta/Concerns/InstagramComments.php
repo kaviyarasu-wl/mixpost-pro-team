@@ -16,7 +16,7 @@ trait InstagramComments
 
         $response = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
             ->post("$this->apiUrl/$this->apiVersion/$postId/comments", [
-                'message' => $text,
+                'message' => $text
             ]);
 
         return $this->buildResponse($response);

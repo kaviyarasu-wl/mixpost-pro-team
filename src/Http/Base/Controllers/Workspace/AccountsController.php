@@ -66,7 +66,7 @@ class AccountsController extends Controller
             return redirect()->back()->with('error', __('mixpost::account.account_not_updated'));
         }
 
-        (new UpdateOrCreateAccount)($account->provider, $response->context(), $account->access_token->toArray());
+        (new UpdateOrCreateAccount())($account->provider, $response->context(), $account->access_token->toArray());
 
         return redirect()->back();
     }

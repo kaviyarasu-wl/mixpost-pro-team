@@ -10,7 +10,7 @@ class SystemWebhook
 {
     public function handle(Request $request, Closure $next)
     {
-        if (! Mixpost::isSystemWebhookEnabled()) {
+        if (!Mixpost::isSystemWebhookEnabled()) {
             abort(403);
         }
 

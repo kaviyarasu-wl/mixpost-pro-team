@@ -40,11 +40,8 @@ class AccountPublishPost
             media: $parser->formatMedia($content[0]['media']),
             params: array_merge($options, [
                 'url' => $content[0]['url'] ?? '',
-                'video_thumbs' => $content[0]['video_thumbs'] ?? '',
             ])
         );
-
-        $firstResponse = $lastResponse;
 
         if ($lastResponse->hasError()) {
             $post->insertErrors($account, $lastResponse->context());
@@ -81,8 +78,6 @@ class AccountPublishPost
                     media: $parser->formatMedia($contentItem['media']),
                     params: array_merge($options, [
                         'url' => $contentItem['url'] ?? '',
-                        'first_response' => $firstResponse,
-                        'last_response' => $lastResponse,
                         'last_id' => $lastResponse->id(),
                     ])
                 );

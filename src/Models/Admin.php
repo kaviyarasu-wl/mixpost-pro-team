@@ -15,7 +15,7 @@ class Admin extends Model
     public $table = 'mixpost_admins';
 
     protected $fillable = [
-        'user_id',
+        'user_id'
     ];
 
     public function user(): BelongsTo

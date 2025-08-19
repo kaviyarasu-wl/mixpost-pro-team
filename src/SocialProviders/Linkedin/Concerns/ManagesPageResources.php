@@ -3,7 +3,6 @@
 namespace Inovector\Mixpost\SocialProviders\Linkedin\Concerns;
 
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\SocialProviders\Linkedin\Enums\PageType;
 use Inovector\Mixpost\Support\AccountSuffix;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
@@ -24,7 +23,7 @@ trait ManagesPageResources
         $response = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
             ->withHeaders($this->httpHeaders())
             ->get("$this->apiUrl/$this->apiVersion/organizations/{$this->values['provider_id']}", [
-                'projection' => '(id,localizedName,vanityName,primaryOrganizationType,logoV2(original~:playableStreams))',
+                'projection' => '(id,localizedName,vanityName,logoV2(original~:playableStreams))'
             ]);
 
         return $this->buildResponse($response, function () use ($response) {
@@ -35,10 +34,7 @@ trait ManagesPageResources
                 'name' => $data['localizedName'],
                 'username' => $data['vanityName'] ?? '',
                 'image' => Arr::get($data, 'logoV2.original~.elements.0.identifiers.0.identifier'),
-                'data' => array_merge(
-                    AccountSuffix::schema('Page'),
-                    ['page_type' => $this->getPageType($data['primaryOrganizationType'] ?? null)]
-                ),
+                'data' => AccountSuffix::schema('Page')
             ];
         });
     }
@@ -59,7 +55,7 @@ trait ManagesPageResources
             ->withHeaders($this->httpHeaders())
             ->get("$this->apiUrl/$this->apiVersion/organizationalEntityAcls", [
                 'q' => 'roleAssignee',
-                'projection' => '(elements*(organizationalTarget~(id,vanityName,primaryOrganizationType,localizedName,logoV2(original~:playableStreams))))',
+                'projection' => '(elements*(organizationalTarget~(id,vanityName,localizedName,logoV2(original~:playableStreams))))'
             ]);
 
         return $this->buildResponse($response, function () use ($response) {
@@ -69,10 +65,7 @@ trait ManagesPageResources
                     'name' => $item['organizationalTarget~']['localizedName'],
                     'username' => $item['organizationalTarget~']['vanityName'] ?? '',
                     'image' => Arr::get($item, 'organizationalTarget~.logoV2.original~.elements.0.identifiers.0.identifier'),
-                    'data' => array_merge(
-                        AccountSuffix::schema('Page'),
-                        ['page_type' => $this->getPageType($data['primaryOrganizationType'] ?? null)]
-                    ),
+                    'data' => AccountSuffix::schema('Page')
                 ];
             })->toArray();
         });
@@ -92,12 +85,12 @@ trait ManagesPageResources
 
         $response = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
             ->get("$this->apiUrl/$this->apiVersion/networkSizes/urn:li:organization:{$this->values['provider_id']}", [
-                'edgeType' => 'CompanyFollowedByMember',
+                'edgeType' => 'CompanyFollowedByMember'
             ]);
 
         return $this->buildResponse($response, function () use ($response) {
             return [
-                'count' => $response->json('firstDegreeSize'),
+                'count' => $response->json('firstDegreeSize')
             ];
         });
     }
@@ -121,17 +114,8 @@ trait ManagesPageResources
                     'owners' => "urn:li:organization:{$this->values['provider_id']}",
                     'sharesPerOwner' => 1000,
                     'count' => $count,
-                    'start' => $start,
+                    'start' => $start
                 ])
         );
-    }
-
-    private function getPageType(?string $organizationType = null): PageType
-    {
-        return match ($organizationType) {
-            'BRAND' => PageType::SHOWCASE,
-            'SCHOOL' => PageType::SCHOOL,
-            default => PageType::COMPANY
-        };
     }
 }

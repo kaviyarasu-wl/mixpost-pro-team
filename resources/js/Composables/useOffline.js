@@ -1,31 +1,31 @@
-import { onMounted, onUnmounted, ref } from 'vue'
+import {onMounted, onUnmounted, ref} from "vue";
 
 const useOffline = () => {
-  const offline = ref(false)
+    const offline = ref(false);
 
-  const setOffline = () => {
-    offline.value = true
-  }
+    const setOffline = () => {
+        offline.value = true;
+    }
 
-  const setOnline = () => {
-    offline.value = false
-  }
+    const setOnline = () => {
+        offline.value = false;
+    }
 
-  onMounted(() => {
-    window.addEventListener('offline', setOffline)
-    window.addEventListener('online', setOnline)
-  })
+    onMounted(() => {
+        window.addEventListener('offline', setOffline);
+        window.addEventListener('online', setOnline);
+    });
 
-  onUnmounted(() => {
-    window.removeEventListener('offline', setOffline)
-    window.removeEventListener('online', setOnline)
-  })
+    onUnmounted(() => {
+        window.removeEventListener('offline', setOffline);
+        window.removeEventListener('online', setOnline);
+    });
 
-  return {
-    offline,
-    setOffline,
-    setOnline
-  }
+    return {
+        offline,
+        setOffline,
+        setOnline,
+    }
 }
 
-export default useOffline
+export default useOffline;

@@ -8,9 +8,7 @@ use Inovector\Mixpost\Support\AnonymousResourceCollectionWithParameters;
 trait ResourceHasParameters
 {
     protected array $additionalFields = [];
-
     protected array $only = [];
-
     protected array $except = [];
 
     public function additionalFields($value): static
@@ -43,11 +41,11 @@ trait ResourceHasParameters
     {
         $fields = $this->fields();
 
-        if (! empty($this->only)) {
+        if (!empty($this->only)) {
             return Arr::only($fields, $this->only);
         }
 
-        if (! empty($this->except)) {
+        if (!empty($this->except)) {
             return Arr::except($fields, $this->except);
         }
 

@@ -17,7 +17,7 @@ class StorePost extends PostFormRequest
             $post = Post::create([
                 'user_id' => Auth::id(),
                 'status' => PostStatus::DRAFT,
-                'scheduled_at' => $this->scheduledAt() ? Util::convertTimeToUTC($this->scheduledAt()) : null,
+                'scheduled_at' => $this->scheduledAt() ? Util::convertTimeToUTC($this->scheduledAt()) : null
             ]);
 
             $post->accounts()->attach($this->input('accounts', []));

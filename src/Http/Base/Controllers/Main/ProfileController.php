@@ -16,13 +16,13 @@ class ProfileController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Main/Profile', [
+        return Inertia::render('Admin/Profile', [
             'settings' => Settings::all(),
             'locales' => Util::config('locales'),
-            'timezoneList' => (new TimezoneList)->splitGroup()->list(),
-            'userHasTwoFactorAuthEnabled' => Auth::user()->hasTwoFactorAuthEnabled(),
+            'timezone_list' => (new TimezoneList())->splitGroup()->list(),
+            'user_has_two_factor_auth_enabled' => Auth::user()->hasTwoFactorAuthEnabled(),
             'is_two_factor_auth_enabled' => Features::isTwoFactorAuthEnabled(),
-            'isDeleteAccountEnabled' => Features::isDeleteAccountEnabled(),
+            'is_delete_account_enabled' => Features::isDeleteAccountEnabled(),
             'delete_account_url' => Mixpost::getDeleteAccountRoute() ? route(Mixpost::getDeleteAccountRoute()) : null,
         ]);
     }

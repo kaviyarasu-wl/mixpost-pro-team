@@ -6,11 +6,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Inovector\Mixpost\Actions\Post\DeletePost as DeletePostAction;
 use Inovector\Mixpost\Builders\Post\PostQuery;
-use Inovector\Mixpost\Enums\PostDeleteMode;
+use Inovector\Mixpost\Events\Post\PostDeleted;
 use Inovector\Mixpost\Http\Api\Requests\Workspace\Post\StorePost;
 use Inovector\Mixpost\Http\Api\Requests\Workspace\Post\UpdatePost;
 use Inovector\Mixpost\Http\Api\Resources\PostResource;
@@ -24,9 +21,7 @@ class PostsController extends Controller
         $posts = PostQuery::apply($request)
             ->latest()
             ->latest('id')
-            ->paginate(
-                (int) min($request->get('limit', 50), 100)
-            );
+            ->paginate(20);
 
         EagerLoadPostVersionsMedia::apply($posts);
 
@@ -60,29 +55,30 @@ class PostsController extends Controller
     public function update(UpdatePost $updatePost): JsonResponse
     {
         return response()->json([
-            'success' => (bool) $updatePost->handle(),
+            'success' => (bool)$updatePost->handle(),
         ]);
     }
 
     public function destroy(Request $request): JsonResponse
     {
-        $result = (new DeletePostAction)(
-            uuids: Arr::wrap($request->route('post')),
-            mode: PostDeleteMode::from(
-                $request->input('delete_mode', PostDeleteMode::APP_ONLY->value)
-            ),
-            toTrash: $toTrash = (bool) $request->get('trash'),
-            userId: Auth::id()
-        );
+        $query = Post::where('uuid', $request->route('post'));
 
-        if (! $toTrash) {
-            return response()->json(array_merge($result, [
-                'deleted' => $result['deleted_from_app'] ?? 0, // TODO: remove this on the v4
-            ]));
+        if (!$request->get('trash')) {
+            $deleted = $query->forceDelete();
+
+            PostDeleted::dispatch([$request->route('post')], false);
+
+            return response()->json([
+                'deleted' => $deleted,
+            ]);
         }
 
-        return response()->json(array_merge($result, [
-            'to_trash' => $result['deleted_from_app'] ?? 0, // TODO: remove this on the v4
-        ]));
+        $deleted = $query->delete();
+
+        PostDeleted::dispatch([$request->route('post')], false);
+
+        return response()->json([
+            'to_trash' => $deleted,
+        ]);
     }
 }

@@ -19,7 +19,7 @@ class AccessTokensController extends Controller
     public function index(): Response
     {
         return Inertia::render('Main/AccessTokens', [
-            'tokens' => fn () => TokenResource::collection(self::getAuthGuard()->user()->tokens()->latest()->paginate(20)),
+            'tokens' => fn() => TokenResource::collection(self::getAuthGuard()->user()->tokens()->latest()->paginate(20)),
         ]);
     }
 

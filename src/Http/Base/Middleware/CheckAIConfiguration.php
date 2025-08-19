@@ -14,7 +14,7 @@ class CheckAIConfiguration
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! AIManager::isReadyToUse()) {
+        if (!AIManager::isReadyToUse()) {
             throw ValidationException::withMessages([
                 'ai_disabled' => [__('mixpost::ai.ai_disabled')],
             ]);

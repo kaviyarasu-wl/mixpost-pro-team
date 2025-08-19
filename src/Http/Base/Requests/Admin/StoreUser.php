@@ -17,7 +17,7 @@ class StoreUser extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.self::getUserClass()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . self::getUserClass()],
             'is_admin' => ['required', 'boolean'],
             'password' => ['required', 'confirmed', Password::defaults()],
         ];

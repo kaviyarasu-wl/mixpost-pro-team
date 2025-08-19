@@ -2,16 +2,16 @@
 
 namespace Inovector\Mixpost\Models;
 
-use DateTimeInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Inovector\Mixpost\Concerns\Model\HasUuid;
 use Inovector\Mixpost\Enums\WebhookDeliveryStatus;
 use Inovector\Mixpost\Support\AnonymousWebhookEvent;
+use DateTimeInterface;
 
 class WebhookDelivery extends Model
 {
@@ -32,7 +32,7 @@ class WebhookDelivery extends Model
         'resent_manually',
         'payload',
         'response',
-        'created_at',
+        'created_at'
     ];
 
     protected $casts = [
@@ -77,7 +77,7 @@ class WebhookDelivery extends Model
         $this->save();
     }
 
-    public function updateResendAt(Carbon|DateTimeInterface|null $datetime = null): void
+    public function updateResendAt(Carbon|DateTimeInterface $datetime = null): void
     {
         $this->resend_at = $datetime;
         $this->save();

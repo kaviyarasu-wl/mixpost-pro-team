@@ -11,10 +11,12 @@ use Inovector\Mixpost\Support\LoginRateLimiter;
 
 class RedirectIfTwoFactorAuthenticatable
 {
-    use UsesAuth;
     use UsesUserModel;
+    use UsesAuth;
 
-    public function __construct(protected readonly LoginRateLimiter $limiter) {}
+    public function __construct(protected readonly LoginRateLimiter $limiter)
+    {
+    }
 
     public function handle(Request $request, callable $next)
     {
@@ -30,7 +32,7 @@ class RedirectIfTwoFactorAuthenticatable
     protected function validateCredentials($request)
     {
         return tap(self::getUserClass()::where('email', $request->input('email'))->first(), function ($user) use ($request) {
-            if (! $user || ! self::getAuthGuard()->getProvider()->validateCredentials($user, ['password' => $request->password])) {
+            if (!$user || !self::getAuthGuard()->getProvider()->validateCredentials($user, ['password' => $request->password])) {
                 $this->throwFailedAuthenticationException($request);
             }
         });

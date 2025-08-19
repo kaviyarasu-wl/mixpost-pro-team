@@ -10,6 +10,5 @@ trait SocialProviderException
     public function captureException(SocialProviderResponse $response): void
     {
         Log::error($this->job->payload()['displayName'], array_merge($response->context(), ['payload' => $this->job->payload()]));
-        // TODO: Send to Sentry if enabled
     }
 }

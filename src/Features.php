@@ -28,7 +28,7 @@ class Features
     {
         $config = Mixpost::getEnterpriseConfig()['onboarding'] ?? null;
 
-        if (! $config) {
+        if (!$config) {
             return false;
         }
 

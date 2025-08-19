@@ -20,20 +20,21 @@ class MediaFetchGifsController extends Controller
     {
         $clientId = TenorService::getConfiguration('client_id');
 
-        if (! $clientId) {
+        if (!$clientId) {
             abort(Response::HTTP_FORBIDDEN);
         }
 
         $terms = config('mixpost.external_media_terms');
+        $searchKeyword = $request->query('keyword', Arr::random($terms));
 
-        $items = Http::get('https://tenor.googleapis.com/v2/search', [
+        $items = Http::get("https://tenor.googleapis.com/v2/search", [
             'key' => $clientId,
             'client_key' => Str::slug(Config::get('app.name', 'mixpost'), '_'),
-            'q' => $request->query('keyword', Arr::random($terms)),
+            'q' => $searchKeyword,
             'limit' => 30,
         ]);
 
-        $media = collect($items->json('results', []))->map(function ($item) {
+        $media = collect($items->json('results', []))->map(function ($item) use ($searchKeyword) {
             $media = new Media([
                 'name' => $item['content_description'],
                 'mime_type' => 'image/gif',
@@ -43,14 +44,18 @@ class MediaFetchGifsController extends Controller
                     [
                         'disk' => 'stock',
                         'name' => 'thumb',
-                        'path' => $item['media_formats']['tinygif']['url'],
-                    ],
-                ],
+                        'path' => $item['media_formats']['tinygif']['url']
+                    ]
+                ]
             ]);
 
             $media->setAttribute('id', $item['id']);
             $media->setAttribute('download_data', 'false');
-            $media->setAttribute('data', null);
+            $media->setAttribute('data', [
+                'content_description' => $item['content_description'] ?? null,
+                'search_term' => $searchKeyword,
+                'tenor_id' => $item['id'],
+            ]);
 
             return $media;
         });
@@ -59,8 +64,8 @@ class MediaFetchGifsController extends Controller
 
         return MediaResource::collection($media)->additional([
             'links' => [
-                'next' => "?page=$nextPage",
-            ],
+                'next' => "?page=$nextPage"
+            ]
         ]);
     }
 }

@@ -12,5 +12,5 @@ interface MediaConversion
 
     public function canPerform(): bool;
 
-    public function handle(): ?MediaConversionData;
+    public function handle(): MediaConversionData|null;
 }

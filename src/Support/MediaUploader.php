@@ -6,39 +6,22 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use Inovector\Mixpost\Abstracts\Image;
-use Inovector\Mixpost\Concerns\UsesMimeType;
-use Inovector\Mixpost\Contracts\MediaConversion;
 use Inovector\Mixpost\Models\Media;
-use Inovector\Mixpost\Util;
+use Inovector\Mixpost\Contracts\MediaConversion;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 
 class MediaUploader
 {
-    use UsesMimeType;
-
     protected UploadedFile $file;
-
     protected string $disk;
-
     protected string $path = '';
-
     protected ?array $data = null;
-
-    protected int $width;
-
-    protected int $height;
-
     protected array $conversions;
 
     public function __construct(UploadedFile $file)
     {
         $this->setFile($file);
-
-        $this->disk(Util::config('disk'));
-
-        $this->width = Image::LARGE_WIDTH;
-        $this->height = Image::LARGE_HEIGHT;
+        $this->disk(config('mixpost.disk'));
     }
 
     public static function fromFile(UploadedFile $file): static
@@ -67,27 +50,6 @@ class MediaUploader
         return $this;
     }
 
-    public function data(array $array): static
-    {
-        $this->data = ! empty($array) ? $array : null;
-
-        return $this;
-    }
-
-    public function width(int $width): static
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    public function height(int $height): static
-    {
-        $this->height = $height;
-
-        return $this;
-    }
-
     public function conversions(array $array): static
     {
         $this->conversions = $array;
@@ -95,52 +57,43 @@ class MediaUploader
         return $this;
     }
 
+    public function data(array $array): static
+    {
+        $this->data = !empty($array) ? $array : null;
+
+        return $this;
+    }
+
     public function upload(): array
     {
-        $mimeType = $this->file->getMimeType();
-        $filesystem = $this->filesystem();
+        $path = $this->filesystem()->putFile($this->path, $this->file, 'public');
 
-        // Determine upload path
-        $filePath = $this->isImage($mimeType) && ! $this->isGifImage($mimeType)
-            ? $this->uploadImage()
-            : $filesystem->putFile($this->path, $this->file, 'public');
-
-        if (! $filePath) {
+        if (!$path) {
             throw new \Exception("The file was not uploaded. Check your $this->disk driver configuration.");
         }
 
-        $size = $filesystem->size($filePath);
-        $conversions = $this->performConversions($filePath);
-        $totalSize = $size + collect($conversions)->sum('size');
+        $conversions = $this->performConversions($path);
+        $conversionsSize = collect($conversions)->sum('size');
 
         return [
             'name' => $this->file->getClientOriginalName(),
-            'mime_type' => $mimeType,
-            'size' => $size,
-            'size_total' => $totalSize,
+            'mime_type' => $this->file->getMimeType(),
+            'size' => $this->file->getSize(),
+            'size_total' => $this->file->getSize() + $conversionsSize,
             'disk' => $this->disk,
-            'is_local_driver' => $filesystem->getAdapter() instanceof LocalFilesystemAdapter,
-            'path' => $filePath,
-            'url' => $filesystem->url($filePath),
+            'is_local_driver' => $this->filesystem()->getAdapter() instanceof LocalFilesystemAdapter,
+            'path' => $path,
+            'url' => $this->filesystem()->url($path),
             'conversions' => $conversions,
-            'data' => $this->data ?: null,
+            'data' => !empty($this->data) ? $this->data : null,
         ];
     }
 
     public function uploadAndInsert()
     {
-        $data = Arr::only($this->upload(), ['name', 'mime_type', 'size', 'size_total', 'disk', 'path', 'conversions', 'data']);
-
-        if (! (isset($this->data['adobe_express_doc_id'])
-                &&
-                $media = Media::whereJsonContains('data->adobe_express_doc_id', $this->data['adobe_express_doc_id'])->first())) {
-            return Media::create($data);
-        }
-
-        $media->deleteFiles();
-        $media->update($data);
-
-        return $media->refresh();
+        return Media::create(
+            Arr::only($this->upload(), ['name', 'mime_type', 'size', 'size_total', 'disk', 'path', 'conversions', 'data'])
+        );
     }
 
     protected function performConversions(string $filepath): array
@@ -150,29 +103,18 @@ class MediaUploader
         }
 
         return collect($this->conversions)->map(function ($conversion) use ($filepath) {
-            if (! $conversion instanceof MediaConversion) {
+            if (!$conversion instanceof MediaConversion) {
                 throw new \Exception('The conversion must be an instance of MediaConversion');
             }
 
             $perform = $conversion->filepath($filepath)->fromDisk($this->disk)->perform();
 
-            if (! $perform) {
+            if (!$perform) {
                 return null;
             }
 
             return $perform->get();
         })->filter()->values()->toArray();
-    }
-
-    protected function uploadImage(): string
-    {
-        $image = ImageResizer::make($this->file);
-
-        $image->disk($this->disk)
-            ->path($this->path)
-            ->resize(Image::LARGE_WIDTH);
-
-        return $image->getDestinationFilePath();
     }
 
     protected function filesystem(): Filesystem

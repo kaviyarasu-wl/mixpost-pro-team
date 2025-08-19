@@ -16,7 +16,7 @@ class InstagramReports extends Report
     {
         return [
             'metrics' => $this->metrics($account, $period),
-            'audience' => $this->audience($account, $period),
+            'audience' => $this->audience($account, $period)
         ];
     }
 
@@ -37,13 +37,13 @@ class InstagramReports extends Report
             return $this->queryPeriod($query, $period);
         })->first();
 
-        $impressions = (int) $reports->where('type', InstagramInsightType::IMPRESSIONS)->value('total', 0);
-        $followerCount = (int) $reports->where('type', InstagramInsightType::FOLLOWER_COUNT)->value('total', 0);
-        $reach = (int) $reports->where('type', InstagramInsightType::REACH)->value('total', 0);
+        $impressions = (int)$reports->where('type', InstagramInsightType::IMPRESSIONS)->value('total', 0);
+        $followerCount = (int)$reports->where('type', InstagramInsightType::FOLLOWER_COUNT)->value('total', 0);
+        $reach = (int)$reports->where('type', InstagramInsightType::REACH)->value('total', 0);
 
         return [
-            'likes' => (int) $processedMetricsFromImportedPosts->likes ?? 0,
-            'comments' => (int) $processedMetricsFromImportedPosts->comments ?? 0,
+            'likes' => (int)$processedMetricsFromImportedPosts->likes ?? 0,
+            'comments' => (int)$processedMetricsFromImportedPosts->comments ?? 0,
             'follower_count' => $followerCount,
             'impressions' => $impressions,
             'reach' => $reach,

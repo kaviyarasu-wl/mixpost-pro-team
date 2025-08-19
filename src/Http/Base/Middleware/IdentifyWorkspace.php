@@ -14,7 +14,7 @@ class IdentifyWorkspace
             return $next($request);
         }
 
-        if (! $request->expectsJson()) {
+        if (!$request->expectsJson()) {
             abort(404);
         }
 

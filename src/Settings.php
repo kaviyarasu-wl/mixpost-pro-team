@@ -44,7 +44,7 @@ class Settings
         Cache::put($this->resolveCacheKey($name, $userId), $value);
     }
 
-    public function get(string $name, ?int $userId = null): mixed
+    public function get(string $name, ?int $userId = null)
     {
         $userId = $userId ?: Auth::id();
 
@@ -87,6 +87,6 @@ class Settings
     {
         $userId = $userId ?: Auth::id();
 
-        return $this->config->get('mixpost.cache_prefix').".settings.$userId.$key";
+        return $this->config->get('mixpost.cache_prefix') . ".settings.$userId.$key";
     }
 }

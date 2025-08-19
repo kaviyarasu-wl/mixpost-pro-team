@@ -8,7 +8,9 @@ use Inovector\Mixpost\TwoFactorAuthProvider;
 
 class EnableTwoFactorAuth
 {
-    public function __construct(private readonly TwoFactorAuthProvider $provider) {}
+    public function __construct(private readonly TwoFactorAuthProvider $provider)
+    {
+    }
 
     public function __invoke($user): void
     {

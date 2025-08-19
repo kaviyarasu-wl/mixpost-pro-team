@@ -11,7 +11,7 @@ class AccountResource extends BaseAccountResource
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
-            'name' => $this->name.($this->suffix() ? " ({$this->suffix()})" : ''),
+            'name' => $this->name . ($this->suffix() ? " ({$this->suffix()})" : ''),
             'username' => $this->username,
             'image' => $this->image(),
             'provider' => $this->provider,
@@ -19,7 +19,7 @@ class AccountResource extends BaseAccountResource
             'authorized' => $this->authorized,
             'created_at' => $this->created_at->toDateTimeString(),
             'external_url' => $this->whenPivotLoaded('mixpost_post_accounts', function () {
-                if (! $this->pivot->provider_post_id) {
+                if (!$this->pivot->provider_post_id) {
                     return null;
                 }
 
@@ -27,7 +27,7 @@ class AccountResource extends BaseAccountResource
             }),
             'errors' => $this->whenPivotLoaded('mixpost_post_accounts', function () {
                 return $this->errors();
-            }),
+            })
         ];
     }
 }

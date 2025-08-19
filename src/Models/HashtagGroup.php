@@ -18,6 +18,6 @@ class HashtagGroup extends Model
     protected $fillable = [
         'uuid',
         'name',
-        'content',
+        'content'
     ];
 }

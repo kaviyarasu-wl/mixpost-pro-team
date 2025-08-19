@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 class CheckUserPasswordRule implements ValidationRule
 {
     public $user;
-
     public ?string $message;
 
     public function __construct($user, ?string $message = null)
@@ -20,7 +19,7 @@ class CheckUserPasswordRule implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! Hash::check($value, $this->user->password)) {
+        if (!Hash::check($value, $this->user->password)) {
             $fail($this->message ?: trans('validation.password'));
         }
     }

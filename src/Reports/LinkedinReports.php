@@ -11,7 +11,7 @@ class LinkedinReports extends Report
     {
         return [
             'metrics' => [],
-            'audience' => [],
+            'audience' => []
         ];
     }
 }

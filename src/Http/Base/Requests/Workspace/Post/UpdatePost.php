@@ -35,7 +35,8 @@ class UpdatePost extends PostFormRequest
         $wasSetDraft = false;
 
         DB::transaction(function () use (&$wasSetDraft) {
-            if (! $this->post->isDraft() && (empty($this->input('accounts')) || ! $this->scheduledAt())) {
+            if (!$this->post->isDraft() && (empty($this->input('accounts')) || !$this->scheduledAt())) {
+                $this->post->unSetUsageLimit();
                 $this->post->setDraft(false);
                 $wasSetDraft = true;
             }
@@ -54,7 +55,7 @@ class UpdatePost extends PostFormRequest
 
         PostUpdated::dispatch($this->post);
 
-        if ($this->post->scheduledAtWasChanged() && $isScheduledOldValue && ! $wasSetDraft) {
+        if ($this->post->scheduledAtWasChanged() && $isScheduledOldValue && !$wasSetDraft) {
             PostScheduleAtUpdated::dispatch($this->post, $scheduledAtOldValue);
         }
 

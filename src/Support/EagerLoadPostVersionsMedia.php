@@ -3,16 +3,16 @@
 namespace Inovector\Mixpost\Support;
 
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Inovector\Mixpost\Models\Media;
 
 class EagerLoadPostVersionsMedia
 {
     protected Collection $mediaCollection;
 
-    public function __construct(public readonly LengthAwarePaginator|Collection|Model $postResult)
+    public function __construct(readonly LengthAwarePaginator|Collection|Model $postResult)
     {
         $this->mediaCollection = $this->getMediaCollection();
     }
@@ -30,13 +30,6 @@ class EagerLoadPostVersionsMedia
                                 if (isset($this->mediaCollection[$mediaId])) {
                                     $mediaId = $this->mediaCollection[$mediaId];
                                 }
-                            }
-                        }
-                        if (isset($item['video_thumbs']) && is_array($item['video_thumbs'])) {
-                            $item['video_thumb_media'] = [];
-
-                            foreach ($item['video_thumbs'] as $videoThumb) {
-                                $item['video_thumb_media'][$videoThumb['media_id']] = $this->mediaCollection[$videoThumb['thumb_id']];
                             }
                         }
                     }
@@ -62,13 +55,6 @@ class EagerLoadPostVersionsMedia
                     foreach ($version->content as $item) {
                         if (isset($item['media']) && is_array($item['media'])) {
                             $mediaIds = array_merge($mediaIds, $item['media']);
-                        }
-                        if (isset($item['video_thumbs']) && is_array($item['video_thumbs'])) {
-                            $thumbnailMediaIds = [];
-                            foreach ($item['video_thumbs'] as $videoThumb) {
-                                $thumbnailMediaIds[] = $videoThumb['thumb_id'];
-                            }
-                            $mediaIds = array_merge($mediaIds, $thumbnailMediaIds);
                         }
                     }
                 }

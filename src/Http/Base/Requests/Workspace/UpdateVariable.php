@@ -11,7 +11,7 @@ class UpdateVariable extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'value' => ['required', 'string', 'max:3000'],
+            'value' => ['required', 'string', 'max:3000']
         ];
     }
 

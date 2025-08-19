@@ -1,18 +1,18 @@
 <script setup>
-import AddMedia from '@/Components/Media/AddMedia.vue'
-import PhotoIcon from '@/Icons/Photo.vue'
+import AddMedia from "@/Components/Media/AddMedia.vue";
+import PhotoIcon from "@/Icons/Photo.vue";
 
-defineEmits(['insert'])
+defineEmits(["insert"]);
 </script>
 
 <template>
-  <AddMedia @insert="$emit('insert', $event)">
-    <button
-      v-tooltip="$t('post.media')"
-      type="button"
-      class="text-stone-800 hover:text-primary-500 transition-colors ease-in-out duration-200"
-    >
-      <PhotoIcon />
-    </button>
-  </AddMedia>
+    <AddMedia @insert="$emit('insert', $event)">
+        <button
+            type="button"
+            v-tooltip="$t('post.media')"
+            class="text-stone-800 hover:text-primary-500 transition-colors ease-in-out duration-200"
+        >
+            <PhotoIcon/>
+        </button>
+    </AddMedia>
 </template>

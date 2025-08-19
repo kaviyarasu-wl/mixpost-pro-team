@@ -10,8 +10,8 @@ use Inovector\Mixpost\Rules\CheckUserPasswordRule;
 
 class ConfirmPassword extends FormRequest
 {
-    use ConfirmsPasswords;
     use UsesUserModel;
+    use ConfirmsPasswords;
 
     public function rules(): array
     {
@@ -20,7 +20,7 @@ class ConfirmPassword extends FormRequest
         return [
             'password' => [
                 'required',
-                new CheckUserPasswordRule($user, __('mixpost::auth.password_dont_match')),
+                new CheckUserPasswordRule($user, __('mixpost::auth.password_dont_match'))
             ],
         ];
     }

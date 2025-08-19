@@ -11,7 +11,7 @@ trait UsesUserResource
     {
         $resource = Mixpost::getCustomUserResource();
 
-        if (! $resource) {
+        if (!$resource) {
             return UserResource::class;
         }
 

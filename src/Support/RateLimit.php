@@ -9,9 +9,11 @@ class RateLimit
 {
     public function __construct(
         private readonly string $key,
-        private readonly int $limit,
-        private readonly int $timeframeInMinutes,
-    ) {}
+        private readonly int    $limit,
+        private readonly int    $timeframeInMinutes,
+    )
+    {
+    }
 
     public function isExceeded(): bool
     {

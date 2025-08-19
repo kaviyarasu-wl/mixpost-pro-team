@@ -12,7 +12,7 @@ class PostVersionResource extends BasePostVersionResource
             'account_id' => $this->account_id,
             'is_original' => $this->is_original,
             'content' => $this->content(),
-            'options' => $this->options(),
+            'options' => $this->options()
         ];
     }
 }

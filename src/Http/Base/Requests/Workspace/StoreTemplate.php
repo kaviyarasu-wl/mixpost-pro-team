@@ -11,9 +11,16 @@ class StoreTemplate extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'content.*.body' => ['nullable', 'string'],
+            'content.*.body' => ['required', 'string'],
             'content.*.media' => ['array'],
             'content.*.media.*' => ['integer'],
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'content.*.body' => 'content body',
         ];
     }
 

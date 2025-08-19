@@ -15,6 +15,6 @@ trait Approval
 
     public function determineSchedulePostStatus(): PostStatus
     {
-        return ! $this->userCanApprove() ? PostStatus::NEEDS_APPROVAL : PostStatus::SCHEDULED;
+        return !$this->userCanApprove() ? PostStatus::NEEDS_APPROVAL : PostStatus::SCHEDULED;
     }
 }

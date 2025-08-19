@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        if (! Schema::hasTable('users') && ! $this->defaultUsersMigrationFileExists()) {
+        if (!Schema::hasTable('users') && !$this->defaultUsersMigrationFileExists()) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
                 $table->string('name');
@@ -26,7 +25,7 @@ return new class extends Migration
             });
         }
 
-        if (! Schema::hasTable($this->passwordResetTableName()) && ! $this->defaultPasswordResetTokensMigrationFileExists()) {
+        if (!Schema::hasTable($this->passwordResetTableName()) && !$this->defaultPasswordResetTokensMigrationFileExists()) {
             Schema::create($this->passwordResetTableName(), function (Blueprint $table) {
                 $table->string('email')->primary();
                 $table->string('token');
@@ -391,19 +390,6 @@ return new class extends Migration
             $table->json('response')->nullable();
             $table->timestamp('created_at')->nullable();
         });
-
-        Schema::create('mixpost_shortened_urls', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('workspace_id')->unsigned()->index();
-            $table->foreign('workspace_id')->references('id')->on('mixpost_workspaces')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('provider');
-            $table->string('original_url');
-            $table->string('short_url');
-            $table->timestamp('created_at');
-
-            $table->index(['workspace_id', 'original_url']);
-            $table->index(['workspace_id', 'short_url']);
-        });
     }
 
     /**
@@ -413,7 +399,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mixpost_shortened_urls');
         Schema::dropIfExists('mixpost_webhook_deliveries');
         Schema::dropIfExists('mixpost_webhooks');
 
@@ -461,11 +446,11 @@ return new class extends Migration
 
         Schema::dropIfExists('mixpost_user_two_factor_auth');
 
-        if (! $this->defaultPasswordResetTokensMigrationFileExists()) {
+        if (!$this->defaultPasswordResetTokensMigrationFileExists()) {
             Schema::dropIfExists($this->passwordResetTableName());
         }
 
-        if (! $this->defaultUsersMigrationFileExists()) {
+        if (!$this->defaultUsersMigrationFileExists()) {
             Schema::dropIfExists('users');
         }
     }

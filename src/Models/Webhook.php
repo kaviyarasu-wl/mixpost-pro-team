@@ -102,6 +102,6 @@ class Webhook extends Model
 
     public function trigger(WebhookEvent $event): Model|WebhookDelivery
     {
-        return (new TriggerWebhook)($this, $event);
+        return (new TriggerWebhook())($this, $event);
     }
 }

@@ -8,8 +8,7 @@ use Inovector\Mixpost\Support\SocialProviderResponse;
 trait ManagesOAuth
 {
     protected array $scope = [
-        'https://www.googleapis.com/auth/youtube',
-        'https://www.googleapis.com/auth/youtube.upload',
+        'https://www.googleapis.com/auth/youtube'
     ];
 
     public function getAuthUrl(): string
@@ -44,7 +43,7 @@ trait ManagesOAuth
 
         if (isset($response['error'])) {
             return [
-                'error' => $response['error_description'],
+                'error' => $response['error_description']
             ];
         }
 
@@ -55,14 +54,14 @@ trait ManagesOAuth
         ];
     }
 
-    public function refreshToken(?string $refreshToken = null): SocialProviderResponse
+    public function refreshToken(string $refreshToken = null): SocialProviderResponse
     {
         $params = [
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
             'redirect_uri' => $this->redirectUrl,
             'grant_type' => 'refresh_token',
-            'refresh_token' => $refreshToken ?: $this->getAccessToken()['refresh_token'],
+            'refresh_token' => $refreshToken ?: $this->getAccessToken()['refresh_token']
         ];
 
         $response = $this->getHttpClient()::post('https://oauth2.googleapis.com/token', $params);
@@ -77,10 +76,10 @@ trait ManagesOAuth
         });
     }
 
-    public function revokeToken(?string $token = null): SocialProviderResponse
+    public function revokeToken(string $token = null): SocialProviderResponse
     {
         $response = $this->getHttpClient()::post('https://oauth2.googleapis.com/revoke', [
-            'token' => $token ?: $this->getAccessToken()['access_token'],
+            'token' => $token ?: $this->getAccessToken()['access_token']
         ]);
 
         return $this->buildResponse($response);
