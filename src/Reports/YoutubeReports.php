@@ -11,7 +11,7 @@ class YoutubeReports extends Report
     {
         return [
             'metrics' => [],
-            'audience' => [],
+            'audience' => []
         ];
     }
 }

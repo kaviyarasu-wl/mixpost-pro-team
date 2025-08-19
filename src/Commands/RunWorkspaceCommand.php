@@ -16,9 +16,8 @@ class RunWorkspaceCommand extends Command
     {
         $workspace = Workspace::find($this->option('workspace'));
 
-        if (! $workspace) {
+        if (!$workspace) {
             $this->error('Workspace not found!');
-
             return Command::FAILURE;
         }
 

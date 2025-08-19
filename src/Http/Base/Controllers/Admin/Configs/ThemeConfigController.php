@@ -13,7 +13,7 @@ class ThemeConfigController extends Controller
     public function form(): Response
     {
         return Inertia::render('Admin/Configs/ThemeConfig', [
-            'configs' => Theme::config()->all(),
+            'configs' => Theme::config()->all()
         ]);
     }
 

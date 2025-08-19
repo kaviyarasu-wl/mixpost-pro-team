@@ -20,17 +20,17 @@ use Inovector\Mixpost\Models\ImportedPost;
 use Inovector\Mixpost\SocialProviders\Linkedin\LinkedinPageProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportLinkedinPagePostsJob implements QueueWorkspaceAware, ShouldQueue
+class ImportLinkedinPagePostsJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
     public Account $account;
-
     public array $params;
 
     public function __construct(Account $account, array $params = [])
@@ -53,7 +53,6 @@ class ImportLinkedinPagePostsJob implements QueueWorkspaceAware, ShouldQueue
 
         /**
          * @see LinkedinPageProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = $this->connectProvider($this->account)->getShares(Arr::get($this->params, 'start', 0));
@@ -96,7 +95,7 @@ class ImportLinkedinPagePostsJob implements QueueWorkspaceAware, ShouldQueue
                 'provider_post_id' => $item['id'],
                 'content' => json_encode(['text' => $item['content']]),
                 'metrics' => json_encode([]),
-                'created_at' => Carbon::parse($item['created_at'], 'UTC')->toDateString(),
+                'created_at' => Carbon::parse($item['created_at'], 'UTC')->toDateString()
             ];
         });
 

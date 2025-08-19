@@ -35,13 +35,11 @@
         "account_entities": "منصات التواصل الاجتماعي للحساب",
         "select_the_social_entities": "حدد منصات التواصل الاجتماعية التي تريد ربطها بالمنصة",
         "connected": "متصل",
+        "choose": "أختر",
         "access_token_expired": "انتهت صلاحية رمز الوصول. يرجى إعادة ربط حسابك",
         "unauthorized": "غير مصرح",
         "add_social_account": "ليس لديك حساب تواصل اجتماعي، يرجى إضافة حساب واحد على الأقل لتستمتع بتجربة المنصة والاستفادة من المميزات",
-        "no_accounts_found": "لم يتم العثور على حسابات اجتماعية",
-        "finish_connection": "إنهاء الاتصال",
-        "open_account_page": "افتح صفحة الحساب",
-        "view_profile": "افتح صفحة الحساب"
+        "no_accounts_found": "لم يتم العثور على حسابات"
     },
     "ai": {
         "tell_ai": "أخبر الذكاء الاصطناعي عما يكتب عنه",
@@ -241,8 +239,7 @@
         "request_timeout": "معذرة انتهى وقت الطلب. حاول مره اخرى.",
         "unknown_error": "خطأ غير معروف",
         "service_auth_failed": "المصادقة فشلت! يرجى التحقق من بيانات اعتماد خدمة {service}.",
-        "page_expired": "انتهت صلاحية الصفحة، يرجى المحاولة مرة أخرى.",
-        "invalid_grant": "بيانات الدخول غير صحيحة أو أن التفويض منتهي الصلاحية."
+        "page_expired": "انتهت صلاحية الصفحة، يرجى المحاولة مرة أخرى."
     },
     "finance": {
         "billing": "الفواتير"
@@ -332,7 +329,8 @@
         "search_jump": "ابحث أو انتقل إلى",
         "replace": "استبدال",
         "retry": "أعد المحاولة",
-        "general": "عام"
+        "your_plan": "خطتك",
+        "is_required": "مطلوب"
     },
     "hashtag": {
         "hashtag_name": "اسم مجموعة الوسم (HashTag)",
@@ -354,6 +352,8 @@
     "media": {
         "media_library": "مكتبة الوسائط",
         "uploads": "تحميل",
+        "filter_by_source": "تصفية حسب المصدر",
+        "uploaded": "مرفوع",
         "stock": "مكتبة  Stock",
         "gifs": "صور GIF",
         "library": "المكتبة",
@@ -375,36 +375,7 @@
         "aspect_ratio_range": "يجب أن تكون نسبة العرض إلى الارتفاع بين {min} و{max}.",
         "resolution_range": "يجب أن يكون الحد الأدنى للدقة {min} × {max} بكسل. يوصى بـ {recommended_min} x {recommended_max} بكسل.",
         "duration_range": "يجب أن تتراوح المدة بين {min} و{max} ثانية.",
-        "frame_rate_range": "يجب أن يكون معدل الإطارات بين {min} و{max} إطارًا في الثانية.",
-        "edit_alt_text": "تعديل النص البديل",
-        "write_alt_text": "اكتب نصًا بديلًا",
-        "add_alt_text_for": "أضف نصًا بديلًا لـ {platforms}.",
-        "add_video_thumb": "أضف صورة لتمثيل الفيديو.",
-        "change_video_thumb": "غيّر الصورة المصغّرة للفيديو.",
-        "view_video_thumb": "مشاهدة الصورة المصغرة للفيديو",
-        "video_thumb": "صورة مصغرة للفيديو",
-        "video_thumb_providers": "الصورة المصغرة للفيديو متاحة عبر: {providers}.",
-        "custom_size": "تخصيص الحجم",
-        "width": "عرض",
-        "height": "ارتفاع",
-        "unit": "وحدة",
-        "px": "بكسل",
-        "inch": "بوصة",
-        "mm": "ملليمترات",
-        "create_design": "إنشاء تصميم",
-        "create_adobe_express": "إنشاء باستخدام Adobe Express",
-        "new_design": "تصميم جديد",
-        "saved": "تم حفظ الوسائط بنجاح.",
-        "fb_post": "منشور على الفيسبوك",
-        "fb_story": "قصة على الفيسبوك",
-        "ig_portrait_post": "منشور صورة شخصية على إنستغرام",
-        "ig_square_post": "منشور مربع على إنستغرام",
-        "ig_story": "قصة انستغرام",
-        "linkedin_post": "منشور على LinkedIn",
-        "x_post": "منشور لمنصة X",
-        "pinterest_post": "منشور على بينتريست",
-        "media": "الوسائط المتعددة",
-        "create_for_adobe_express": "إنشاء لبرنامج Adobe Express"
+        "frame_rate_range": "يجب أن يكون معدل الإطارات بين {min} و{max} إطارًا في الثانية."
     },
     "page": {
         "pages": "الصفحات",
@@ -470,7 +441,7 @@
         "accounts": "الحسابات",
         "author": "الكاتب",
         "no_posts_found": "لم يتم العثور على أية منشورات أو مشاركات.",
-        "delete_posts": "حذف المنشورات | حذف المنشورات",
+        "delete_posts": "حذف المنشورات",
         "your_post": "منشوراتك أو مشاركاتك",
         "confirmation_delete_post": "هل أنت متأكد أنك تريد حذف المنشورات أو المشاركات المحددة؟",
         "posts_history_not_edited": "لا يمكن تعديل المنشورات في الماضي.",
@@ -532,16 +503,7 @@
         "approval_required": "يجب الموافقة على المنشور قبل أن يتم نشره.",
         "needs_approval": "يحتاج إلى موافقة",
         "approve": "موافقة على النشر",
-        "view": "عرض المنشور",
-        "posts_deleted_from_social_platforms": "تم حذف المنشورات المختارة من منصات التواصل الاجتماعي",
-        "does_not_support_deleting": "{provider} لا يدعم حذف {types}",
-        "confirmation_delete_posts_from": "من أين تريد حذف هذه المنشور؟ | من أين تريد حذف المنشورات المحددة؟",
-        "delete_post_from": {
-            "app_only": "من التطبيق فقط",
-            "app_and_social": "كلاهما من التطبيق و المنصات الاجتماعية",
-            "social_only": "من منصات التواصل الاجتماعي فقط"
-        },
-        "post_deleted_from_social_platforms": "تم حذف المنشور من منصات التواصل الاجتماعي"
+        "view": "عرض المنشور"
     },
     "post_activity": {
         "activity": "موضوع المنشور",
@@ -569,8 +531,7 @@
         "watch": "فعل التنبيهات",
         "notify_all_activity": "ابلغني بجميع الأنشطة الخاصة بهذه المهمة.",
         "unwatch": "إلغاء التنبيهات",
-        "notify_mentions_only": "ابلغني فقط اذا شخص ما اشار لي في المهمة.",
-        "post_deleted_from_social_platforms": "تم حذف المنشور من منصات التواصل الاجتماعي"
+        "notify_mentions_only": "ابلغني فقط اذا شخص ما اشار لي في المهمة."
     },
     "posting_schedule": {
         "everyday": "كل يوم",
@@ -626,11 +587,11 @@
         "members": "الأعضاء"
     },
     "service": {
-        "third_party_services": "تنصيب أعدادات حساب X  تويتر",
-        "third_party_services_desc": "هذه الصفحة مخصصة لتخزين بيانات الاعتماد لخدمات حساب X تويتر.",
+        "third_party_services": "خدمات الطرف الثالث",
+        "third_party_services_desc": "هذه الصفحة مخصصة لتخزين بيانات الاعتماد لخدمات الطرف الثالث.",
         "create_app": "إنشاء تطبيق على {name}",
         "configure_services_desc": "انقر فوق الزر أدناه لتنصيب خدمات الطرف الثالث.",
-        "configure_services": "تنصيب اعدادات حساب X",
+        "configure_services": "تنصيب الخدمات",
         "representative_data": "هذه البيانات ليست حقيقية، بل تمثيلية فقط.",
         "not_configured_service": "لم تقم بربط حساب {service}.",
         "service_saved": "تم حفظ  الخدمة {service}.",
@@ -697,10 +658,7 @@
                 "number_website_clicks": "إجمالي عدد النقرات على رابط موقع الويب في الملف الشخصي",
                 "website_clicks": "نقرات الموقع"
             },
-            "select_video_image": "حدد مقطع فيديو أو صورة لحساب Instagram هذا.",
-            "post": "المنشور",
-            "reel": "Reel ميتا",
-            "story": "القصة"
+            "select_video_image": "حدد مقطع فيديو أو صورة لحساب Instagram هذا."
         },
         "linkedin": {
             "connect_page": "ربط صفحة LinkedIn جديدة",
@@ -708,6 +666,7 @@
             "visibility": "الرؤية",
             "public": "عام",
             "connections": "الزملاء",
+            "not_support_accounts": "لسوء الحظ، لا تدعم واجهة برمجة تطبيقات LinkedIn عرض التحليلات الخاصة بحسابات LinkedIn الشخصية.",
             "insights": "الأفكار",
             "job_title": "المسمى الوظيفي",
             "send": "ارسل"
@@ -760,6 +719,7 @@
             "create_board": "إنشاء لوحة بينتيريست",
             "save_rate": "معدل الحفظ",
             "not_account": "هذا ليس حساب بينتيريست",
+            "select_board": "اختر لوحة",
             "report": {
                 "number_pins_saved": "عدد المرات التي تم فيها حفظ Pin",
                 "number_pin_clicks": "إجمالي عدد النقرات على Pin  أو إعلانك بحيث يتم فتحه في صورة قريبة.",
@@ -786,6 +746,7 @@
             "public": "عام",
             "private": "خاص",
             "unlisted": "غير مدرج",
+            "analytics_under_development": "تحليلات اليوتيوب قيد التطوير.",
             "select_video": "حدد مقطع فيديو لحساب اليوتيوب هذا.",
             "privacy_config": "تنصيب الخصوصية",
             "title": "فيديو أو عنوان قصير"
@@ -807,53 +768,13 @@
         "provider_options": "خيارات {provider}.",
         "services": "خدمات",
         "threads": {
-            "connect": "ربط حساب  Threads جديد"
-        },
-        "bluesky": {
-            "connect_profile": "ربط حساب جديد على Bluesky",
-            "service": "خدمة",
-            "server_address": "عنوان الخادم"
-        },
-        "gbp": {
-            "post": "المنشور",
-            "offer": "عرض",
-            "event": "حدث",
-            "event_title": "عنوان الحدث",
-            "add_time": "أضف الوقت",
-            "offer_title": "عنوان العرض",
-            "start_date": "تاريخ البدء",
-            "end_date": "تاريخ الانتهاء",
-            "button": "زر",
-            "none": "بدون",
-            "book": "جحز",
-            "order_online": "اطلب اونلاين",
-            "buy": "شراء",
-            "learn_more": "تفاصيل أكثر",
-            "sign_up": "اشتراك",
-            "button_link": "رابط الزر",
-            "add_more_details": "أضف المزيد من التفاصيل",
-            "coupon_code": "كود الخصم",
-            "offer_link": "رابط العرض",
-            "tos": "الشروط والأحكام",
-            "start_time": "وقت البدء",
-            "end_time": "وقت الانتهاء",
-            "call_now": "اتصل الآن",
-            "redeem_online": "استفد من العرض عبر الإنترنت",
-            "show_code": "أظهر هذا الرمز في المتجر",
-            "offer_valid": "صالح {start_date} إلى {end_date}",
-            "connect_profile": "ربط حساب ملف تعريف قوقل بزنس جديد"
-        },
-        "stock_photo": {
-            "search": "بحث {source}",
-            "can_use_external_photos": "مع {source} يمكنك استخدام صور المخزون الخارجية مباشرة في المنصة."
-        },
-        "facebook_page": {
-            "post": "المنشور",
-            "reel": "Reel ميتا",
-            "story": "القصة"
-        },
-        "story": "القصة",
-        "generate_api_key": "إنشاء مفتاح API"
+            "connect": "ربط ملف تعريف Threads جديد"
+        }
+    },
+    "subscription": {
+        "upgrade_required": "ترقية مطلوبة",
+        "plan_limit_reached_message": "لقد وصلت إلى حد خطتك أو انتهت صلاحية اشتراكك. يرجى ترقية خطتك لمواصلة استخدام هذه الميزة.",
+        "upgrade_plan": "ترقية الخطة"
     },
     "system": {
         "system": "النظام",
@@ -889,9 +810,7 @@
         "copied_clipboard": "نسخ إلى الحافظة!",
         "failed_copied_clipboard": "فشل النسخ إلى الحافظة!",
         "usage_api": "الاستخدام في API",
-        "stored_safely": "لقد قمت بتخزينها بأمان",
-        "copy_id": "نسخ الهوية",
-        "copy_uuid": "نسخ UUID"
+        "stored_safely": "لقد قمت بتخزينها بأمان"
     },
     "tag": {
         "change_label_color": "تغيير لون التصنيف",
@@ -899,9 +818,9 @@
         "delete_label": "حذف التصنيف",
         "label_deleted": "تم حذف التصنيف",
         "confirm_label_delete": "هل أنت متأكد أنك تريد حذف التصنيف {name} من كل مكان؟",
-        "create_new_label": "اضغط على Enter لإنشاء تصنيف جديد",
+        "create_new_label": "اضغط على Enter أو حفظ لإنشاء تصنيف جديد",
         "search_create_post": "بحث أو إنشاء جديد",
-        "no_labels_found": "لم يتم العثور على أي تصنيفات"
+        "no_labels_found": "لم يتم العثور على أي علامات"
     },
     "team": {
         "add_user": "إضافة مستخدم",
@@ -958,10 +877,6 @@
         "upload_favicon": "تحميل رمز اللوقو",
         "theme_color": "لون الثيم",
         "rebrand_company": "إعادة تسمية شركتك"
-    },
-    "url_shortener": {
-        "on": "تفعيل اختصار الرابط ",
-        "off": "إيقاف اختصار الرابط"
     },
     "user": {
         "create_user": "إنشاء مستخدم جديد",

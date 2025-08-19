@@ -66,7 +66,7 @@ class InstagramProvider extends MetaProvider
 
         $shortcode = Arr::get($data, 'shortcode');
 
-        if (! $shortcode) {
+        if (!$shortcode) {
             return '';
         }
 

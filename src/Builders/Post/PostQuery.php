@@ -32,15 +32,15 @@ class PostQuery implements Query
             $query = PostKeyword::apply($query, $request->get('keyword'));
         }
 
-        if ($request->has('accounts') && ! empty($request->get('accounts'))) {
+        if ($request->has('accounts') && !empty($request->get('accounts'))) {
             $query = PostAccounts::apply($query, $request->get('accounts', []));
         }
 
-        if ($request->has('tags') && ! empty($request->get('tags'))) {
+        if ($request->has('tags') && !empty($request->get('tags'))) {
             $query = PostTags::apply($query, $request->get('tags', []));
         }
 
-        if ($request->has('date') && ! empty($request->get('date')) && preg_match('/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/', $request->get('date'))) {
+        if ($request->has('date') && !empty($request->get('date')) && preg_match('/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/', $request->get('date'))) {
             $query = PostScheduledAt::apply($query, $request->only('calendar_type', 'date'));
         }
 

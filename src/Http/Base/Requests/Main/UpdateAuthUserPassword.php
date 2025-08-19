@@ -3,9 +3,9 @@
 namespace Inovector\Mixpost\Http\Base\Requests\Main;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Auth;
 use Inovector\Mixpost\Concerns\UsesUserModel;
 use Inovector\Mixpost\Rules\CheckUserPasswordRule;
 

@@ -16,7 +16,7 @@ trait FacebookComments
 
         $response = $this->getHttpClient()::withToken($this->accessToken())
             ->post("$this->apiUrl/$this->apiVersion/$postId/comments", [
-                'message' => $text,
+                'message' => $text
             ]);
 
         return $this->buildResponse($response);

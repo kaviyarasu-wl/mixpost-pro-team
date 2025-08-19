@@ -35,13 +35,11 @@
         "account_entities": "Subjekty účtu",
         "select_the_social_entities": "Vyberte sociálne subjekty, ktoré chcete pripojiť",
         "connected": "Pripojené",
+        "choose": "Vyberte si",
         "access_token_expired": "Platnosť prístupového tokenu vypršala. Znova pripojte svoj účet.",
         "unauthorized": "Neoprávnené",
         "add_social_account": "Nemáte účet na sociálnej sieti, pridajte si aspoň jeden.",
-        "no_accounts_found": "Nenašli sa žiadne účty",
-        "finish_connection": "Dokončenie pripojenia",
-        "open_account_page": "Stránka s otvoreným účtom",
-        "view_profile": "Zobraziť profil"
+        "no_accounts_found": "Nenašli sa žiadne účty"
     },
     "ai": {
         "tell_ai": "Povedzte AI, o čom má písať",
@@ -241,8 +239,7 @@
         "request_timeout": "Časový limit požiadavky. Skúste to znova.",
         "unknown_error": "Neznáma chyba",
         "service_auth_failed": "Autentifikácia zlyhala! Overte prosím svoje poverenia služby {service}.",
-        "page_expired": "Platnosť stránky vypršala, skúste to prosím znova.",
-        "invalid_grant": "Neplatné poverenia alebo vypršala platnosť oprávnenia."
+        "page_expired": "Platnosť stránky vypršala, skúste to prosím znova."
     },
     "finance": {
         "billing": "Fakturácia"
@@ -331,8 +328,7 @@
         "generate_new": "Generovanie nových",
         "search_jump": "Vyhľadávanie alebo prechod na",
         "replace": "Vymeňte stránku",
-        "retry": "Opakovanie",
-        "general": "Všeobecné"
+        "retry": "Opakovanie"
     },
     "hashtag": {
         "hashtag_name": "Názov skupiny hashtagov",
@@ -354,6 +350,8 @@
     "media": {
         "media_library": "Knižnica médií",
         "uploads": "Nahrať",
+        "filter_by_source": "Filtrovať podľa zdroja",
+        "uploaded": "Nahrané",
         "stock": "Zásobné fotografie",
         "gifs": "GIFy",
         "library": "Knižnica",
@@ -375,36 +373,7 @@
         "aspect_ratio_range": "Pomer strán musí byť medzi {min} a {max}.",
         "resolution_range": "Rozlíšenie musí byť minimálne {min} x {max} px. Odporúčaná hodnota je {recommended_min} x {recommended_max} px.",
         "duration_range": "Trvanie musí byť medzi {min} a {max} sekúnd.",
-        "frame_rate_range": "Snímková frekvencia musí byť medzi {min} a {max} snímok za sekundu.",
-        "edit_alt_text": "Úprava textu alt",
-        "write_alt_text": "Napíšte text alt",
-        "add_alt_text_for": "Pridajte text alt pre {platforms}.",
-        "add_video_thumb": "Pridanie miniatúry videa",
-        "change_video_thumb": "Zmena miniatúry videa",
-        "view_video_thumb": "Zobraziť miniatúru videa",
-        "video_thumb": "Miniatúra videa",
-        "video_thumb_providers": "Miniatúra videa je k dispozícii naprieč: {providers}.",
-        "custom_size": "Vlastná veľkosť",
-        "width": "Šírka",
-        "height": "Výška",
-        "unit": "Jednotka",
-        "px": "pixely",
-        "inch": "palcov",
-        "mm": "milimetre",
-        "create_design": "Vytvoriť dizajn",
-        "create_adobe_express": "Vytváranie pomocou aplikácie Adobe Express",
-        "new_design": "Nový dizajn",
-        "saved": "Médiá boli úspešne uložené.",
-        "fb_post": "Príspevok na Facebooku",
-        "fb_story": "Príbeh na Facebooku",
-        "ig_portrait_post": "Portrétny príspevok na Instagrame",
-        "ig_square_post": "Štvorcový príspevok na Instagrame",
-        "ig_story": "Príbeh na Instagrame",
-        "linkedin_post": "Príspevok na LinkedIn",
-        "x_post": "X príspevok",
-        "pinterest_post": "Pinterest príspevok",
-        "media": "Médiá",
-        "create_for_adobe_express": "Vytvorenie pre Adobe Express"
+        "frame_rate_range": "Snímková frekvencia musí byť medzi {min} a {max} snímok za sekundu."
     },
     "page": {
         "pages": "Stránky",
@@ -470,7 +439,7 @@
         "accounts": "Účty",
         "author": "Autor",
         "no_posts_found": "Nenašli sa žiadne príspevky.",
-        "delete_posts": "Odstrániť príspevky|Odstrániť príspevky",
+        "delete_posts": "Odstrániť príspevky",
         "your_post": "Váš príspevok",
         "confirmation_delete_post": "Ste si istí, že chcete odstrániť vybrané príspevky?",
         "posts_history_not_edited": "Príspevky v histórii nie je možné upravovať.",
@@ -532,16 +501,7 @@
         "approval_required": "Príspevok musí byť pred zverejnením schválený.",
         "needs_approval": "Potrebuje schválenie",
         "approve": "Schváliť",
-        "view": "Zobraziť príspevok",
-        "posts_deleted_from_social_platforms": "Vybrané príspevky odstránené zo sociálnych platforiem",
-        "does_not_support_deleting": "{provider} nepodporuje vymazanie {types}",
-        "confirmation_delete_posts_from": "Odkiaľ chcete odstrániť tento príspevok?|Odkiaľ chcete odstrániť vybrané príspevky?",
-        "delete_post_from": {
-            "app_only": "Len z aplikácie",
-            "app_and_social": "Z aplikácií a sociálnych platforiem",
-            "social_only": "Len zo sociálnych platforiem"
-        },
-        "post_deleted_from_social_platforms": "Príspevok odstránený zo sociálnych platforiem"
+        "view": "Zobraziť príspevok"
     },
     "post_activity": {
         "activity": "Aktivita",
@@ -569,8 +529,7 @@
         "watch": "Sledujte stránku",
         "notify_all_activity": "Informujte ma o všetkých aktivitách týkajúcich sa tejto úlohy.",
         "unwatch": "Zrušiť sledovanie",
-        "notify_mentions_only": "Upozornite ma len na zmienky.",
-        "post_deleted_from_social_platforms": "Príspevok odstránený zo sociálnych platforiem"
+        "notify_mentions_only": "Upozornite ma len na zmienky."
     },
     "posting_schedule": {
         "everyday": "Každý deň",
@@ -697,10 +656,7 @@
                 "number_website_clicks": "Celkový počet ťuknutí na odkaz na webovú stránku v profile",
                 "website_clicks": "Kliknutia na webové stránky"
             },
-            "select_video_image": "Vyberte video alebo obrázok pre toto konto Instagram.",
-            "post": "Príspevok",
-            "reel": "Reel",
-            "story": "Príbeh"
+            "select_video_image": "Vyberte video alebo obrázok pre toto konto Instagram."
         },
         "linkedin": {
             "connect_page": "Pripojenie novej stránky LinkedIn",
@@ -708,6 +664,7 @@
             "visibility": "Viditeľnosť",
             "public": "Verejnosť",
             "connections": "Pripojenia",
+            "not_support_accounts": "Rozhranie API spoločnosti LinkedIn bohužiaľ nepodporuje zobrazovanie analytických údajov pre osobné kontá LinkedIn.",
             "insights": "Postrehy",
             "job_title": "Váš pracovný názov",
             "send": "Odoslať"
@@ -760,6 +717,7 @@
             "create_board": "Vytvorenie nástenky Pinterest",
             "save_rate": "Uložiť sadzbu",
             "not_account": "Toto nie je konto Pinterest",
+            "select_board": "Vyberte nástenku",
             "report": {
                 "number_pins_saved": "Počet uložení vašich kolíkov",
                 "number_pin_clicks": "Celkový počet kliknutí na vašu spinku alebo reklamu, aby sa otvorila v detailnom zobrazení.",
@@ -786,6 +744,7 @@
             "public": "Verejnosť",
             "private": "Súkromná stránka",
             "unlisted": "Nezaradené",
+            "analytics_under_development": "Analytika YouTube je vo vývoji.",
             "select_video": "Vyberte video pre toto konto YouTube.",
             "privacy_config": "Konfigurácia ochrany osobných údajov",
             "title": "Video alebo krátky názov"
@@ -808,52 +767,12 @@
         "services": "Služby",
         "threads": {
             "connect": "Pripojenie nového profilu Threads"
-        },
-        "bluesky": {
-            "connect_profile": "Pripojenie nového profilu Bluesky",
-            "service": "Služba",
-            "server_address": "Adresa servera"
-        },
-        "gbp": {
-            "post": "Príspevok",
-            "offer": "Ponuka",
-            "event": "Udalosť",
-            "event_title": "Názov podujatia",
-            "add_time": "Pridať čas",
-            "offer_title": "Názov ponuky",
-            "start_date": "Dátum začiatku",
-            "end_date": "Dátum ukončenia",
-            "button": "Tlačidlo",
-            "none": "Žiadne",
-            "book": "Kniha",
-            "order_online": "Objednajte si online",
-            "buy": "Kúpiť",
-            "learn_more": "Zistite viac",
-            "sign_up": "Zaregistrujte sa",
-            "button_link": "Odkaz na tlačidlo",
-            "add_more_details": "Pridať ďalšie podrobnosti",
-            "coupon_code": "Kód kupónu",
-            "offer_link": "Odkaz na ponuku",
-            "tos": "Podmienky a pravidlá",
-            "start_time": "Čas začiatku",
-            "end_time": "Čas konca",
-            "call_now": "Zavolajte teraz",
-            "redeem_online": "Uplatniť online",
-            "show_code": "Ukážte tento kód v obchode",
-            "offer_valid": "Platné {start_date} - {end_date}",
-            "connect_profile": "Pripojenie nového firemného profilu Google"
-        },
-        "stock_photo": {
-            "search": "Vyhľadávanie {source}",
-            "can_use_external_photos": "Pomocou {provider} môžete používať externé fotografie priamo v službe Mixpost."
-        },
-        "facebook_page": {
-            "post": "Príspevok",
-            "reel": "Reel",
-            "story": "Príbeh"
-        },
-        "story": "Príbeh",
-        "generate_api_key": "Generovanie kľúča API"
+        }
+    },
+    "subscription": {
+        "upgrade_required": "Vyžadovaný Upgrade",
+        "plan_limit_reached_message": "Dosiahli ste limit vášho plánu alebo vaše predplatné vypršalo. Prosím, upgradujte váš plán pre pokračovanie v používaní tejto funkcie.",
+        "upgrade_plan": "Upgradovať Plán"
     },
     "system": {
         "system": "Systém",
@@ -889,9 +808,7 @@
         "copied_clipboard": "Skopírované do schránky!",
         "failed_copied_clipboard": "Nepodarilo sa skopírovať do schránky!",
         "usage_api": "Používanie v rozhraní API",
-        "stored_safely": "Uložil som ho bezpečne",
-        "copy_id": "Kopírovať ID",
-        "copy_uuid": "Kopírovanie UUID"
+        "stored_safely": "Uložil som ho bezpečne"
     },
     "tag": {
         "change_label_color": "Zmena farby štítku",
@@ -899,7 +816,7 @@
         "delete_label": "Odstrániť štítok",
         "label_deleted": "Štítok odstránený",
         "confirm_label_delete": "Ste si istí, že chcete odstrániť označenie {name} z každého miesta?",
-        "create_new_label": "Stlačením klávesu Enter vytvoríte nový štítok",
+        "create_new_label": "Stlačením klávesu Enter alebo Uložiť vytvoríte nový štítok",
         "search_create_post": "Vyhľadávanie alebo vytvorenie nového",
         "no_labels_found": "Nenašli sa žiadne štítky"
     },
@@ -958,10 +875,6 @@
         "upload_favicon": "Nahrať favicon",
         "theme_color": "Farba témy",
         "rebrand_company": "Zmena značky vašej spoločnosti"
-    },
-    "url_shortener": {
-        "on": "Skrátenie adresy URL: Na stránke",
-        "off": "Skrátenie adresy URL: Vypnuté"
     },
     "user": {
         "create_user": "Vytvoriť používateľa",

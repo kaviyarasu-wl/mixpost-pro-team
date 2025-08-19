@@ -9,7 +9,6 @@ use Inovector\Mixpost\Contracts\WebhookEvent;
 class AccountDeleted implements WebhookEvent
 {
     use Dispatchable, SerializesModels;
-
     public string $accountUuid;
 
     public function __construct(string $accountUuid)

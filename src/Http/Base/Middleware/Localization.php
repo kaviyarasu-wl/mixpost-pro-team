@@ -23,7 +23,7 @@ class Localization
         $locale = self::getAuthGuard()->check() ? Settings::get('locale') : Mixpost::getDefaultLocale();
 
         // Fallback to default locale if logged in and selected user locale is not supported
-        if (self::getAuthGuard()->check() && ! $this->isLocaleSupported($locale)) {
+        if (self::getAuthGuard()->check() && !$this->isLocaleSupported($locale)) {
             $locale = Mixpost::getDefaultLocale();
 
             Mixpost::setLocaleDirection($this->getLocaleDirection($locale));

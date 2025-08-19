@@ -14,12 +14,12 @@ class SchedulePostController extends Controller
     {
         $schedulePost->handle();
 
-        $scheduledAt = $schedulePost->getDateTime()->tz(Settings::get('timezone'))->translatedFormat('D, M j, '.Util::timeFormat());
+        $scheduledAt = $schedulePost->getDateTime()->tz(Settings::get('timezone'))->translatedFormat("D, M j, " . Util::timeFormat());
 
         return response()->json([
             'scheduled_at' => $scheduledAt,
             'date' => $schedulePost->getDateTime()->toDateString(),
-            'needs_approval' => $schedulePost->getPost()->isNeedsApproval(),
+            'needs_approval' => $schedulePost->getPost()->isNeedsApproval()
         ]);
     }
 }

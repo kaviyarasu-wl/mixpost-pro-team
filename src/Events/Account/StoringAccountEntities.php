@@ -12,9 +12,7 @@ class StoringAccountEntities
     use Dispatchable, SerializesModels;
 
     public ?Workspace $workspace;
-
     public string $provider;
-
     public array $items;
 
     public function __construct(string $provider, array $items)

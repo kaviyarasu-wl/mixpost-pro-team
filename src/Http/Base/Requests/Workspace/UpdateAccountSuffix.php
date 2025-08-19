@@ -20,7 +20,7 @@ class UpdateAccountSuffix extends FormRequest
         $record = Account::firstOrFailByUuid($this->route('account'));
 
         $record->update([
-            'data' => array_merge($record->data ?? [], AccountSuffix::schema(strval($this->input('name')), true)),
+            'data' => array_merge($record->data ?? [], AccountSuffix::schema(strval($this->input('name')), true))
         ]);
     }
 }

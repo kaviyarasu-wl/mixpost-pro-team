@@ -6,19 +6,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Inovector\Mixpost\Enums\WorkspaceUserRole;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         if (Schema::hasTable('mixpost_workspace_user')) {
-            if (! Schema::hasColumn('mixpost_workspace_user', 'can_approve')) {
+            if (!Schema::hasColumn('mixpost_workspace_user', 'can_approve')) {
                 Schema::table('mixpost_workspace_user', function (Blueprint $table) {
                     $table->boolean('can_approve')->default(false);
                 });
             }
         }
 
-        if (! Schema::hasTable('mixpost_post_activities')) {
+        if (!Schema::hasTable('mixpost_post_activities')) {
             Schema::create('mixpost_post_activities', function (Blueprint $table) {
                 $table->id();
                 $table->uuid('uuid')->unique();
@@ -32,7 +31,7 @@ return new class extends Migration
             });
         }
 
-        if (! Schema::hasTable('mixpost_post_activity_reactions')) {
+        if (!Schema::hasTable('mixpost_post_activity_reactions')) {
             Schema::create('mixpost_post_activity_reactions', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('activity_id')->constrained('mixpost_post_activities')->onDelete('cascade');
@@ -42,7 +41,7 @@ return new class extends Migration
             });
         }
 
-        if (! Schema::hasTable('mixpost_post_activities_ns')) {
+        if (!Schema::hasTable('mixpost_post_activities_ns')) {
             Schema::create('mixpost_post_activities_ns', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('post_id')->constrained('mixpost_posts')->onDelete('cascade');

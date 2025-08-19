@@ -4,10 +4,10 @@ namespace Inovector\Mixpost\Builders\User;
 
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Inovector\Mixpost\Builders\User\Filters\Exclude;
-use Inovector\Mixpost\Builders\User\Filters\Keyword;
 use Inovector\Mixpost\Concerns\UsesUserModel;
 use Inovector\Mixpost\Contracts\Query;
+use Inovector\Mixpost\Builders\User\Filters\Exclude;
+use Inovector\Mixpost\Builders\User\Filters\Keyword;
 use Inovector\Mixpost\Facades\WorkspaceManager;
 
 class CurrentWorkspaceUserQuery implements Query

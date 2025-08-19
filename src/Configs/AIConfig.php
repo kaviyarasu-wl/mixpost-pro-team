@@ -25,7 +25,7 @@ class AIConfig extends Config
     {
         return [
             'provider' => ['sometimes', 'nullable', Rule::in(AIManager::getProviderSelectionOptionKeys())],
-            'instructions' => ['sometimes', 'max:1000'],
+            "instructions" => ['sometimes', 'max:1000'],
         ];
     }
 

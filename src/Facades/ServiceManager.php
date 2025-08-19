@@ -8,7 +8,7 @@ use Inovector\Mixpost\Collection\ServiceCollection;
 /**
  * @method static ServiceCollection services()
  * @method static string|null getServiceClass(string $name)
- * @method mixed get(string $name, null|string $key = null)
+ * @method static get(string $name, null|string $key = null)
  * @method static getFromCache(string $name)
  * @method static array all()
  * @method static array|bool isActive(string|array $name = null)

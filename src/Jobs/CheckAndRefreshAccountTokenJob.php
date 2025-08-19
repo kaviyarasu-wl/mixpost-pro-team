@@ -15,12 +15,13 @@ use Inovector\Mixpost\Contracts\QueueWorkspaceAware;
 use Inovector\Mixpost\Models\Account;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class CheckAndRefreshAccountTokenJob implements QueueWorkspaceAware, ShouldQueue
+class CheckAndRefreshAccountTokenJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
@@ -37,21 +38,21 @@ class CheckAndRefreshAccountTokenJob implements QueueWorkspaceAware, ShouldQueue
             return;
         }
 
-        if (! $this->account->isServiceActive()) {
+        if (!$this->account->isServiceActive()) {
             return;
         }
 
         $connection = $this->connectProvider($this->account);
 
-        if (! $connection->hasRefreshToken()) {
+        if (!$connection->hasRefreshToken()) {
             return;
         }
 
-        if (! method_exists($connection, 'refreshToken')) {
+        if (!method_exists($connection, 'refreshToken')) {
             return;
         }
 
-        if (! $connection->tokenIsAboutToExpire()) {
+        if (!$connection->tokenIsAboutToExpire()) {
             return;
         }
 

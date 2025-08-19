@@ -4,8 +4,8 @@ namespace Inovector\Mixpost\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Inovector\Mixpost\Models\Tag;
 use Inovector\Mixpost\Models\Workspace;
+use Inovector\Mixpost\Models\Tag;
 
 class TagFactory extends Factory
 {
@@ -17,7 +17,7 @@ class TagFactory extends Factory
             'uuid' => $this->faker->uuid(),
             'workspace_id' => Workspace::factory(),
             'name' => $this->faker->domainName(),
-            'hex_color' => Str::after($this->faker->hexColor(), '#'),
+            'hex_color' => Str::after($this->faker->hexColor(), '#')
         ];
     }
 }

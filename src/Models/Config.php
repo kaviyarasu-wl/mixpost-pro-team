@@ -11,11 +11,11 @@ class Config extends Model
     protected $fillable = [
         'group',
         'name',
-        'payload',
+        'payload'
     ];
 
     protected $casts = [
-        'payload' => 'array',
+        'payload' => 'array'
     ];
 
     public $timestamps = false;
@@ -29,7 +29,7 @@ class Config extends Model
             ->where('name', $name)
             ->first('payload');
 
-        if (! $config) {
+        if (!$config) {
             return $default;
         }
 

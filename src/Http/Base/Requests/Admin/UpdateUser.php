@@ -24,14 +24,14 @@ class UpdateUser extends FormRequest
                 'required_if:password_confirmation,!=,',
                 'confirmed',
                 function ($attribute, $value, $fail) {
-                    if (! empty($value)) {
+                    if (!empty($value)) {
                         $validator = Validator::make(
                             [$attribute => $value],
                             [$attribute => [Password::defaults()]]
                         );
 
                         if ($validator->fails()) {
-                            $fail('The '.$attribute.' does not meet password requirements.');
+                            $fail('The ' . $attribute . ' does not meet password requirements.');
                         }
                     }
                 },
@@ -55,11 +55,11 @@ class UpdateUser extends FormRequest
         $user->update($data);
 
         if ($user->id !== Auth::id()) {
-            if ($user->isAdmin() && ! $this->input('is_admin')) {
+            if ($user->isAdmin() && !$this->input('is_admin')) {
                 $user->admin()->delete();
             }
 
-            if (! $user->isAdmin() && $this->input('is_admin')) {
+            if (!$user->isAdmin() && $this->input('is_admin')) {
                 $user->admin()->create();
             }
         }

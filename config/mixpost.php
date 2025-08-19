@@ -46,7 +46,7 @@ return [
             'app' => [
                 'web',
                 \Inovector\Mixpost\Http\Base\Middleware\Bootstrap::class,
-                \Inovector\Mixpost\Http\Base\Middleware\Localization::class,
+                \Inovector\Mixpost\Http\Base\Middleware\Localization::class
             ],
             'dashboard' => [
                 \Inovector\Mixpost\Http\Base\Middleware\Authenticate::class,
@@ -56,9 +56,9 @@ return [
             'api',
             \Inovector\Mixpost\Http\Api\Middleware\Bootstrap::class,
             \Inovector\Mixpost\Http\Api\Middleware\ForceJsonResponse::class,
-            \Inovector\Mixpost\Http\Api\Middleware\Authenticate::class.':mixpost_access_token',
+            \Inovector\Mixpost\Http\Api\Middleware\Authenticate::class . ':mixpost_access_token',
             \Inovector\Mixpost\Http\Base\Middleware\Localization::class,
-        ],
+        ]
     ],
 
     /*
@@ -82,9 +82,9 @@ return [
      * Adding a larger file will result in an exception.
      */
     'max_file_size' => [
-        'image' => env('MIXPOST_MAX_IMAGE_FILE_SIZE', 1024 * 15), // 15MB
-        'gif' => env('MIXPOST_MAX_GIF_FILE_SIZE', 1024 * 15), // 15MB
-        'video' => env('MIXPOST_MAX_VIDEO_FILE_SIZE', 1024 * 200), // 200MB
+        'image' => 1024 * 5, // 5MB
+        'gif' => 1024 * 15, // 15MB
+        'video' => 1024 * 200 // 200MB
     ],
 
     /*
@@ -98,7 +98,7 @@ return [
         'image/gif',
         'image/png',
         'video/mp4',
-        'video/x-m4v',
+        'video/x-m4v'
     ],
 
     /*
@@ -148,7 +148,7 @@ return [
                 'videos' => 1,
                 'gifs' => 1,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
         'facebook_page' => [
             'simultaneous_posting_on_multiple_accounts' => true,
@@ -158,7 +158,7 @@ return [
                 'videos' => 1,
                 'gifs' => 1,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
         'facebook_group' => [
             'simultaneous_posting_on_multiple_accounts' => true,
@@ -168,7 +168,7 @@ return [
                 'videos' => 1,
                 'gifs' => 1,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
         'instagram' => [
             'simultaneous_posting_on_multiple_accounts' => true,
@@ -178,7 +178,7 @@ return [
                 'videos' => 1,
                 'gifs' => 0,
                 'allow_mixing' => true,
-            ],
+            ]
         ],
         'mastodon' => [
             'simultaneous_posting_on_multiple_accounts' => true,
@@ -188,7 +188,7 @@ return [
                 'videos' => 1,
                 'gifs' => 1,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
         'youtube' => [
             'simultaneous_posting_on_multiple_accounts' => true,
@@ -198,7 +198,7 @@ return [
                 'videos' => 1,
                 'gifs' => 0,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
         'pinterest' => [
             'simultaneous_posting_on_multiple_accounts' => true,
@@ -208,7 +208,7 @@ return [
                 'videos' => 0,
                 'gifs' => 0,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
         'linkedin' => [
             'simultaneous_posting_on_multiple_accounts' => false,
@@ -218,7 +218,7 @@ return [
                 'videos' => 1,
                 'gifs' => 1,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
         'linkedin_page' => [
             'simultaneous_posting_on_multiple_accounts' => false,
@@ -228,7 +228,7 @@ return [
                 'videos' => 1,
                 'gifs' => 1,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
         'tiktok' => [
             'simultaneous_posting_on_multiple_accounts' => true,
@@ -238,7 +238,7 @@ return [
                 'videos' => 1,
                 'gifs' => 0,
                 'allow_mixing' => false,
-            ],
+            ]
         ],
     ],
 
@@ -257,7 +257,6 @@ return [
         ['short' => 'ca', 'long' => 'ca-ES', 'direction' => 'ltr', 'english' => 'Catalan (Spain)', 'native' => 'Català (España)'],
         ['short' => 'cs', 'long' => 'cs-CZ', 'direction' => 'ltr', 'english' => 'Czech (Czechia)', 'native' => 'Čeština (Česko)'],
         ['short' => 'de', 'long' => 'de-DE', 'direction' => 'ltr', 'english' => 'German (Germany)', 'native' => 'Deutsch (Deutschland)'],
-        ['short' => 'nl', 'long' => 'nl-NL', 'direction' => 'ltr', 'english' => 'Dutch (Netherlands)', 'native' => 'Nederlands (Nederland)'],
         ['short' => 'en', 'long' => 'en-GB', 'direction' => 'ltr', 'english' => 'English (GB)', 'native' => 'English (GB)'],
         ['short' => 'es', 'long' => 'es-ES', 'direction' => 'ltr', 'english' => 'Spanish (Spain)', 'native' => 'Español (España)'],
         ['short' => 'es', 'long' => 'es-MX', 'direction' => 'ltr', 'english' => 'Spanish (Mexico)', 'native' => 'Español (México)'],
@@ -268,5 +267,6 @@ return [
         ['short' => 'ro', 'long' => 'ro-RO', 'direction' => 'ltr', 'english' => 'Romanian (Romania)', 'native' => 'Română (Romania)'],
         ['short' => 'ru', 'long' => 'ru-RU', 'direction' => 'ltr', 'english' => 'Russian (Russia)', 'native' => 'Русский (Россия)'],
         ['short' => 'sk', 'long' => 'sk-SK', 'direction' => 'ltr', 'english' => 'Slovak (Slovakia)', 'native' => 'Slovenčina (Slovensko)'],
-    ],
+    ]
 ];
+

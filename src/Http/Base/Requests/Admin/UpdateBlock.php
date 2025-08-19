@@ -14,7 +14,7 @@ class UpdateBlock extends FormRequest
             'name' => ['required', 'max:255'],
             'module' => ['required'],
             'content' => ['required', 'array'],
-            'status' => ['required', 'integer', new ResourceStatusRule],
+            'status' => ['required', 'integer', new ResourceStatusRule()],
         ];
     }
 

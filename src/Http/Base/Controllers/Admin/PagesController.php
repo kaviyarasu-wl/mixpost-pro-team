@@ -21,7 +21,7 @@ class PagesController extends Controller
         $pages = Page::latest()->get();
 
         return Inertia::render('Admin/Pages/Pages', [
-            'pages' => PageResource::collection($pages),
+            'pages' => PageResource::collection($pages)
         ]);
     }
 
@@ -30,7 +30,7 @@ class PagesController extends Controller
         return Inertia::render('Admin/Pages/CreateEdit', [
             'mode' => 'create',
             'page' => null,
-            'blocks' => BlockResource::collection(Block::latest()->get()),
+            'blocks' => BlockResource::collection(Block::latest()->get())
         ]);
     }
 
@@ -50,7 +50,7 @@ class PagesController extends Controller
         return Inertia::render('Admin/Pages/CreateEdit', [
             'mode' => 'edit',
             'page' => new PageResource($page),
-            'blocks' => BlockResource::collection(Block::latest()->get()),
+            'blocks' => BlockResource::collection(Block::latest()->get())
         ]);
     }
 

@@ -35,13 +35,11 @@
         "account_entities": "Entités de compte",
         "select_the_social_entities": "Sélectionnez les entités sociales que vous souhaitez connecter",
         "connected": "Connecté",
+        "choose": "Choisissez",
         "access_token_expired": "Le jeton d'accès a expiré. Reconnectez votre compte.",
         "unauthorized": "Non autorisé",
         "add_social_account": "Vous n'avez pas de compte social, veuillez en ajouter au moins un.",
-        "no_accounts_found": "Aucun compte trouvé",
-        "finish_connection": "Finition Connexion",
-        "open_account_page": "Page d'ouverture de compte",
-        "view_profile": "Voir le profil"
+        "no_accounts_found": "Aucun compte trouvé"
     },
     "ai": {
         "tell_ai": "Indiquez à l'IA sur quel sujet écrire.",
@@ -241,8 +239,7 @@
         "request_timeout": "Requête expirée. Veuillez réessayer.",
         "unknown_error": "Erreur inconnue",
         "service_auth_failed": "L'authentification a échoué ! Veuillez vérifier vos informations d'identification pour le service {service}.",
-        "page_expired": "La page a expiré, veuillez réessayer.",
-        "invalid_grant": "Informations d'identification non valides ou autorisation expirée."
+        "page_expired": "La page a expiré, veuillez réessayer."
     },
     "finance": {
         "billing": "Facturation"
@@ -332,7 +329,8 @@
         "search_jump": "Rechercher ou aller à",
         "replace": "Remplacer",
         "retry": "Réessayer",
-        "general": "Général"
+        "your_plan": "Votre forfait",
+        "is_required": "est requis"
     },
     "hashtag": {
         "hashtag_name": "Nom du groupe de Hashtags",
@@ -354,6 +352,8 @@
     "media": {
         "media_library": "Médiathèque",
         "uploads": "Télécharger",
+        "filter_by_source": "Filtrer par source",
+        "uploaded": "Téléversé",
         "stock": "Banque d'images",
         "gifs": "GIFs",
         "library": "Bibliothèque",
@@ -375,36 +375,7 @@
         "aspect_ratio_range": "Le rapport d'aspect doit être compris entre {min} et {max}.",
         "resolution_range": "La résolution doit être au minimum de {min} x {max} px. La résolution recommandée est de {recommended_min} x {recommended_max} px.",
         "duration_range": "La durée doit être comprise entre {min} et {max} secondes.",
-        "frame_rate_range": "La fréquence d'images (fps) doit être comprise entre {min} et {max} images par seconde.",
-        "edit_alt_text": "Modifier le texte alt",
-        "write_alt_text": "Rédiger un texte alt",
-        "add_alt_text_for": "Ajouter un texte alt pour {platforms}.",
-        "add_video_thumb": "Ajouter une vignette vidéo",
-        "change_video_thumb": "Modifier la vignette de la vidéo",
-        "view_video_thumb": "Voir la vignette de la vidéo",
-        "video_thumb": "Miniature de la vidéo",
-        "video_thumb_providers": "La vignette vidéo est disponible à travers : {providers}.",
-        "custom_size": "Taille personnalisée",
-        "width": "Largeur",
-        "height": "Hauteur",
-        "unit": "Unité",
-        "px": "pixels",
-        "inch": "pouces",
-        "mm": "millimètres",
-        "create_design": "Créer un design",
-        "create_adobe_express": "Créer avec Adobe Express",
-        "new_design": "Nouvelle conception",
-        "saved": "Le média a été enregistré avec succès.",
-        "fb_post": "Message sur Facebook",
-        "fb_story": "L'histoire de Facebook",
-        "ig_portrait_post": "Portrait Instagram",
-        "ig_square_post": "Postes carrés sur Instagram",
-        "ig_story": "L'histoire d'Instagram",
-        "linkedin_post": "Article sur LinkedIn",
-        "x_post": "X post",
-        "pinterest_post": "Postes sur Pinterest",
-        "media": "Médias",
-        "create_for_adobe_express": "Créer pour Adobe Express"
+        "frame_rate_range": "La fréquence d'images (fps) doit être comprise entre {min} et {max} images par seconde."
     },
     "page": {
         "pages": "Pages",
@@ -470,7 +441,7 @@
         "accounts": "Comptes",
         "author": "Auteur",
         "no_posts_found": "Aucune publication n'a été trouvée.",
-        "delete_posts": "Supprimer les messages|Supprimer les messages",
+        "delete_posts": "Supprimer les publications",
         "your_post": "Votre publication",
         "confirmation_delete_post": "Êtes-vous sûr(e) de vouloir supprimer les publications sélectionnées ?",
         "posts_history_not_edited": "Les publications dans l'historique ne peuvent pas être modifiées.",
@@ -532,16 +503,7 @@
         "approval_required": "La publication doit être approuvée avant d'être publiée.",
         "needs_approval": "Doit être approuvé",
         "approve": "Approuver",
-        "view": "Voir la publication",
-        "posts_deleted_from_social_platforms": "Les messages sélectionnés sont supprimés des plates-formes sociales",
-        "does_not_support_deleting": "{provider} ne permet pas de supprimer {types}",
-        "confirmation_delete_posts_from": "Où voulez-vous supprimer ce message ? Où voulez-vous supprimer les messages sélectionnés ?",
-        "delete_post_from": {
-            "app_only": "A partir de la demande uniquement",
-            "app_and_social": "À partir d'applications et de plateformes sociales",
-            "social_only": "Uniquement à partir de plateformes sociales"
-        },
-        "post_deleted_from_social_platforms": "Publication supprimée des plateformes sociales"
+        "view": "Voir l'article"
     },
     "post_activity": {
         "activity": "Activité",
@@ -549,28 +511,27 @@
         "send": "Envoyer",
         "reply_n": "{count} réponse | {count} réponses",
         "reply": "Répondre",
-        "thread_by": "Sujet de",
+        "thread_by": "Fil par",
         "delete_comment": "Supprimer le commentaire",
         "delete_comment_confirm": "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
         "new_comment": "Nouveau commentaire",
-        "by": "De {name}",
+        "by": "Par {name}",
         "new_activity": "Nouvelle activité",
-        "new_post_activity": "Nouvelle activité pour la publication",
-        "created_post": "{user} a créé cette publication",
-        "post_publishing_failed": "La publication a échoué",
-        "post_published": "Publication effectuée avec succès",
-        "schedule_approval": "{ user } a programmé cete publication pour {datetime} et l'a soumis pour approbation.",
-        "post_approved": "{user} a approuvé la programmation de cete publication pour {datetime}",
-        "scheduled_post": "{user} a programmé cete publication pour {datetime}",
-        "publishing": "Démarrage de la publication",
-        "user_set_drafts": "{user} a déplacé cette publication vers les brouillons",
-        "set_drafts": "La publication a été déplacé vers les brouillons.",
+        "new_post_activity": "Nouvelle activité pour le poste",
+        "created_post": "{user} a créé ce poste",
+        "post_publishing_failed": "Le processus de publication a échoué",
+        "post_published": "Publication réussie de l'article",
+        "schedule_approval": "{ user } a programmé ce message pour {datetime} et l'a soumis pour approbation.",
+        "post_approved": "{user} a approuvé la programmation de ce message pour {datetime}",
+        "scheduled_post": "{user} a programmé ce message pour {datetime}",
+        "publishing": "Lancement du processus de publication",
+        "user_set_drafts": "{user} a déplacé ce message vers les brouillons",
+        "set_drafts": "Le message a été déplacé vers les brouillons.",
         "update_scheduled_at": "{user} a mis à jour l'horaire de {old_datetime} à {new_datetime}",
-        "watch": "Surveiller",
+        "watch": "Regarder",
         "notify_all_activity": "Me notifier de toute activité pour cette tâche.",
-        "unwatch": "Ne plus surveiller",
-        "notify_mentions_only": "Ne m'informez que sur les mentions.",
-        "post_deleted_from_social_platforms": "Publication supprimée des plateformes sociales"
+        "unwatch": "Déclencher la surveillance",
+        "notify_mentions_only": "Ne m'informez que des mentions."
     },
     "posting_schedule": {
         "everyday": "Tous les jours",
@@ -697,10 +658,7 @@
                 "number_website_clicks": "Nombre total de clics sur le lien du site web dans le profil",
                 "website_clicks": "Clics sur le site web"
             },
-            "select_video_image": "Sélectionnez une vidéo ou une image pour ce compte Instagram.",
-            "post": "Publication",
-            "reel": "Reel",
-            "story": "Story"
+            "select_video_image": "Sélectionnez une vidéo ou une image pour ce compte Instagram."
         },
         "linkedin": {
             "connect_page": "Connecter une nouvelle page LinkedIn",
@@ -708,6 +666,7 @@
             "visibility": "Visibilité",
             "public": "Public",
             "connections": "Connexions",
+            "not_support_accounts": "Malheureusement, l'API de LinkedIn ne permet pas d'afficher des analyses pour les comptes LinkedIn personnels.",
             "insights": "Statistiques",
             "job_title": "Votre fonction",
             "send": "Envoyer"
@@ -760,6 +719,7 @@
             "create_board": "Créer un tableau Pinterest",
             "save_rate": "Taux d'enregistrement",
             "not_account": "Ce n'est pas un compte Pinterest",
+            "select_board": "Sélectionner un tableau",
             "report": {
                 "number_pins_saved": "Le nombre de fois où vos Pins ont été enregistrées",
                 "number_pin_clicks": "Le nombre total de clics sur votre Pins ou votre annonce pour qu'elle s'ouvre en gros plan.",
@@ -786,6 +746,7 @@
             "public": "Public",
             "private": "Privé",
             "unlisted": "Non répertorié",
+            "analytics_under_development": "Les analyses Youtube sont en cours de développement.",
             "select_video": "Sélectionnez une vidéo pour ce compte YouTube.",
             "privacy_config": "Configuration de la confidentialité",
             "title": "Vidéo ou titre court"
@@ -808,52 +769,12 @@
         "services": "Services",
         "threads": {
             "connect": "Connecter un nouveau profil Threads"
-        },
-        "bluesky": {
-            "connect_profile": "Connecter un nouveau profil Bluesky",
-            "service": "Service",
-            "server_address": "Adresse du serveur"
-        },
-        "gbp": {
-            "post": "Publication",
-            "offer": "Offre",
-            "event": "Événement",
-            "event_title": "Titre de l'événement",
-            "add_time": "Ajouter du temps",
-            "offer_title": "Titre de l'offre",
-            "start_date": "Date de début",
-            "end_date": "Date de fin",
-            "button": "Bouton",
-            "none": "Aucun",
-            "book": "Livre",
-            "order_online": "Commander en ligne",
-            "buy": "Acheter",
-            "learn_more": "En savoir plus",
-            "sign_up": "S'inscrire",
-            "button_link": "Lien vers le bouton",
-            "add_more_details": "Plus de détails",
-            "coupon_code": "Code des coupons",
-            "offer_link": "Lien de l'offre",
-            "tos": "Conditions générales d'utilisation",
-            "start_time": "Heure de début",
-            "end_time": "L'heure de la fin",
-            "call_now": "Appeler maintenant",
-            "redeem_online": "Remboursement en ligne",
-            "show_code": "Afficher ce code dans la boutique",
-            "offer_valid": "Valable {start_date} - {end_date}",
-            "connect_profile": "Connecter un nouveau compte Google Business Profile"
-        },
-        "stock_photo": {
-            "search": "Recherche {source}",
-            "can_use_external_photos": "Avec {provider}, vous pouvez utiliser des photos externes directement dans Mixpost."
-        },
-        "facebook_page": {
-            "post": "Publication",
-            "reel": "Reel",
-            "story": "Story"
-        },
-        "story": "Story",
-        "generate_api_key": "Générer une clé API"
+        }
+    },
+    "subscription": {
+        "upgrade_required": "Mise à Niveau Requise",
+        "plan_limit_reached_message": "Vous avez atteint la limite de votre plan ou votre abonnement a expiré. Veuillez mettre à niveau votre plan pour continuer à utiliser cette fonctionnalité.",
+        "upgrade_plan": "Mettre à Niveau le Plan"
     },
     "system": {
         "system": "Système",
@@ -889,9 +810,7 @@
         "copied_clipboard": "Copié dans le presse-papiers !",
         "failed_copied_clipboard": "Échec de la copie dans le presse-papiers !",
         "usage_api": "Utilisation dans l'API",
-        "stored_safely": "Je l'ai conservée en toute sécurité",
-        "copy_id": "Copie de l'ID",
-        "copy_uuid": "Copier l'UUID"
+        "stored_safely": "Je l'ai conservée en toute sécurité"
     },
     "tag": {
         "change_label_color": "Modifier la couleur de l'étiquette",
@@ -899,7 +818,7 @@
         "delete_label": "Supprimer l'étiquette",
         "label_deleted": "Étiquette supprimée",
         "confirm_label_delete": "Êtes-vous sûr de vouloir supprimer l'étiquette {name} partout ?",
-        "create_new_label": "Appuyez sur Entrée pour créer une nouvelle étiquette",
+        "create_new_label": "Appuyez sur Entrée ou Enregistrer pour créer une nouvelle étiquette",
         "search_create_post": "Rechercher ou créer un nouveau",
         "no_labels_found": "Aucune étiquette trouvée"
     },
@@ -958,10 +877,6 @@
         "upload_favicon": "Télécharger la favicon",
         "theme_color": "Couleur du thème",
         "rebrand_company": "Modifier l'image de votre entreprise"
-    },
-    "url_shortener": {
-        "on": "Raccourcissement d'URL : Sur",
-        "off": "Raccourcissement d'URL : Désactivé"
     },
     "user": {
         "create_user": "Créer un utilisateur",

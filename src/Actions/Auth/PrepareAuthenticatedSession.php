@@ -7,7 +7,9 @@ use Inovector\Mixpost\Support\LoginRateLimiter;
 
 class PrepareAuthenticatedSession
 {
-    public function __construct(protected readonly LoginRateLimiter $limiter) {}
+    public function __construct(protected readonly LoginRateLimiter $limiter)
+    {
+    }
 
     public function handle(Request $request, callable $next)
     {

@@ -32,7 +32,7 @@ class WebhooksController extends Controller
             'filter' => [
                 'keyword' => $request->query('keyword', ''),
             ],
-            'records' => fn () => WebhookResource::collection($records),
+            'records' => fn() => WebhookResource::collection($records),
         ]);
     }
 
@@ -58,7 +58,7 @@ class WebhooksController extends Controller
     {
         $record = Webhook::firstOrFailByUuid($request->route('webhook'));
 
-        if (! $record->isForWorkspace(WorkspaceManager::current())) {
+        if (!$record->isForWorkspace(WorkspaceManager::current())) {
             abort(404);
         }
 
@@ -80,7 +80,7 @@ class WebhooksController extends Controller
     {
         $query = Webhook::byWorkspace(WorkspaceManager::current())->where('uuid', $request->route('webhook'))->delete();
 
-        if (! $query) {
+        if (!$query) {
             return redirect()
                 ->route('mixpost.webhooks.index', ['workspace' => $request->route('workspace')])
                 ->with('error', __('mixpost::webhook.not_found'));

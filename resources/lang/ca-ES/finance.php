@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'billing' => 'Facturació',
+  'billing' => 'Facturació',
 ];

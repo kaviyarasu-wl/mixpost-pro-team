@@ -41,7 +41,7 @@ class WorkspacesController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Workspaces/CreateEdit', [
-            'mode' => 'create',
+            'mode' => 'create'
         ]);
     }
 
@@ -49,7 +49,7 @@ class WorkspacesController extends Controller
     {
         $workspace = $storeWorkspace->handle();
 
-        if (! $storeWorkspace->input('login')) {
+        if (!$storeWorkspace->input('login')) {
             return redirect()->route('mixpost.workspaces.view', ['workspace' => $workspace->uuid]);
         }
 
@@ -64,7 +64,7 @@ class WorkspacesController extends Controller
         $workspace->load('users');
 
         return Inertia::render('Admin/Workspaces/View', [
-            'workspace' => new WorkspaceResource($workspace),
+            'workspace' => new WorkspaceResource($workspace)
         ]);
     }
 
@@ -82,7 +82,7 @@ class WorkspacesController extends Controller
 
         return Inertia::render('Admin/Workspaces/CreateEdit', [
             'mode' => 'edit',
-            'workspace' => new WorkspaceResource($workspace),
+            'workspace' => new WorkspaceResource($workspace)
         ]);
     }
 

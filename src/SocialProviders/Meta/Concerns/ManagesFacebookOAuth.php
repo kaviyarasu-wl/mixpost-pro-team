@@ -11,10 +11,10 @@ trait ManagesFacebookOAuth
             'redirect_uri' => $this->redirectUrl,
             'scope' => $this->scope,
             'response_type' => 'code',
-            'state' => $this->values['state'],
+            'state' => $this->values['state']
         ];
 
-        $url = 'https://www.facebook.com/'.$this->apiVersion.'/dialog/oauth';
+        $url = 'https://www.facebook.com/' . $this->apiVersion . '/dialog/oauth';
 
         return $this->buildUrlFromBase($url, $params);
     }

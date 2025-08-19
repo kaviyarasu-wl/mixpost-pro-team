@@ -20,6 +20,6 @@ class PostingSchedule extends Model
     ];
 
     protected $casts = [
-        'times' => PostingScheduleTimesCast::class,
+        'times' => PostingScheduleTimesCast::class
     ];
 }

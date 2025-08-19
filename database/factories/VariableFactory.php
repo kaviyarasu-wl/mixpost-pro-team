@@ -16,7 +16,7 @@ class VariableFactory extends Factory
             'uuid' => $this->faker->uuid,
             'workspace_id' => Workspace::factory(),
             'name' => $this->faker->domainName,
-            'value' => $this->faker->paragraph,
+            'value' => $this->faker->paragraph
         ];
     }
 }

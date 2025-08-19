@@ -4,6 +4,7 @@ namespace Inovector\Mixpost\Services;
 
 use Inovector\Mixpost\Abstracts\Service;
 use Inovector\Mixpost\Enums\ServiceGroup;
+use Illuminate\Validation\Rule;
 
 class OpenAIService extends Service
 {
@@ -23,6 +24,7 @@ class OpenAIService extends Service
     {
         return [
             'secret_key' => '',
+            'model' => 'gpt-4o-mini',
         ];
     }
 
@@ -30,6 +32,18 @@ class OpenAIService extends Service
     {
         return [
             'secret_key' => ['required'],
+            'model' => [
+                'required',
+                Rule::in([
+                    'gpt-4-turbo',
+                    'gpt-4-turbo-mini',
+                    'gpt-4',
+                    'gpt-3.5-turbo',
+                    'gpt-4-vision-preview',
+                    'gpt-4-turbo-vision',
+                    'gpt-4o-mini',
+                ])
+            ]
         ];
     }
 
@@ -37,6 +51,8 @@ class OpenAIService extends Service
     {
         return [
             'secret_key' => __('validation.required', ['attribute' => 'API Key']),
+            'model.required' => __('validation.required', ['attribute' => 'Model']),
+            'model.in' => __('validation.in', ['attribute' => 'Model']),
         ];
     }
 }

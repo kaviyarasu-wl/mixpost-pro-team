@@ -13,7 +13,7 @@ trait ManagesOAuth
             'redirect_uri' => $this->redirectUrl,
             'scope' => 'read write',
             'response_type' => 'code',
-            'state' => $this->values['state'],
+            'state' => $this->values['state']
         ];
 
         return $this->buildUrlFromBase("$this->serverUrl/oauth/authorize", $params);
@@ -27,13 +27,13 @@ trait ManagesOAuth
             'redirect_uri' => $this->redirectUrl,
             'grant_type' => 'authorization_code',
             'code' => $params['code'],
-            'scope' => 'read write',
+            'scope' => 'read write'
         ];
 
         $result = Http::post("$this->serverUrl/oauth/token", $params)->json();
 
         return [
-            'access_token' => $result['access_token'],
+            'access_token' => $result['access_token']
         ];
     }
 }

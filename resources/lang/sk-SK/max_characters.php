@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'max_characters' => 'Povolené je maximálne :count znakov.',
+  'max_characters' => 'Povolené je maximálne :count znakov.',
 ];

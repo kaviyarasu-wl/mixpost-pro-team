@@ -9,11 +9,13 @@ class SocialProviderResponse
 {
     public function __construct(
         private readonly SocialProviderResponseStatus $status,
-        private array $context,
-        private readonly bool $rateLimitAboutToBeExceeded = false,
-        private readonly int $retryAfter = 0,
-        private readonly bool $isAppLevel = false
-    ) {}
+        private array                                 $context,
+        private readonly bool                         $rateLimitAboutToBeExceeded = false,
+        private readonly int                          $retryAfter = 0,
+        private readonly bool                         $isAppLevel = false
+    )
+    {
+    }
 
     public function __get(string $key)
     {
@@ -47,7 +49,7 @@ class SocialProviderResponse
 
     public function hasError(): bool
     {
-        return ! $this->isOk();
+        return !$this->isOk();
     }
 
     public function isUnauthorized(): bool

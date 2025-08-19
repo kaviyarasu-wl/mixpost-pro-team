@@ -9,20 +9,23 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Inovector\Mixpost\Contracts\QueueWorkspaceAware;
+use Inovector\Mixpost\Models\Post;
 use Inovector\Mixpost\Models\PostActivity;
 use Inovector\Mixpost\Notifications\NewPostActivity;
 
-class SendNotificationsForActivitiesJob implements QueueWorkspaceAware, ShouldQueue
+class SendNotificationsForActivitiesJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $deleteWhenMissingModels = true;
 
-    public function __construct(public PostActivity $activity) {}
+    public function __construct(public PostActivity $activity)
+    {
+    }
 
     public function handle(): void
     {
-        if (! $this->activity->post) {
+        if (!$this->activity->post) {
             return;
         }
 
@@ -32,7 +35,7 @@ class SendNotificationsForActivitiesJob implements QueueWorkspaceAware, ShouldQu
             ->filter(function ($subscriber) {
                 return $subscriber->id !== $this->activity->user_id;
             })
-            ->each(fn ($subscriber) => $subscriber->notify(new NewPostActivity($this->activity)));
+            ->each(fn($subscriber) => $subscriber->notify(new NewPostActivity($this->activity)));
     }
 
     protected function getSubscribers(): Collection
@@ -41,13 +44,13 @@ class SendNotificationsForActivitiesJob implements QueueWorkspaceAware, ShouldQu
             ->with('user')
             ->get()
             ->unique('user_id')
-            ->filter(fn ($subscription) => $subscription->user)
-            ->map(fn ($subscription) => $subscription->user);
+            ->filter(fn($subscription) => $subscription->user)
+            ->map(fn($subscription) => $subscription->user);
     }
 
     protected function getMentioned(): Collection
     {
-        if (! $this->activity->isComment()) {
+        if (!$this->activity->isComment()) {
             return collect();
         }
 

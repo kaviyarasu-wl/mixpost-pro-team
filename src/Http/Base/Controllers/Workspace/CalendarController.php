@@ -27,22 +27,22 @@ class CalendarController extends Controller
         EagerLoadPostVersionsMedia::apply($posts);
 
         return Inertia::render('Workspace/Calendar', [
-            'accounts' => fn () => AccountResource::collection(Account::oldest()->get())->resolve(),
-            'tags' => fn () => TagResource::collection(Tag::latest()->get())->resolve(),
-            'posts' => fn () => PostResource::collection($posts)->additional([
+            'accounts' => fn() => AccountResource::collection(Account::oldest()->get())->resolve(),
+            'tags' => fn() => TagResource::collection(Tag::latest()->get())->resolve(),
+            'posts' => fn() => PostResource::collection($posts)->additional([
                 'filter' => [
-                    'accounts' => Arr::map($request->get('accounts', []), 'intval'),
-                ],
+                    'accounts' => Arr::map($request->get('accounts', []), 'intval')
+                ]
             ]),
             'type' => $request->type(),
-            'selectedDate' => $request->selectedDate(),
+            'selected_date' => $request->selectedDate(),
             'filter' => [
                 'keyword' => $request->get('keyword', ''),
                 'status' => $request->get('status'),
                 'tags' => $request->get('tags', []),
-                'accounts' => $request->get('accounts', []),
+                'accounts' => $request->get('accounts', [])
             ],
-            'service_configs' => ServiceManager::exposedConfiguration(),
+            'service_configs' => ServiceManager::exposedConfiguration()
         ]);
     }
 }

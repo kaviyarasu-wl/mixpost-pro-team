@@ -23,7 +23,7 @@ class UsersController extends Controller
     public function index(Request $request): Response|RedirectResponse
     {
         if (Mixpost::getEnterpriseConsoleUrl()) {
-            return redirect()->to(Mixpost::getEnterpriseConsoleUrl().'/users');
+            return redirect()->to(Mixpost::getEnterpriseConsoleUrl() . '/users');
         }
 
         $users = UserQuery::apply($request)
@@ -35,7 +35,7 @@ class UsersController extends Controller
             ->withQueryString();
 
         return Inertia::render('Admin/Users/Users', [
-            'users' => fn () => UserResource::collection($users),
+            'users' => fn() => UserResource::collection($users),
             'filter' => [
                 'keyword' => $request->query('keyword', ''),
             ],
@@ -45,7 +45,7 @@ class UsersController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Users/CreateEdit', [
-            'mode' => 'create',
+            'mode' => 'create'
         ]);
     }
 
@@ -61,7 +61,7 @@ class UsersController extends Controller
         $user = self::getUserClass()::with('admin', 'workspaces')->findOrFail($request->route('user'));
 
         return Inertia::render('Admin/Users/View', [
-            'user' => new UserResource($user),
+            'user' => new UserResource($user)
         ]);
     }
 
@@ -71,7 +71,7 @@ class UsersController extends Controller
 
         return Inertia::render('Admin/Users/CreateEdit', [
             'mode' => 'edit',
-            'user' => new UserResource($user),
+            'user' => new UserResource($user)
         ]);
     }
 

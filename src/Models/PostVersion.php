@@ -18,13 +18,13 @@ class PostVersion extends Model
         'account_id',
         'is_original',
         'content',
-        'options',
+        'options'
     ];
 
     protected $casts = [
         'is_original' => 'boolean',
         'content' => 'array',
-        'options' => 'array',
+        'options' => 'array'
     ];
 
     public function scopeOriginal(Builder $query): Builder
@@ -34,7 +34,7 @@ class PostVersion extends Model
 
     public function scopeHasMedia(Builder $query, Media $media): Builder
     {
-        return $query->whereRaw("JSON_SEARCH(content, 'all', ?, NULL, '$[*].media') is not null", [(string) $media->id]);
+        return $query->whereRaw("JSON_SEARCH(content, 'all', ?, NULL, '$[*].media') is not null", [(string)$media->id]);
     }
 
     public function removeMedia(Media $media): void
@@ -43,7 +43,7 @@ class PostVersion extends Model
 
         foreach ($content as $i => $contentData) {
             $content[$i]['media'] = array_values(array_filter($contentData['media'], function ($val) use ($media) {
-                return $val != (string) $media->id;
+                return $val != (string)$media->id;
             }));
         }
 

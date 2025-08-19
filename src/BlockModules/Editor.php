@@ -12,7 +12,7 @@ class Editor
     public function render(Block $block): Factory|View|Application
     {
         return view('mixpost::blocks_modules.Editor', [
-            'block' => $block,
+            'block' => $block
         ]);
     }
 }

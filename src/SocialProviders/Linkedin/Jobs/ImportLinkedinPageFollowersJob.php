@@ -2,13 +2,13 @@
 
 namespace Inovector\Mixpost\SocialProviders\Linkedin\Jobs;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Carbon;
 use Inovector\Mixpost\Concerns\Job\HasSocialProviderJobRateLimit;
 use Inovector\Mixpost\Concerns\Job\SocialProviderException;
 use Inovector\Mixpost\Concerns\UsesSocialProviderManager;
@@ -18,12 +18,13 @@ use Inovector\Mixpost\Models\Audience;
 use Inovector\Mixpost\SocialProviders\Linkedin\LinkedinPageProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportLinkedinPageFollowersJob implements QueueWorkspaceAware, ShouldQueue
+class ImportLinkedinPageFollowersJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
@@ -40,7 +41,7 @@ class ImportLinkedinPageFollowersJob implements QueueWorkspaceAware, ShouldQueue
             return;
         }
 
-        if (! $this->account->isServiceActive()) {
+        if (!$this->account->isServiceActive()) {
             return;
         }
 
@@ -52,7 +53,6 @@ class ImportLinkedinPageFollowersJob implements QueueWorkspaceAware, ShouldQueue
 
         /**
          * @see LinkedinPageProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = $this->connectProvider($this->account)->getFollowerCount();
@@ -83,9 +83,9 @@ class ImportLinkedinPageFollowersJob implements QueueWorkspaceAware, ShouldQueue
 
         Audience::updateOrCreate([
             'account_id' => $this->account->id,
-            'date' => Carbon::now()->utc()->toDateString(),
+            'date' => Carbon::now()->utc()->toDateString()
         ], [
-            'total' => $response->count ?? 0,
+            'total' => $response->count ?? 0
         ]);
     }
 }

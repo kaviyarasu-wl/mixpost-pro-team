@@ -22,7 +22,7 @@ class WorkspaceResource extends JsonResource
                 return [
                     'role' => $this->pivot->role,
                     'can_approve' => boolval($this->pivot->can_approve),
-                    'joined_at' => Util::dateTimeFormat(Carbon::parse($this->pivot->joined)),
+                    'joined_at' => Util::dateTimeFormat(Carbon::parse($this->pivot->joined))
                 ];
             }),
         ];

@@ -13,7 +13,7 @@ class DeleteWebhooksController extends Controller
     {
         $delete = Webhook::whereIn('uuid', $request->input('webhooks'))->delete();
 
-        if (! $delete) {
+        if (!$delete) {
             return redirect()
                 ->route('mixpost.webhooks.index', ['workspace' => $request->route('workspace')])
                 ->with('error', __('mixpost::webhook.delete_webhooks_failed'));

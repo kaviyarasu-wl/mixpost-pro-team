@@ -10,14 +10,16 @@ use Illuminate\Queue\SerializesModels;
 use Inovector\Mixpost\Contracts\QueueWorkspaceAware;
 use Inovector\Mixpost\Integrations\Unsplash\Unsplash;
 
-class TriggerDownloadJob implements QueueWorkspaceAware, ShouldQueue
+class TriggerDownloadJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
 
-    public function __construct(public readonly string $downloadLocation) {}
+    public function __construct(public readonly string $downloadLocation)
+    {
+    }
 
     public function handle(Unsplash $unsplash): void
     {

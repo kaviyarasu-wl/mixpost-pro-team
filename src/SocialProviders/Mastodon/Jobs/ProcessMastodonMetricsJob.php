@@ -15,7 +15,7 @@ use Inovector\Mixpost\Models\Account;
 use Inovector\Mixpost\Models\ImportedPost;
 use Inovector\Mixpost\Models\Metric;
 
-class ProcessMastodonMetricsJob implements QueueWorkspaceAware, ShouldQueue
+class ProcessMastodonMetricsJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -48,7 +48,7 @@ class ProcessMastodonMetricsJob implements QueueWorkspaceAware, ShouldQueue
                     'replies' => $item->replies,
                     'reblogs' => $item->reblogs,
                     'favourites' => $item->favourites,
-                ]),
+                ])
             ];
         });
 

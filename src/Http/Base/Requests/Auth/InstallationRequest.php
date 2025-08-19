@@ -17,14 +17,14 @@ class InstallationRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return ! self::getUserClass()::exists();
+        return !self::getUserClass()::exists();
     }
 
     public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.self::getUserClass()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . self::getUserClass()],
             'password' => ['required', 'confirmed', Password::defaults()],
             'timezone' => ['sometimes', 'nullable', 'timezone'],
         ];
@@ -47,7 +47,7 @@ class InstallationRequest extends FormRequest
 
             $user->settings()->create([
                 'name' => 'timezone',
-                'payload' => $this->input('timezone', Config::get('app.timezone')),
+                'payload' => $this->input('timezone', Config::get('app.timezone'))
             ]);
         });
 

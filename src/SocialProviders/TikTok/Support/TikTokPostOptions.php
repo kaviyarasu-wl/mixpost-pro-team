@@ -2,13 +2,12 @@
 
 namespace Inovector\Mixpost\SocialProviders\TikTok\Support;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Support\SocialProviderPostOptions;
+use Inovector\Mixpost\Contracts\SocialProviderPostOptions;
 
-class TikTokPostOptions extends SocialProviderPostOptions
+class TikTokPostOptions implements SocialProviderPostOptions
 {
-    public function rules(FormRequest $request): array
+    public function rules(): array
     {
         return [
             'privacy_level' => ['sometimes', 'array'],
@@ -33,22 +32,22 @@ class TikTokPostOptions extends SocialProviderPostOptions
         return [
             'privacy_level' => Arr::get($options, 'privacy_level', ['account-0' => '']),
             'allow_comments' => Arr::map(Arr::get($options, 'allow_comments', ['account-0' => false]), function ($value) {
-                return (bool) $value;
+                return (bool)$value;
             }),
             'allow_duet' => Arr::map(Arr::get($options, 'allow_duet', ['account-0' => false]), function ($value) {
-                return (bool) $value;
+                return (bool)$value;
             }),
             'allow_stitch' => Arr::map(Arr::get($options, 'allow_stitch', ['account-0' => false]), function ($value) {
-                return (bool) $value;
+                return (bool)$value;
             }),
             'content_disclosure' => Arr::map(Arr::wrap(Arr::get($options, 'content_disclosure', ['account-0' => false])), function ($value) {
-                return (bool) $value;
+                return (bool)$value;
             }),
             'brand_organic_toggle' => Arr::map(Arr::wrap(Arr::get($options, 'brand_organic_toggle', ['account-0' => false])), function ($value) {
-                return (bool) $value;
+                return (bool)$value;
             }),
             'brand_content_toggle' => Arr::map(Arr::wrap(Arr::get($options, 'brand_content_toggle', ['account-0' => false])), function ($value) {
-                return (bool) $value;
+                return (bool)$value;
             }),
         ];
     }

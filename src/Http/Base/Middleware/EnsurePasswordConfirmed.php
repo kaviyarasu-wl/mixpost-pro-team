@@ -16,7 +16,7 @@ class EnsurePasswordConfirmed
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! $this->passwordConfirmed()) {
+        if (!$this->passwordConfirmed()) {
             throw ValidationException::withMessages([
                 'confirm_password' => [__('mixpost::auth.confirm_your_password')],
             ]);

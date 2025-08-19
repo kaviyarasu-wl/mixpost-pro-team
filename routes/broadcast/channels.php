@@ -5,17 +5,17 @@ use Inovector\Mixpost\Models\Post;
 use Inovector\Mixpost\Util;
 
 Broadcast::channel('mixpost_posts.{uuid}', function ($user, $uuid) {
-    if (! $user) {
+    if (!$user) {
         return false;
     }
 
-    if (! $post = Post::withoutWorkspace()->where('uuid', $uuid)->first()) {
+    if (!$post = Post::withoutWorkspace()->where('uuid', $uuid)->first()) {
         return false;
     }
 
     $finalUserModel = app(Util::getUserClass())::make($user->only('email'))->setAttribute('id', $user->id);
 
-    if ($post->workspace && ! $finalUserModel->hasWorkspace($post->workspace->id)) {
+    if ($post->workspace && !$finalUserModel->hasWorkspace($post->workspace->id)) {
         return false;
     }
 

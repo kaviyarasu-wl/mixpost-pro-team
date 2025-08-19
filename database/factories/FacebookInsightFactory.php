@@ -17,11 +17,11 @@ class FacebookInsightFactory extends Factory
         return [
             'workspace_id' => Workspace::factory(),
             'account_id' => Account::factory()->state([
-                'provider' => 'facebook_page',
+                'provider' => 'facebook_page'
             ]),
             'type' => FacebookInsightType::PAGE_POSTS_IMPRESSIONS,
             'value' => $this->faker->randomDigit(),
-            'date' => $this->faker->dateTimeBetween('-90 days'),
+            'date' => $this->faker->dateTimeBetween('-90 days')
         ];
     }
 }

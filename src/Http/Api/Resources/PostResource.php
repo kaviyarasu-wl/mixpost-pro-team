@@ -22,7 +22,7 @@ class PostResource extends JsonResource
             'scheduled_at' => $this->scheduled_at?->toDateTimeString(),
             'published_at' => $this->published_at?->toDateTimeString(),
             'created_at' => $this->created_at->toDateTimeString(),
-            'trashed' => $this->trashed(),
+            'trashed' => $this->trashed()
         ];
     }
 

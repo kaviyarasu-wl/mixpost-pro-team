@@ -13,7 +13,7 @@ class PostingScheduleTimesCast implements CastsAttributes
 {
     public function get($model, string $key, $value, array $attributes)
     {
-        if (! $value) {
+        if (!$value) {
             return PostingSchedule::defaultTimes();
         }
 
@@ -30,13 +30,13 @@ class PostingScheduleTimesCast implements CastsAttributes
 
             $day['times'] = collect($value[$dayIndex]['times'] ?? [])
                 ->map(function ($time) use ($userTimezone) {
-                    $hour = (int) Str::before($time['value'], ':');
-                    $minute = (int) Str::after($time['value'], ':');
+                    $hour = (int)Str::before($time['value'], ':');
+                    $minute = (int)Str::after($time['value'], ':');
 
                     return [
                         'value' => Carbon::createFromTime($hour, $minute, 0, $userTimezone)
                             ->tz('UTC')
-                            ->format('H:i'),
+                            ->format('H:i')
                     ];
                 })
                 ->unique('value')

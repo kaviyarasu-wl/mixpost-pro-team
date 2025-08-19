@@ -35,13 +35,11 @@
         "account_entities": "Entidades de cuenta",
         "select_the_social_entities": "Seleccione las entidades sociales que desea conectar",
         "connected": "Conectado",
+        "choose": "Elija",
         "access_token_expired": "El token de acceso ha caducado. Vuelva a conectar su cuenta.",
         "unauthorized": "Sin autorización",
         "add_social_account": "Si no tienes una cuenta social, añade al menos una.",
-        "no_accounts_found": "No se han encontrado cuentas",
-        "finish_connection": "Conexión de acabado",
-        "open_account_page": "Abrir cuenta",
-        "view_profile": "Ver perfil"
+        "no_accounts_found": "No se han encontrado cuentas"
     },
     "ai": {
         "tell_ai": "Dile a la IA sobre qué escribir",
@@ -241,8 +239,7 @@
         "request_timeout": "Solicitud agotada. Inténtelo de nuevo.",
         "unknown_error": "Error desconocido",
         "service_auth_failed": "Error de autenticación. Por favor, verifique sus credenciales de servicio {service}.",
-        "page_expired": "La página ha caducado, inténtelo de nuevo.",
-        "invalid_grant": "Credenciales no válidas o autorización caducada."
+        "page_expired": "La página ha caducado, inténtelo de nuevo."
     },
     "finance": {
         "billing": "Facturación"
@@ -332,7 +329,8 @@
         "search_jump": "Buscar o saltar a",
         "replace": "Sustituir",
         "retry": "Reintentar",
-        "general": "General"
+        "your_plan": "Tu plan",
+        "is_required": "es requerido"
     },
     "hashtag": {
         "hashtag_name": "Hashtag Nombre del grupo",
@@ -354,6 +352,8 @@
     "media": {
         "media_library": "Mediateca",
         "uploads": "Cargar",
+        "filter_by_source": "Filtrar por fuente",
+        "uploaded": "Subido",
         "stock": "Fotos de archivo",
         "gifs": "GIFs",
         "library": "Biblioteca",
@@ -375,36 +375,7 @@
         "aspect_ratio_range": "La relación de aspecto debe estar entre {min} y {max}.",
         "resolution_range": "La resolución debe ser como mínimo de {min} x {max} px. Se recomienda {recommended_min} x {recommended_max} px.",
         "duration_range": "La duración debe estar comprendida entre {min} y {max} segundos.",
-        "frame_rate_range": "La frecuencia de imagen debe estar entre {min} y {max} imágenes por segundo.",
-        "edit_alt_text": "Editar texto alternativo",
-        "write_alt_text": "Escribir un texto alternativo",
-        "add_alt_text_for": "Añade un texto alternativo para {platforms}.",
-        "add_video_thumb": "Añadir miniatura de vídeo",
-        "change_video_thumb": "Cambiar la miniatura del vídeo",
-        "view_video_thumb": "Ver vídeo en miniatura",
-        "video_thumb": "Miniatura del vídeo",
-        "video_thumb_providers": "La miniatura del vídeo está disponible a través de: {providers}.",
-        "custom_size": "Tamaño personalizado",
-        "width": "Anchura",
-        "height": "Altura",
-        "unit": "Unidad",
-        "px": "píxeles",
-        "inch": "pulgadas",
-        "mm": "milímetros",
-        "create_design": "Crear diseño",
-        "create_adobe_express": "Crear con Adobe Express",
-        "new_design": "Nuevo diseño",
-        "saved": "Medios guardados correctamente.",
-        "fb_post": "Publicación en Facebook",
-        "fb_story": "Historia de Facebook",
-        "ig_portrait_post": "Retrato en Instagram",
-        "ig_square_post": "Instagram post cuadrado",
-        "ig_story": "Historia de Instagram",
-        "linkedin_post": "LinkedIn post",
-        "x_post": "X puesto",
-        "pinterest_post": "Pinterest post",
-        "media": "Medios de comunicación",
-        "create_for_adobe_express": "Crear para Adobe Express"
+        "frame_rate_range": "La frecuencia de imagen debe estar entre {min} y {max} imágenes por segundo."
     },
     "page": {
         "pages": "Páginas",
@@ -470,7 +441,7 @@
         "accounts": "Cuentas",
         "author": "Autor",
         "no_posts_found": "No se han encontrado publicaciones",
-        "delete_posts": "Borrar mensajes|Borrar mensajes",
+        "delete_posts": "Borrar mensajes",
         "your_post": "Su publicación",
         "confirmation_delete_post": "¿Está seguro de que desea eliminar los mensajes seleccionados?",
         "posts_history_not_edited": "Los mensajes del historial no se pueden editar.",
@@ -532,16 +503,7 @@
         "approval_required": "Los mensajes deben ser aprobados antes de ser publicados.",
         "needs_approval": "Necesita aprobación",
         "approve": "Aprobar",
-        "view": "Ver el post",
-        "posts_deleted_from_social_platforms": "Publicaciones seleccionadas eliminadas de las plataformas sociales",
-        "does_not_support_deleting": "{provider} no permite borrar {types}",
-        "confirmation_delete_posts_from": "¿De dónde quieres borrar este mensaje? ¿De dónde quieres borrar los mensajes seleccionados?",
-        "delete_post_from": {
-            "app_only": "Sólo desde la aplicación",
-            "app_and_social": "Desde aplicaciones y plataformas sociales",
-            "social_only": "Sólo desde plataformas sociales"
-        },
-        "post_deleted_from_social_platforms": "Publicación eliminada de las plataformas sociales"
+        "view": "Ver el post"
     },
     "post_activity": {
         "activity": "Actividad",
@@ -569,8 +531,7 @@
         "watch": "Ver",
         "notify_all_activity": "Notificarme toda la actividad de esta tarea.",
         "unwatch": "Unwatch",
-        "notify_mentions_only": "Notificarme sólo las menciones.",
-        "post_deleted_from_social_platforms": "Publicación eliminada de las plataformas sociales"
+        "notify_mentions_only": "Notificarme sólo las menciones."
     },
     "posting_schedule": {
         "everyday": "Todos los días",
@@ -697,10 +658,7 @@
                 "number_website_clicks": "Número total de pulsaciones sobre el enlace del sitio web en el perfil",
                 "website_clicks": "Clics en el sitio web"
             },
-            "select_video_image": "Selecciona un vídeo o una imagen para esta cuenta de Instagram.",
-            "post": "Publicar en",
-            "reel": "Carrete",
-            "story": "Historia"
+            "select_video_image": "Selecciona un vídeo o una imagen para esta cuenta de Instagram."
         },
         "linkedin": {
             "connect_page": "Conectar una nueva página de LinkedIn",
@@ -708,6 +666,7 @@
             "visibility": "Visibilidad",
             "public": "Público",
             "connections": "Conexiones",
+            "not_support_accounts": "Lamentablemente, la API de LinkedIn no permite mostrar análisis de cuentas personales de LinkedIn.",
             "insights": "Perspectivas",
             "job_title": "Su cargo",
             "send": "Enviar"
@@ -760,6 +719,7 @@
             "create_board": "Crear un tablero de Pinterest",
             "save_rate": "Ahorrar tarifa",
             "not_account": "Esto no es una cuenta de Pinterest",
+            "select_board": "Selecciona un tablero",
             "report": {
                 "number_pins_saved": "El número de veces que se han guardado tus pines",
                 "number_pin_clicks": "El número total de clics en su Pin o anuncio para que se abra en primer plano.",
@@ -786,6 +746,7 @@
             "public": "Público",
             "private": "Privado",
             "unlisted": "Sin clasificar",
+            "analytics_under_development": "El análisis de YouTube está en fase de desarrollo.",
             "select_video": "Selecciona un vídeo para esta cuenta de YouTube.",
             "privacy_config": "Configuración de privacidad",
             "title": "Vídeo o título corto"
@@ -808,52 +769,12 @@
         "services": "Servicios",
         "threads": {
             "connect": "Conectar un nuevo perfil de Threads"
-        },
-        "bluesky": {
-            "connect_profile": "Conectar un nuevo perfil Bluesky",
-            "service": "Servicio",
-            "server_address": "Dirección del servidor"
-        },
-        "gbp": {
-            "post": "Publicar en",
-            "offer": "Oferta",
-            "event": "Evento",
-            "event_title": "Título del evento",
-            "add_time": "Añadir tiempo",
-            "offer_title": "Título de la oferta",
-            "start_date": "Fecha de inicio",
-            "end_date": "Fecha final",
-            "button": "Botón",
-            "none": "Ninguno",
-            "book": "Reserve",
-            "order_online": "Pedidos en línea",
-            "buy": "Comprar",
-            "learn_more": "Más información",
-            "sign_up": "Inscribirse",
-            "button_link": "Botón de enlace",
-            "add_more_details": "Añadir más detalles",
-            "coupon_code": "Código de cupón",
-            "offer_link": "Ofrecer enlace",
-            "tos": "Condiciones generales",
-            "start_time": "Hora de inicio",
-            "end_time": "Fin de los tiempos",
-            "call_now": "Llama ahora",
-            "redeem_online": "Canjear en línea",
-            "show_code": "Mostrar este código en la tienda",
-            "offer_valid": "Válido {start_date} - {end_date}",
-            "connect_profile": "Conectar una nueva cuenta de perfil de Google Business"
-        },
-        "stock_photo": {
-            "search": "Buscar {source}",
-            "can_use_external_photos": "Con {provider} puede utilizar fotos de archivo externas directamente en Mixpost."
-        },
-        "facebook_page": {
-            "post": "Publicar en",
-            "reel": "Carrete",
-            "story": "Historia"
-        },
-        "story": "Historia",
-        "generate_api_key": "Generar clave API"
+        }
+    },
+    "subscription": {
+        "upgrade_required": "Actualización Requerida",
+        "plan_limit_reached_message": "Has alcanzado el límite de tu plan o tu suscripción ha expirado. Por favor, actualiza tu plan para continuar usando esta función.",
+        "upgrade_plan": "Actualizar Plan"
     },
     "system": {
         "system": "Sistema",
@@ -889,9 +810,7 @@
         "copied_clipboard": "Copiado al portapapeles.",
         "failed_copied_clipboard": "No se ha podido copiar en el portapapeles.",
         "usage_api": "Uso en API",
-        "stored_safely": "Lo he guardado a buen recaudo",
-        "copy_id": "Copiar ID",
-        "copy_uuid": "Copiar UUID"
+        "stored_safely": "Lo he guardado a buen recaudo"
     },
     "tag": {
         "change_label_color": "Cambiar el color de la etiqueta",
@@ -899,7 +818,7 @@
         "delete_label": "Eliminar etiqueta",
         "label_deleted": "Etiqueta eliminada",
         "confirm_label_delete": "¿Estás seguro de que quieres borrar la etiqueta {name} de todas partes?",
-        "create_new_label": "Pulse Intro para crear una nueva etiqueta",
+        "create_new_label": "Pulse Intro o Guardar para crear una nueva etiqueta",
         "search_create_post": "Buscar o crear nuevo",
         "no_labels_found": "No se han encontrado etiquetas"
     },
@@ -958,10 +877,6 @@
         "upload_favicon": "Subir favicon",
         "theme_color": "Color del tema",
         "rebrand_company": "Cambie la marca de su empresa"
-    },
-    "url_shortener": {
-        "on": "Acortamiento de URL: En",
-        "off": "Acortamiento de URL: Off"
     },
     "user": {
         "create_user": "Crear usuario",

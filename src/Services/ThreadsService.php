@@ -23,8 +23,8 @@ class ThreadsService extends Service
     public static function formRules(): array
     {
         return [
-            'client_id' => ['required'],
-            'client_secret' => ['required'],
+            "client_id" => ['required'],
+            "client_secret" => ['required'],
         ];
     }
 

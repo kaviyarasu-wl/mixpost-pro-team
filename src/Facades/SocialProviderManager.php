@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Inovector\Mixpost\Contracts\SocialProvider connect(string $provider, array $values = [])
- * @method static array unsupportedPostDeletionTypes()
  * @method static \Inovector\Mixpost\Contracts\SocialProvider useAccessToken(array $token = [])
  * @method static array providers()
  *

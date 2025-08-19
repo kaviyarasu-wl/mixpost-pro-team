@@ -20,7 +20,7 @@ class UserTwoFactorAuth extends Model
 
     protected $casts = [
         'secret_key' => 'encrypted',
-        'recovery_codes' => EncryptArrayObject::class,
+        'recovery_codes' => EncryptArrayObject::class
     ];
 
     protected $hidden = [

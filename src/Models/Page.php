@@ -22,11 +22,11 @@ class Page extends Model
         'meta_title',
         'meta_description',
         'layout',
-        'status',
+        'status'
     ];
 
     protected $casts = [
-        'status' => ResourceStatus::class,
+        'status' => ResourceStatus::class
     ];
 
     public function blocks(): BelongsToMany

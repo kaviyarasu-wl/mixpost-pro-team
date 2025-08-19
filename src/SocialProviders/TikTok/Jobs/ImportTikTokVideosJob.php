@@ -20,17 +20,17 @@ use Inovector\Mixpost\Models\ImportedPost;
 use Inovector\Mixpost\SocialProviders\TikTok\TikTokProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportTikTokVideosJob implements QueueWorkspaceAware, ShouldQueue
+class ImportTikTokVideosJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
     public Account $account;
-
     public array $params;
 
     public function __construct(Account $account, array $params = [])
@@ -45,7 +45,7 @@ class ImportTikTokVideosJob implements QueueWorkspaceAware, ShouldQueue
             return;
         }
 
-        if (! $this->account->isServiceActive()) {
+        if (!$this->account->isServiceActive()) {
             return;
         }
 
@@ -57,7 +57,6 @@ class ImportTikTokVideosJob implements QueueWorkspaceAware, ShouldQueue
 
         /**
          * @see TikTokProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = $this->connectProvider($this->account)->getVideos(Arr::get($this->params, 'cursor'));
@@ -116,7 +115,7 @@ class ImportTikTokVideosJob implements QueueWorkspaceAware, ShouldQueue
                     'comment_count' => $item['comment_count'],
                     'view_count' => $item['view_count'],
                 ]),
-                'created_at' => Carbon::createFromTimestamp($item['create_time'], 'UTC')->toDateTimeString(),
+                'created_at' => Carbon::createFromTimestamp($item['create_time'], 'UTC')->toDateTimeString()
             ];
         });
 

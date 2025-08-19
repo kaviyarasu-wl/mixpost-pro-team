@@ -14,7 +14,7 @@ class ResendWebhookController extends Controller
     {
         $webhook = Webhook::firstOrFailByUuid($request->route('webhook'));
 
-        if (! $webhook->isSystem()) {
+        if (!$webhook->isSystem()) {
             abort(404);
         }
 

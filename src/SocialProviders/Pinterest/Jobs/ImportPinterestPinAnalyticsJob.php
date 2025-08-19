@@ -23,17 +23,17 @@ use Inovector\Mixpost\Models\PinterestAnalytic;
 use Inovector\Mixpost\SocialProviders\Pinterest\PinterestProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportPinterestPinAnalyticsJob implements QueueWorkspaceAware, ShouldQueue
+class ImportPinterestPinAnalyticsJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
     public Account $account;
-
     public array $params;
 
     public function __construct(Account $account, array $params = [])
@@ -67,13 +67,12 @@ class ImportPinterestPinAnalyticsJob implements QueueWorkspaceAware, ShouldQueue
         foreach ($this->posts() as $post) {
             /**
              * @see PinterestProvider
-             *
              * @var SocialProviderResponse $response
              */
             $response = $connection->getPinAnalytics($post->provider_post_id, [
                 'start_date' => $post->created_at->toDateString(),
                 'end_date' => Carbon::today('UTC')->toDateString(),
-                'metric_types' => implode(',', ['OUTBOUND_CLICK', 'PIN_CLICK', 'IMPRESSION', 'SAVE', 'SAVE_RATE']),
+                'metric_types' => implode(',', ['OUTBOUND_CLICK', 'PIN_CLICK', 'IMPRESSION', 'SAVE', 'SAVE_RATE'])
             ]);
 
             if ($response->isUnauthorized()) {
@@ -101,11 +100,11 @@ class ImportPinterestPinAnalyticsJob implements QueueWorkspaceAware, ShouldQueue
             }
 
             $post->setAttribute('metrics', [
-                'outbound_click' => (int) Arr::get($response->all, 'summary_metrics.OUTBOUND_CLICK', 0),
-                'impressions' => (int) Arr::get($response->all, 'summary_metrics.IMPRESSION', 0),
-                'save_rate' => (int) Arr::get($response->all, 'summary_metrics.SAVE_RATE', 0),
-                'click' => (int) Arr::get($response->all, 'summary_metrics.PIN_CLICK', 0),
-                'save' => (int) Arr::get($response->all, 'summary_metrics.SAVE', 0),
+                'outbound_click' => (int)Arr::get($response->all, 'summary_metrics.OUTBOUND_CLICK', 0),
+                'impressions' => (int)Arr::get($response->all, 'summary_metrics.IMPRESSION', 0),
+                'save_rate' => (int)Arr::get($response->all, 'summary_metrics.SAVE_RATE', 0),
+                'click' => (int)Arr::get($response->all, 'summary_metrics.PIN_CLICK', 0),
+                'save' => (int)Arr::get($response->all, 'summary_metrics.SAVE', 0),
             ]);
 
             $posts[] = $post;
@@ -134,7 +133,7 @@ class ImportPinterestPinAnalyticsJob implements QueueWorkspaceAware, ShouldQueue
                 'provider_post_id' => $item->provider_post_id,
                 'content' => json_encode($item->content),
                 'metrics' => json_encode($item->metrics ?? []),
-                'created_at' => $item->created_at,
+                'created_at' => $item->created_at
             ];
         });
 
@@ -150,11 +149,11 @@ class ImportPinterestPinAnalyticsJob implements QueueWorkspaceAware, ShouldQueue
                 'provider_post_id' => $providerPostId,
                 'date' => $item['date'],
                 'metrics' => json_encode([
-                    PinterestMetricType::SAVE_RATE->value => (int) Arr::get($item['metrics'], 'SAVE_RATE', 0),
-                    PinterestMetricType::PIN_CLICK->value => (int) Arr::get($item['metrics'], 'PIN_CLICK', 0),
-                    PinterestMetricType::IMPRESSION->value => (int) Arr::get($item['metrics'], 'IMPRESSION', 0),
-                    PinterestMetricType::OUTBOUND_CLICK->value => (int) Arr::get($item['metrics'], 'OUTBOUND_CLICK', 0),
-                    PinterestMetricType::SAVE->value => (int) Arr::get($item['metrics'], 'SAVE', 0),
+                    PinterestMetricType::SAVE_RATE->value => (int)Arr::get($item['metrics'], 'SAVE_RATE', 0),
+                    PinterestMetricType::PIN_CLICK->value => (int)Arr::get($item['metrics'], 'PIN_CLICK', 0),
+                    PinterestMetricType::IMPRESSION->value => (int)Arr::get($item['metrics'], 'IMPRESSION', 0),
+                    PinterestMetricType::OUTBOUND_CLICK->value => (int)Arr::get($item['metrics'], 'OUTBOUND_CLICK', 0),
+                    PinterestMetricType::SAVE->value => (int)Arr::get($item['metrics'], 'SAVE', 0),
                 ]),
             ];
         });

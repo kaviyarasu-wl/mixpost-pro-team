@@ -7,7 +7,6 @@ use Inovector\Mixpost\Contracts\WebhookEvent;
 class AnonymousWebhookEvent implements WebhookEvent
 {
     protected static string $name;
-
     protected array $payload;
 
     public function __construct(string $name, array $payload = [])
@@ -25,6 +24,7 @@ class AnonymousWebhookEvent implements WebhookEvent
     {
         return self::name();
     }
+
 
     public function payload(): array
     {

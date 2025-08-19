@@ -18,16 +18,16 @@ class TemplateResource extends JsonResource
             'name' => $this->name,
             'content' => collect($this->content)->map(function ($item) use ($mediaCollection) {
                 return [
-                    'body' => (string) $item['body'],
+                    'body' => (string)$item['body'],
                     'media' => collect($item['media'])->map(function ($mediaId) use ($mediaCollection) {
                         $media = $mediaCollection->where('id', $mediaId)->first();
 
-                        if (! $media) {
+                        if (!$media) {
                             return null;
                         }
 
                         return new MediaResource($media);
-                    })->filter()->values(),
+                    })->filter()->values()
                 ];
             }),
         ];

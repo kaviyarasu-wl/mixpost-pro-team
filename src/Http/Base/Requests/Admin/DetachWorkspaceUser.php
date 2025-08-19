@@ -13,7 +13,7 @@ class DetachWorkspaceUser extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'exists:'.app(self::getUserClass())->getTable().',id'],
+            'user_id' => ['required', "exists:" . app(self::getUserClass())->getTable() . ",id"]
         ];
     }
 

@@ -18,16 +18,16 @@ class FacebookService extends Service
         return [
             'client_id' => '',
             'client_secret' => '',
-            'api_version' => current(self::versions()),
+            'api_version' => current(self::versions())
         ];
     }
 
     public static function formRules(): array
     {
         return [
-            'client_id' => ['required'],
-            'client_secret' => ['required'],
-            'api_version' => ['required', Rule::in(self::versions())],
+            "client_id" => ['required'],
+            "client_secret" => ['required'],
+            "api_version" => ['required', Rule::in(self::versions())],
         ];
     }
 

@@ -22,6 +22,11 @@ class PostScheduledAt implements Filter
                 ->whereDate('scheduled_at', '<=', $date->endOfWeek()->toDateString());
         }
 
+        if ($value['calendar_type'] === 'year') {
+            return $builder->whereDate('scheduled_at', '>=', $date->clone()->startOfYear()->toDateString())
+                ->whereDate('scheduled_at', '<=', $date->clone()->endOfYear()->toDateString());
+        }
+
         if ($value['calendar_type'] === 'day') {
             return $builder->whereDate('scheduled_at', $date->toDateString());
         }

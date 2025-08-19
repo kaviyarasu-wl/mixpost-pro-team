@@ -9,7 +9,9 @@ class Calendar extends FormRequest
 {
     public function rules(): array
     {
-        return [];
+        return [
+            'type' => 'nullable|string|in:month,week,year'
+        ];
     }
 
     public function handle()

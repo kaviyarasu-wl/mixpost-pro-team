@@ -13,7 +13,7 @@ class PostActivitiesController extends Controller
 {
     public function __invoke(Request $request): AnonymousResourceCollection
     {
-        $post = Post::firstOrFailTrashedByUuid($request->route('post'));
+        $post = Post::firstOrFailByUuid($request->route('post'));
 
         $records = PostActivity::where('post_id', $post->id)
             ->whereNull('parent_id')

@@ -13,7 +13,7 @@ trait FacebookPostPublication
     {
         $isVideo = $media->count() === 1 && $media->first()->isVideo();
 
-        if (! $isVideo) {
+        if (!$isVideo) {
             return $this->publishFacebookStandardPostDefault($text, $media, $params['url'] ?? '');
         }
 
@@ -30,15 +30,15 @@ trait FacebookPostPublication
 
         $params = [
             'message' => $text,
-            'access_token' => $this->accessToken(),
+            'access_token' => $this->accessToken()
         ];
 
-        if (! $media->count() && $url) {
+        if (!$media->count() && $url) {
             $params['link'] = $url;
         }
 
         // `attached_media` = support only images
-        if (! empty($uploadPhotos)) {
+        if (!empty($uploadPhotos)) {
             $params['attached_media'] = $uploadPhotos;
         }
 
@@ -46,7 +46,7 @@ trait FacebookPostPublication
 
         return $this->buildResponse($response, function () use ($response) {
             return [
-                'id' => $response->json()['id'],
+                'id' => $response->json()['id']
             ];
         });
     }
@@ -57,7 +57,7 @@ trait FacebookPostPublication
 
         $meta = [
             'description' => $text,
-            'thumb' => $thumbReadStream['stream'],
+            'thumb' => $thumbReadStream['stream']
         ];
 
         $response = $this->uploadVideoPost($media->first(), $meta);
@@ -77,7 +77,7 @@ trait FacebookPostPublication
         $session = $this->buildResponse($this->getHttpClient()::post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/videos", [
             'upload_phase' => 'start',
             'file_size' => $mediaItem->size,
-            'access_token' => $this->accessToken(),
+            'access_token' => $this->accessToken()
         ]));
 
         if ($session->hasError()) {
@@ -95,13 +95,13 @@ trait FacebookPostPublication
             $partialFile = stream_get_contents($readStream['stream'], ($endOffset - $startOffset), $startOffset);
 
             $chunkResponse = $this->buildResponse($this->getHttpClient()::attach('video_file_chunk', $partialFile, $mediaItem->name, [
-                'Content-Type' => $mediaItem->mime_type,
+                'Content-Type' => $mediaItem->mime_type
             ])
                 ->post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/videos", [
                     'upload_phase' => 'transfer',
                     'upload_session_id' => $uploadSessionId,
                     'start_offset' => $startOffset,
-                    'access_token' => $this->accessToken(),
+                    'access_token' => $this->accessToken()
                 ]));
 
             if ($chunkResponse->hasError()) {
@@ -130,14 +130,14 @@ trait FacebookPostPublication
         $finish = $this->buildResponse($this->getHttpClient()::asMultipart()->post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/videos", array_merge([
             'upload_phase' => 'finish',
             'upload_session_id' => $uploadSessionId,
-            'access_token' => $this->accessToken(),
+            'access_token' => $this->accessToken()
         ], $meta)));
 
         if ($finish->hasError()) {
             return $finish;
         }
 
-        if (! $finish->context()['success']) {
+        if (!$finish->context()['success']) {
             return new SocialProviderResponse(SocialProviderResponseStatus::ERROR, ['error_upload_video']);
         }
 

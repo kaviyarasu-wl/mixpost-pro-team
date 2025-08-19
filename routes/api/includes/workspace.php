@@ -17,18 +17,18 @@ use Inovector\Mixpost\Mixpost;
 
 Route::middleware(array_merge([
     IdentifyWorkspace::class,
-    CheckWorkspaceUser::class,
+    CheckWorkspaceUser::class
 ], Mixpost::getWorkspaceMiddlewares()))
     ->prefix('{workspace}')
     ->group(function () {
-        $editorMiddleware = CheckWorkspaceUser::class.':'.WorkspaceUserRole::ADMIN->name.'|'.WorkspaceUserRole::MEMBER->name;
+        $editorMiddleware = CheckWorkspaceUser::class . ':' . WorkspaceUserRole::ADMIN->name . '|' . WorkspaceUserRole::MEMBER->name;
 
         Route::prefix('accounts')->name('accounts.')->group(function () {
             Route::get('/', [AccountsController::class, 'index'])->name('index');
             Route::get('{account}', [AccountsController::class, 'show'])->name('show');
         });
 
-        Route::prefix('posts')->name('posts.')->middleware($editorMiddleware)->group(function () use ($editorMiddleware) {
+        Route::prefix('posts')->name('posts.')->middleware($editorMiddleware)->group(function () use($editorMiddleware) {
             Route::get('/', [PostsController::class, 'index'])->name('index')->withoutMiddleware($editorMiddleware);
             Route::post('/', [PostsController::class, 'store'])->name('store');
             Route::get('{post}', [PostsController::class, 'show'])->name('show')->withoutMiddleware($editorMiddleware);
@@ -41,10 +41,9 @@ Route::middleware(array_merge([
             Route::post('approve/{post}', ApprovePostController::class)->name('approve')->withoutMiddleware($editorMiddleware);
         });
 
-        Route::prefix('media')->name('media.')->middleware($editorMiddleware)->group(function () use ($editorMiddleware) {
+        Route::prefix('media')->name('media.')->middleware($editorMiddleware)->group(function () use($editorMiddleware) {
             Route::get('/', [MediaController::class, 'index'])->name('index')->withoutMiddleware($editorMiddleware);
             Route::get('{media}', [MediaController::class, 'show'])->name('show')->withoutMiddleware($editorMiddleware);
-            Route::put('{item}', [MediaController::class, 'update'])->name('update');
             Route::post('/', MediaUploadFileController::class)->name('upload');
             Route::delete('/', [MediaController::class, 'destroy'])->name('delete');
         });

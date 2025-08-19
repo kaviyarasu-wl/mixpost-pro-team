@@ -16,18 +16,18 @@ class StoreWorkspace extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:60'],
-            'hex_color' => ['required', new HexRule],
+            'hex_color' => ['required', new HexRule()]
         ];
     }
 
-    public function handle(): ?Workspace
+    public function handle(): null|Workspace
     {
         $workspace = null;
 
         DB::transaction(function () use (&$workspace) {
             $workspace = Workspace::create([
                 'name' => $this->input('name'),
-                'hex_color' => Str::after($this->input('hex_color'), '#'),
+                'hex_color' => Str::after($this->input('hex_color'), '#')
             ]);
 
             $workspace->attachUser(

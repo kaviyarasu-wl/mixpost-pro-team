@@ -12,7 +12,7 @@ class Html
     public function render(Block $block): Factory|View|Application
     {
         return view('mixpost::blocks_modules.Html', [
-            'block' => $block,
+            'block' => $block
         ]);
     }
 }

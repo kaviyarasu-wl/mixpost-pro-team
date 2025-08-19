@@ -14,7 +14,7 @@ class PasswordResetLinkController
 
     public function create(): Response|RedirectResponse
     {
-        if (! self::getUserClass()::exists()) {
+        if (!self::getUserClass()::exists()) {
             return redirect()->route('mixpost.installation');
         }
 

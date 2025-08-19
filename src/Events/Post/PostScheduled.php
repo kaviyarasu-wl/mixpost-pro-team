@@ -10,11 +10,13 @@ use Inovector\Mixpost\Http\Api\Resources\PostResource;
 use Inovector\Mixpost\Models\Post;
 use Inovector\Mixpost\Support\EagerLoadPostVersionsMedia;
 
-class PostScheduled implements ShouldReceivePostModel, WebhookEvent
+class PostScheduled implements WebhookEvent, ShouldReceivePostModel
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public readonly Post $post, public readonly bool $withApproval = false) {}
+    public function __construct(public readonly Post $post, public readonly bool $withApproval = false)
+    {
+    }
 
     public static function name(): string
     {

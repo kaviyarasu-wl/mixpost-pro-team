@@ -1,14 +1,14 @@
-import { computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
+import {computed} from "vue";
+import {usePage} from "@inertiajs/vue3";
 
 const useEnabledFeatures = () => {
-  const features = computed(() => {
-    return usePage().props.mixpost.features
-  })
+    const features = computed(() => {
+        return usePage().props.mixpost.features;
+    })
 
-  return {
-    features
-  }
+    return {
+        features
+    }
 }
 
-export default useEnabledFeatures
+export default useEnabledFeatures;

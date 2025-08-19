@@ -2,9 +2,9 @@
 
 namespace Inovector\Mixpost\SocialProviders\Threads\Concerns;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Exception;
 use Inovector\Mixpost\Facades\WorkspaceManager;
 use Inovector\Mixpost\Models\Account;
 use Inovector\Mixpost\Support\Log;
@@ -20,7 +20,7 @@ trait ManagesCallbacks
 
         $account = Account::withoutWorkspace()->where('provider_id', $data['user_id'])->first();
 
-        if (! $account) {
+        if (!$account) {
             Log::error('Data Deletion Request Callback - Account not found', ['provider' => 'Threads', 'provider_id' => $data['user_id']]);
             throw new Exception('Account not found', 404);
         }
@@ -39,7 +39,7 @@ trait ManagesCallbacks
     {
         $signedRequest = $request->input('signed_request');
 
-        [$encodedSig, $payload] = explode('.', $signedRequest, 2);
+        list($encodedSig, $payload) = explode('.', $signedRequest, 2);
 
         // Decode the data
         $sig = $this->base64_url_decode($encodedSig);

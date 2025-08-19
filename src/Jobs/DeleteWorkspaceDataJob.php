@@ -2,11 +2,11 @@
 
 namespace Inovector\Mixpost\Jobs;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Inovector\Mixpost\Models\Account;
@@ -25,7 +25,7 @@ use Inovector\Mixpost\Models\Template;
 use Inovector\Mixpost\Models\Variable;
 use Inovector\Mixpost\Models\Webhook;
 
-class DeleteWorkspaceDataJob implements ShouldBeUnique, ShouldQueue
+class DeleteWorkspaceDataJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -33,9 +33,11 @@ class DeleteWorkspaceDataJob implements ShouldBeUnique, ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        private readonly int $workspaceId,
+        private readonly int    $workspaceId,
         private readonly string $workspaceUuid
-    ) {}
+    )
+    {
+    }
 
     public function handle(): void
     {

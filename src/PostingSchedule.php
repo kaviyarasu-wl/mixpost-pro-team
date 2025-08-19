@@ -18,8 +18,8 @@ class PostingSchedule
 
         return Arr::map(self::timesUTCTimezone(), function ($day) use ($userTimezone) {
             $day['times'] = Arr::map($day['times'], function ($time) use ($userTimezone) {
-                $hour = (int) Str::before($time['value'], ':');
-                $minute = (int) Str::after($time['value'], ':');
+                $hour = (int)Str::before($time['value'], ':');
+                $minute = (int)Str::after($time['value'], ':');
 
                 $time['value'] = Carbon::createFromTime($hour, $minute, 0, 'UTC')
                     ->tz($userTimezone)
@@ -36,7 +36,7 @@ class PostingSchedule
     {
         $postingSchedule = PostingScheduleModel::first();
 
-        if (! $postingSchedule) {
+        if (!$postingSchedule) {
             return self::defaultTimes();
         }
 
@@ -58,14 +58,14 @@ class PostingSchedule
             ],
             [
                 'value' => '17:40',
-            ],
+            ]
         ];
 
         $mondayToSaturday = Arr::map(range(1, 6), function ($id) use ($times) {
             return [
                 'id' => $id,
                 'status' => true,
-                'times' => $times,
+                'times' => $times
             ];
         });
 
@@ -73,8 +73,8 @@ class PostingSchedule
             [
                 'id' => 0,
                 'status' => true,
-                'times' => $times,
-            ],
+                'times' => $times
+            ]
         ]);
     }
 
@@ -83,10 +83,10 @@ class PostingSchedule
         $times = self::timesUTCTimezone();
 
         $filter = Arr::where($times, function ($day) {
-            return $day['status'] && ! empty(Arr::wrap($day['times']));
+            return $day['status'] && !empty(Arr::wrap($day['times']));
         });
 
-        return ! empty($filter);
+        return !empty($filter);
     }
 
     public static function getNextScheduleDateTime(): ?Carbon
@@ -119,7 +119,7 @@ class PostingSchedule
             );
 
             foreach ($weekDays as $day) {
-                if (! $day->isToday() && $day->isPast()) {
+                if (!$day->isToday() && $day->isPast()) {
                     continue;
                 }
 
@@ -138,7 +138,7 @@ class PostingSchedule
                             }
                         }
 
-                        if (! $foundInPosts) {
+                        if (!$foundInPosts) {
                             $result = Carbon::parse($nextDateTime, 'UTC');
 
                             // Check if this time is already past today

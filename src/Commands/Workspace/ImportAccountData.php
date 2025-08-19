@@ -27,24 +27,24 @@ class ImportAccountData extends Command
             // example: $account->provider()->importDataJobs();
             $jobs = match ($account->provider) {
                 'twitter' => [
-                    ImportTwitterPostsJob::class,
+                    ImportTwitterPostsJob::class
                 ],
                 'facebook_page' => [
                     ImportFacebookInsightsJob::class,
-                    //                    ImportFacebookPagePostsJob::class,
+//                    ImportFacebookPagePostsJob::class,
                 ],
                 'instagram' => [
                     ImportInstagramInsightsJob::class,
                     ImportInstagramMediaJob::class,
                 ],
                 'mastodon' => [
-                    ImportMastodonPostsJob::class,
+                    ImportMastodonPostsJob::class
                 ],
                 'pinterest' => [
                     ImportPinterestDataJob::class,
                 ],
                 'tiktok' => [
-                    ImportTikTokVideosJob::class,
+                    ImportTikTokVideosJob::class
                 ],
                 default => [],
             };

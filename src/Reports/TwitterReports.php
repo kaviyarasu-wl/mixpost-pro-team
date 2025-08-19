@@ -16,7 +16,7 @@ class TwitterReports extends Report
         return [
             'metrics' => $this->metrics($account, $period),
             'audience' => $this->audience($account, $period),
-            'tier' => TwitterService::getConfiguration('tier'),
+            'tier' => TwitterService::getConfiguration('tier')
         ];
     }
 

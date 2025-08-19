@@ -14,7 +14,7 @@ class UpdatePostingSchedule extends FormRequest
             'times.*.id' => ['required', 'integer'],
             'times.*.status' => ['required', 'boolean'],
             'times.*.times' => ['array'],
-            'times.*.times.*.value' => ['required', 'date_format:H:i'],
+            'times.*.times.*.value' => ['required', 'date_format:H:i']
         ];
     }
 
@@ -22,16 +22,16 @@ class UpdatePostingSchedule extends FormRequest
     {
         $record = PostingSchedule::first();
 
-        if (! $record) {
+        if (!$record) {
             PostingSchedule::create([
-                'times' => $this->input('times'),
+                'times' => $this->input('times')
             ]);
 
             return;
         }
 
         $record->update([
-            'times' => $this->input('times'),
+            'times' => $this->input('times')
         ]);
     }
 }

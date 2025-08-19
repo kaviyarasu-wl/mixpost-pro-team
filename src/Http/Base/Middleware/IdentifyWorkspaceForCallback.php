@@ -10,7 +10,7 @@ class IdentifyWorkspaceForCallback
 {
     public function handle(Request $request, Closure $next)
     {
-        if (WorkspaceManager::loadByUuid((string) $request->get('state'))) {
+        if (WorkspaceManager::loadByUuid((string)$request->get('state'))) {
             return $next($request);
         }
 

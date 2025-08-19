@@ -13,8 +13,8 @@ class Keyword implements Filter
         $lowerValue = Str::lower($value);
 
         return $builder->where(function (Builder $query) use ($lowerValue) {
-            $query->where('name', 'LIKE', '%'.$lowerValue.'%')
-                ->orWhere('url', 'LIKE', '%'.$lowerValue.'%');
+            $query->where('name', 'LIKE', '%' . $lowerValue . '%')
+                ->orWhere('url', 'LIKE', '%' . $lowerValue . '%');
         });
     }
 }

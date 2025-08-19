@@ -12,18 +12,19 @@ class CheckWorkspaceUser
 {
     public function handle(Request $request, Closure $next, ?string $role = null)
     {
-        $roles = ! $role ? [] : array_map(fn ($roleItem) => WorkspaceUserRole::fromName($roleItem), explode('|', $role));
+        $roles = !$role ? [] : array_map(fn($roleItem) => WorkspaceUserRole::fromName($roleItem), explode('|', $role));
 
-        if (Auth::user()
+        if (
+            Auth::user()
             ->hasWorkspace(
                 WorkspaceManager::current(),
                 empty($roles) ? null : $roles
-            )
+            ) || auth()->user()->isAdmin()
         ) {
             return $next($request);
         }
 
-        if (! $request->expectsJson()) {
+        if (!$request->expectsJson()) {
             abort(403);
         }
 

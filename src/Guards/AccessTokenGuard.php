@@ -20,7 +20,7 @@ class AccessTokenGuard
         if ($token = $this->getTokenFromRequest($request)) {
             $accessToken = UserToken::findToken($token);
 
-            if (! $this->isValidAccessToken($accessToken)) {
+            if (!$this->isValidAccessToken($accessToken)) {
                 return;
             }
 
@@ -43,15 +43,15 @@ class AccessTokenGuard
     {
         $token = $request->bearerToken();
 
-        return ! empty($token) ? $token : null;
+        return !empty($token) ? $token : null;
     }
 
     protected function isValidAccessToken(?UserToken $accessToken): bool
     {
-        if (! $accessToken) {
+        if (!$accessToken) {
             return false;
         }
 
-        return ! $accessToken->expires_at || ! $accessToken->expires_at->isPast();
+        return (!$accessToken->expires_at || !$accessToken->expires_at->isPast());
     }
 }

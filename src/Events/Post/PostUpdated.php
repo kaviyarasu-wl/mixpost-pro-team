@@ -10,7 +10,7 @@ use Inovector\Mixpost\Http\Api\Resources\PostResource;
 use Inovector\Mixpost\Models\Post;
 use Inovector\Mixpost\Support\EagerLoadPostVersionsMedia;
 
-class PostUpdated implements ShouldReceivePostModel, WebhookEvent
+class PostUpdated implements WebhookEvent, ShouldReceivePostModel
 {
     use Dispatchable, SerializesModels;
 
@@ -33,7 +33,7 @@ class PostUpdated implements ShouldReceivePostModel, WebhookEvent
 
     public function payload(): array
     {
-        //        $this->post->refresh();
+//        $this->post->refresh();
         $this->post->load('accounts', 'versions', 'tags');
 
         EagerLoadPostVersionsMedia::apply($this->post);

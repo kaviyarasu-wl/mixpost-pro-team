@@ -18,7 +18,7 @@ class WebhookDeliveriesController extends Controller
     {
         $webhook = Webhook::firstOrFailByUuid($request->route('webhook'));
 
-        if (! $webhook->isSystem()) {
+        if (!$webhook->isSystem()) {
             abort(404);
         }
 
@@ -34,8 +34,8 @@ class WebhookDeliveriesController extends Controller
             'filter' => [
                 'status' => $request->query('status'),
             ],
-            'webhook' => fn () => (new WebhookResource($webhook))->resolve(),
-            'deliveries' => fn () => WebhookDeliveryResource::collection($deliveries)->except(['payload', 'response']),
+            'webhook' => fn() => (new WebhookResource($webhook))->resolve(),
+            'deliveries' => fn() => WebhookDeliveryResource::collection($deliveries)->except(['payload', 'response'])
         ]);
     }
 
@@ -43,7 +43,7 @@ class WebhookDeliveriesController extends Controller
     {
         $webhook = Webhook::firstOrFailByUuid($request->route('webhook'));
 
-        if (! $webhook->isSystem()) {
+        if (!$webhook->isSystem()) {
             abort(404);
         }
 

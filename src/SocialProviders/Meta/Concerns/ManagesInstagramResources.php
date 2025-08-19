@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Inovector\Mixpost\Enums\SocialProviderResponseStatus;
 use Inovector\Mixpost\Models\Media;
 use Inovector\Mixpost\Support\PostVersionHelpers;
@@ -14,6 +15,8 @@ use Inovector\Mixpost\Support\SocialProviderResponse;
 trait ManagesInstagramResources
 {
     use InstagramComments;
+    
+    protected array $tempFilesToCleanup = [];
 
     public function getAccount(): SocialProviderResponse
     {
@@ -25,7 +28,7 @@ trait ManagesInstagramResources
         $response = Http::withToken($this->getAccessToken()['access_token'])
             ->get("$this->apiUrl/$this->apiVersion/me/accounts", [
                 'fields' => 'id,name,username,picture{url},instagram_business_account',
-                'limit' => 200,
+                'limit' => 200
             ]);
 
         return $this->buildResponse($response, function () use ($response) {
@@ -41,7 +44,7 @@ trait ManagesInstagramResources
     {
         $response = Http::get("$this->apiUrl/$this->apiVersion/$id", [
             'fields' => 'id,name,username,profile_picture_url',
-            'access_token' => $this->getAccessToken()['access_token'],
+            'access_token' => $this->getAccessToken()['access_token']
         ]);
 
         return $this->buildResponse($response, function () use ($response) {
@@ -56,9 +59,100 @@ trait ManagesInstagramResources
         });
     }
 
+    /**
+     * Copy image to local server to avoid Instagram API fetch issues with external domains
+     */
+    private function getLocalImageUrl(string $imageUrl): string
+    {
+        try {
+            // Check if already a local URL
+            if (str_contains($imageUrl, request()->getHost())) {
+                return $imageUrl;
+            }
+            
+            // Generate unique filename to avoid conflicts
+            $filename = uniqid('instagram_') . '_' . basename($imageUrl);
+            $tempPath = 'instagram-temp/' . $filename;
+            
+            // Download image from external source
+            $imageContent = @file_get_contents($imageUrl);
+            if ($imageContent === false) {
+                return $imageUrl; // Fallback to original URL
+            }
+            
+            // Save to local public storage
+            Storage::disk('public')->put($tempPath, $imageContent);
+            
+            // Track file for cleanup
+            $this->tempFilesToCleanup[] = $tempPath;
+            
+            // Generate local URL
+            $localUrl = asset('storage/' . $tempPath);
+            
+            return $localUrl;
+        } catch (\Exception $e) {
+            return $imageUrl; // Fallback to original URL
+        }
+    }
+    
+    /**
+     * Copy video to local server to avoid Instagram API fetch issues with external domains
+     */
+    private function getLocalVideoUrl(string $videoUrl): string
+    {
+        try {
+            // Check if already a local URL
+            if (str_contains($videoUrl, request()->getHost())) {
+                return $videoUrl;
+            }
+            
+            // Generate unique filename to avoid conflicts
+            $filename = uniqid('instagram_video_') . '_' . basename($videoUrl);
+            $tempPath = 'instagram-temp/' . $filename;
+            
+            // Download video from external source
+            $videoContent = @file_get_contents($videoUrl);
+            if ($videoContent === false) {
+                return $videoUrl; // Fallback to original URL
+            }
+            
+            // Save to local public storage
+            Storage::disk('public')->put($tempPath, $videoContent);
+            
+            // Track file for cleanup
+            $this->tempFilesToCleanup[] = $tempPath;
+            
+            // Generate local URL
+            $localUrl = asset('storage/' . $tempPath);
+            
+            return $localUrl;
+        } catch (\Exception $e) {
+            return $videoUrl; // Fallback to original URL
+        }
+    }
+    
+    /**
+     * Clean up temporary files created for Instagram
+     */
+    private function cleanupTempFiles(): void
+    {
+        foreach ($this->tempFilesToCleanup as $tempPath) {
+            try {
+                if (Storage::disk('public')->exists($tempPath)) {
+                    Storage::disk('public')->delete($tempPath);
+                }
+            } catch (\Exception $e) {
+                // Silently ignore cleanup errors
+            }
+        }
+        
+        // Reset the array
+        $this->tempFilesToCleanup = [];
+    }
+
     public function publishPost(string $text, Collection $media, array $params = []): SocialProviderResponse
     {
-        if (! $media->count()) {
+        if (!$media->count()) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['no_media_selected']);
         }
 
@@ -81,14 +175,19 @@ trait ManagesInstagramResources
             $response = $this->publishStory($media->first());
 
             if ($response->hasError()) {
+                // Clean up temp files on error
+                $this->cleanupTempFiles();
                 return $response;
             }
 
+            // Clean up temp files on success
+            $this->cleanupTempFiles();
+            
             return $response->useContext([
                 'id' => $response->id,
                 'data' => [
-                    'story' => true,
-                ],
+                    'story' => true
+                ]
             ]);
         }
 
@@ -96,15 +195,17 @@ trait ManagesInstagramResources
             $response = $this->response(SocialProviderResponseStatus::ERROR, ['story_single_media_limit']);
         }
 
-        if (! $isReel && ! $isStory && $media->count() === 1) {
+        if (!$isReel && !$isStory && $media->count() === 1) {
             $response = $this->publishSingleMediaPost($text, $media->first());
         }
 
-        if (! $isReel && ! $isStory && $media->count() > 1) {
+        if (!$isReel && !$isStory && $media->count() > 1) {
             $response = $this->publishCarouselPost($text, $media);
         }
 
         if ($response && $response->hasError()) {
+            // Clean up temp files on error
+            $this->cleanupTempFiles();
             return $response;
         }
 
@@ -119,9 +220,12 @@ trait ManagesInstagramResources
             $data['shortcode'] = $postResponse->shortcode;
         }
 
+        // Clean up temp files on success
+        $this->cleanupTempFiles();
+
         return $response->useContext([
             'id' => $response->id,
-            'data' => $data,
+            'data' => $data
         ]);
     }
 
@@ -135,11 +239,19 @@ trait ManagesInstagramResources
 
         if ($mediaItem->isVideo()) {
             $data['media_type'] = 'VIDEO';
-            $data['video_url'] = $mediaItem->getUrl();
+            // Copy to local server to avoid Instagram API fetch issues
+            $localUrl = $this->getLocalVideoUrl($mediaItem->getUrl());
+            $data['video_url'] = $localUrl;
         }
 
         if ($mediaItem->isImage()) {
-            $data['image_url'] = $mediaItem->getUrl();
+            // Use JPEG conversion for Instagram if available, otherwise fall back to original
+            $instagramConversion = $mediaItem->getConversionUrl('instagram');
+            $imageUrl = $instagramConversion ?: $mediaItem->getUrl();
+            
+            // Copy to local server to avoid Instagram API fetch issues
+            $localUrl = $this->getLocalImageUrl($imageUrl);
+            $data['image_url'] = $localUrl;
         }
 
         $response = $this->buildResponse(
@@ -156,7 +268,7 @@ trait ManagesInstagramResources
 
     public function publishInstagramReel(string $text, Media $mediaItem, ?Media $thumb = null): SocialProviderResponse
     {
-        if (! $mediaItem->isVideo()) {
+        if (!$mediaItem->isVideo()) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['reel_only_video_allowed']);
         }
 
@@ -164,12 +276,14 @@ trait ManagesInstagramResources
             'access_token' => $this->getAccessToken()['access_token'],
             'caption' => $text,
             'media_type' => 'REELS',
-            'video_url' => $mediaItem->getUrl(),
+            'video_url' => $this->getLocalVideoUrl($mediaItem->getUrl()),
             'alt_text' => $mediaItem->alt_text,
         ];
 
-        if ($thumb) {
-            $data['cover_url'] = $thumb->getUrl();
+        if($thumb){
+            // Also copy thumbnail to local storage
+            $localThumbUrl = $this->getLocalImageUrl($thumb->getUrl());
+            $data['cover_url'] = $localThumbUrl;
         }
 
         $response = $this->buildResponse(
@@ -188,10 +302,17 @@ trait ManagesInstagramResources
         $mediaContainerIds = [];
 
         foreach ($media as $item) {
+            // Use JPEG conversion for Instagram if available, otherwise fall back to original
+            $instagramConversion = $item->getConversionUrl('instagram');
+            $imageUrl = $instagramConversion ?: $item->getUrl();
+            
+            // Copy to local server to avoid Instagram API fetch issues
+            $localUrl = $this->getLocalImageUrl($imageUrl);
+            
             $mediaContainerResponse = $this->buildResponse(Http::post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/media", [
                 'access_token' => $this->getAccessToken()['access_token'],
                 'is_carousel_item' => true,
-                'image_url' => $item->getUrl(),
+                'image_url' => $localUrl,
                 'alt_text' => $item->alt_text,
             ]));
 
@@ -206,7 +327,7 @@ trait ManagesInstagramResources
             'access_token' => $this->getAccessToken()['access_token'],
             'media_type' => 'CAROUSEL',
             'children' => $mediaContainerIds,
-            'caption' => $text,
+            'caption' => $text
         ]));
 
         if ($carouselContainer->hasError()) {
@@ -224,11 +345,19 @@ trait ManagesInstagramResources
         ];
 
         if ($mediaItem->isVideo()) {
-            $data['video_url'] = $mediaItem->getUrl();
+            // Copy to local server to avoid Instagram API fetch issues
+            $localUrl = $this->getLocalVideoUrl($mediaItem->getUrl());
+            $data['video_url'] = $localUrl;
         }
 
         if ($mediaItem->isImage()) {
-            $data['image_url'] = $mediaItem->getUrl();
+            // Use JPEG conversion for Instagram if available, otherwise fall back to original
+            $instagramConversion = $mediaItem->getConversionUrl('instagram');
+            $imageUrl = $instagramConversion ?: $mediaItem->getUrl();
+            
+            // Copy to local server to avoid Instagram API fetch issues
+            $localUrl = $this->getLocalImageUrl($imageUrl);
+            $data['image_url'] = $localUrl;
         }
 
         $response = $this->buildResponse(
@@ -259,7 +388,7 @@ trait ManagesInstagramResources
             }
         } while ($inProgress === true);
 
-        if (! $responseContainer->status_code) {
+        if (!$responseContainer->status_code) {
             return $this->response(SocialProviderResponseStatus::ERROR, $responseContainer->context());
         }
 
@@ -278,7 +407,7 @@ trait ManagesInstagramResources
 
         $response = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
             ->post("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/media_publish", [
-                'creation_id' => $itemContainerId,
+                'creation_id' => $itemContainerId
             ]);
 
         return $this->buildResponse($response);
@@ -288,7 +417,7 @@ trait ManagesInstagramResources
     {
         $response = Http::get("$this->apiUrl/$this->apiVersion/$containerId", [
             'access_token' => $this->getAccessToken()['access_token'],
-            'fields' => 'status,status_code',
+            'fields' => 'status,status_code'
         ]);
 
         return $this->buildResponse($response);
@@ -297,7 +426,7 @@ trait ManagesInstagramResources
     public function getContentPublishLimit(): SocialProviderResponse
     {
         $response = Http::get("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}/content_publishing_limit", [
-            'access_token' => $this->getAccessToken()['access_token'],
+            'access_token' => $this->getAccessToken()['access_token']
         ]);
 
         return $this->buildResponse($response);
@@ -307,7 +436,7 @@ trait ManagesInstagramResources
     {
         $response = Http::get("$this->apiUrl/$this->apiVersion/{$this->values['provider_id']}", [
             'fields' => 'followers_count,follows_count,media_count',
-            'access_token' => $this->getAccessToken()['access_token'],
+            'access_token' => $this->getAccessToken()['access_token']
         ]);
 
         return $this->buildResponse($response);
@@ -348,7 +477,7 @@ trait ManagesInstagramResources
     {
         $response = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
             ->get("$this->apiUrl/$this->apiVersion/$mediaId", [
-                'fields' => $fields,
+                'fields' => $fields
             ]);
 
         return $this->buildResponse($response);
@@ -361,7 +490,7 @@ trait ManagesInstagramResources
             'since' => Carbon::now('UTC')->subYear()->toDateString(),
             'until' => Carbon::today('UTC')->toDateString(),
             'limit' => 100,
-            'fields' => 'id,caption,comments_count,is_comment_enabled,is_shared_to_feed,like_count,media_product_type,media_type,media_url,permalink,shortcode,thumbnail_url,timestamp,username',
+            'fields' => 'id,caption,comments_count,is_comment_enabled,is_shared_to_feed,like_count,media_product_type,media_type,media_url,permalink,shortcode,thumbnail_url,timestamp,username'
         ];
 
         if ($paginationAfter) {

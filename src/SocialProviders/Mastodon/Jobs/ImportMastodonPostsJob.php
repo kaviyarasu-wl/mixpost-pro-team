@@ -20,17 +20,17 @@ use Inovector\Mixpost\Models\ImportedPost;
 use Inovector\Mixpost\SocialProviders\Mastodon\MastodonProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportMastodonPostsJob implements QueueWorkspaceAware, ShouldQueue
+class ImportMastodonPostsJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
     public Account $account;
-
     public array $params;
 
     public function __construct(Account $account, array $params = [])
@@ -45,7 +45,7 @@ class ImportMastodonPostsJob implements QueueWorkspaceAware, ShouldQueue
             return;
         }
 
-        if (! $this->account->isServiceActive()) {
+        if (!$this->account->isServiceActive()) {
             return;
         }
 
@@ -57,7 +57,6 @@ class ImportMastodonPostsJob implements QueueWorkspaceAware, ShouldQueue
 
         /**
          * @see MastodonProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = $this->connectProvider($this->account)->getUserStatuses($this->account->provider_id, $this->params['max_id'] ?? '');
@@ -116,7 +115,7 @@ class ImportMastodonPostsJob implements QueueWorkspaceAware, ShouldQueue
                     'reblogs' => $item['reblogs_count'],
                     'favourites' => $item['favourites_count'],
                 ]),
-                'created_at' => Carbon::parse($item['created_at'], 'UTC')->toDateTimeString(),
+                'created_at' => Carbon::parse($item['created_at'], 'UTC')->toDateTimeString()
             ];
         });
 

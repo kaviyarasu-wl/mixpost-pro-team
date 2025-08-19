@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\BlocksController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\Configs\AIConfigController;
-use Inovector\Mixpost\Http\Base\Controllers\Admin\Configs\GeneralConfigController;
-use Inovector\Mixpost\Http\Base\Controllers\Admin\Configs\MediaConfigController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\Configs\ThemeConfigController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\DashboardController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\DeletePagesController;
@@ -12,7 +10,6 @@ use Inovector\Mixpost\Http\Base\Controllers\Admin\DeleteUsersController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\DeleteWorkspacesController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\GeneratePageSamplesController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\PagesController;
-use Inovector\Mixpost\Http\Base\Controllers\Admin\Services\Bluesky\GenerateBlueskyPrivateKeyController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\ServicesController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\SystemLogsController;
 use Inovector\Mixpost\Http\Base\Controllers\Admin\SystemStatusController;
@@ -33,6 +30,7 @@ use Inovector\Mixpost\Http\Base\Middleware\EnsurePasswordConfirmed;
 use Inovector\Mixpost\Http\Base\Middleware\EnterpriseConsoleRedirects;
 use Inovector\Mixpost\Http\Base\Middleware\HandleInertiaRequests;
 use Inovector\Mixpost\Http\Base\Middleware\SystemWebhook;
+use Inovector\Mixpost\Mixpost;
 
 Route::prefix('admin')->middleware([Admin::class])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboardAdmin');
@@ -78,9 +76,6 @@ Route::prefix('admin')->middleware([Admin::class])->group(function () {
         Route::get('/', [ServicesController::class, 'index'])->name('index');
         Route::put('{service}', [ServicesController::class, 'update'])->name('update');
 
-        Route::post('generate-bluesky-private-key', GenerateBlueskyPrivateKeyController::class)
-            ->name('generateBlueskyPrivateKey');
-
         // TODO: move this to the workspace routes
         Route::post('create-mastodon-app', CreateMastodonAppController::class)
             ->withoutMiddleware([HandleInertiaRequests::class, Admin::class])
@@ -106,11 +101,6 @@ Route::prefix('admin')->middleware([Admin::class])->group(function () {
     });
 
     Route::prefix('configs')->name('configs.')->group(function () {
-        Route::prefix('general')->name('general.')->group(function () {
-            Route::get('/', [GeneralConfigController::class, 'form'])->name('form');
-            Route::put('/', [GeneralConfigController::class, 'update'])->name('update');
-        });
-
         Route::prefix('theme')->name('theme.')->group(function () {
             Route::get('/', [ThemeConfigController::class, 'form'])->name('form');
             Route::put('/', [ThemeConfigController::class, 'update'])->name('update');
@@ -119,11 +109,6 @@ Route::prefix('admin')->middleware([Admin::class])->group(function () {
         Route::prefix('ai')->name('ai.')->group(function () {
             Route::get('/', [AIConfigController::class, 'form'])->name('form');
             Route::put('/', [AIConfigController::class, 'update'])->name('update');
-        });
-
-        Route::prefix('media')->name('media.')->group(function () {
-            Route::get('/', [MediaConfigController::class, 'form'])->name('form');
-            Route::put('/', [MediaConfigController::class, 'update'])->name('update');
         });
     });
 

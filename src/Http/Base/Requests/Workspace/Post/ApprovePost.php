@@ -24,11 +24,11 @@ class ApprovePost extends FormRequest
         $this->post = Post::firstOrFailByUuid($this->route('post'));
 
         $validator->after(function ($validator) {
-            if (! Auth::user()->canApprove(WorkspaceManager::current())) {
+            if (!Auth::user()->canApprove(WorkspaceManager::current())) {
                 $validator->errors()->add('user_can_not_approve', 'user_can_not_approve');
             }
 
-            if (! $this->post->isNeedsApproval()) {
+            if (!$this->post->isNeedsApproval()) {
                 $validator->errors()->add('needs_approval', __('mixpost::post.needs_approval'));
             }
 
@@ -40,8 +40,8 @@ class ApprovePost extends FormRequest
                 $validator->errors()->add('publishing', 'publishing');
             }
 
-            if (! $this->post->canSchedule()) {
-                $validator->errors()->add('cannot_scheduled', __('mixpost::post.post_cannot_scheduled')."\n".__('mixpost::post.past_date'));
+            if (!$this->post->canSchedule()) {
+                $validator->errors()->add('cannot_scheduled', __('mixpost::post.post_cannot_scheduled') . "\n" . __('mixpost::post.past_date'));
             }
         });
     }

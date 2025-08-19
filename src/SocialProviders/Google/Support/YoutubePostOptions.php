@@ -2,17 +2,16 @@
 
 namespace Inovector\Mixpost\SocialProviders\Google\Support;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
-use Inovector\Mixpost\Support\SocialProviderPostOptions;
+use Inovector\Mixpost\Contracts\SocialProviderPostOptions;
 
-class YoutubePostOptions extends SocialProviderPostOptions
+class YoutubePostOptions implements SocialProviderPostOptions
 {
-    public function rules(FormRequest $request): array
+    public function rules(): array
     {
         return [
             'title' => ['sometimes', 'nullable', 'string', 'max:256'],
-            'status' => ['sometimes', 'string', 'in:public,private,unlisted'],
+            'status' => ['sometimes', 'string', 'in:public,private,unlisted']
         ];
     }
 
@@ -20,7 +19,7 @@ class YoutubePostOptions extends SocialProviderPostOptions
     {
         return [
             'title' => Arr::get($options, 'title', ''),
-            'status' => Arr::get($options, 'status', 'public'),
+            'status' => Arr::get($options, 'status', 'public')
         ];
     }
 }

@@ -14,7 +14,7 @@ class PinterestReports extends Report
     {
         return [
             'metrics' => $this->metrics($account, $period),
-            'audience' => $this->audience($account, $period),
+            'audience' => $this->audience($account, $period)
         ];
     }
 

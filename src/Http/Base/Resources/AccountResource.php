@@ -16,7 +16,7 @@ class AccountResource extends JsonResource implements AccountResourceContract
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
-            'name' => $this->name.($this->suffix() ? " ({$this->suffix()})" : ''),
+            'name' => $this->name . ($this->suffix() ? " ({$this->suffix()})" : ''),
             'suffix' => $this->suffix(),
             'username' => $this->username,
             'image' => $this->image(),
@@ -28,18 +28,16 @@ class AccountResource extends JsonResource implements AccountResourceContract
             'authorized' => $this->authorized,
             'created_at' => $this->created_at->diffForHumans(),
             'content_type' => $this->contentType(),
-            'external_account_url' => $this->getExternalAccountUrl(),
             'external_url' => $this->whenPivotLoaded('mixpost_post_accounts', function () {
-                if (! $this->pivot->provider_post_id) {
+                if (!$this->pivot->provider_post_id) {
                     return null;
                 }
 
                 return $this->getExternalPostUrl();
             }),
-            'support_analytics' => $this->supportAnalytics(),
             'errors' => $this->whenPivotLoaded('mixpost_post_accounts', function () {
                 return $this->errors();
-            }),
+            })
         ];
     }
 
@@ -62,30 +60,16 @@ class AccountResource extends JsonResource implements AccountResourceContract
                 return $error;
             }, $errors);
         }
-
         return [];
     }
 
     protected function getExternalPostUrl(): ?string
     {
-        $provider = $this->resource->getProviderClass();
-
-        if (! ($provider && method_exists($provider, 'externalPostUrl'))) {
-            return '';
+        if ($provider = $this->resource->getProviderClass()) {
+            return $provider::externalPostUrl($this);
         }
 
-        return $provider::externalPostUrl($this);
-    }
-
-    protected function getExternalAccountUrl(): string
-    {
-        $provider = $this->resource->getProviderClass();
-
-        if (! ($provider && method_exists($provider, 'externalAccountUrl'))) {
-            return '';
-        }
-
-        return $provider::externalAccountUrl($this);
+        return '#';
     }
 
     protected function contentType(): SocialProviderContentType
@@ -95,15 +79,6 @@ class AccountResource extends JsonResource implements AccountResourceContract
         }
 
         return SocialProviderContentType::SINGLE;
-    }
-
-    protected function supportAnalytics()
-    {
-        if ($provider = $this->resource->getProviderClass()) {
-            return $provider::supportAnalytics();
-        }
-
-        return true;
     }
 
     protected function getErrorMessage(string $key): string

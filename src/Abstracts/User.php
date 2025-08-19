@@ -19,10 +19,10 @@ use Inovector\Mixpost\Notifications\ResetPassword;
 abstract class User extends Authenticatable implements HasLocalePreference
 {
     use Notifiable;
-    use TwoFactorAuthenticatable;
+    use UserHasWorkspaces;
     use UserHasSettings;
     use UserHasTokens;
-    use UserHasWorkspaces;
+    use TwoFactorAuthenticatable;
 
     protected $fillable = [
         'name',
@@ -64,7 +64,7 @@ abstract class User extends Authenticatable implements HasLocalePreference
         $this->settings()->updateOrCreate(
             [
                 'name' => 'active_workspace',
-                'user_id' => $this->id,
+                'user_id' => $this->id
             ],
             ['payload' => $workspace->id]
         );
@@ -76,7 +76,7 @@ abstract class User extends Authenticatable implements HasLocalePreference
             ->where('name', 'active_workspace')
             ->value('payload');
 
-        if (! $workspaceId) {
+        if (!$workspaceId) {
             return null;
         }
 

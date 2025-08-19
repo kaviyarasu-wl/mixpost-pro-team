@@ -20,7 +20,7 @@ class DuplicatePostController extends Controller
         DB::transaction(function () use ($post) {
             $newPost = Post::create([
                 'user_id' => Auth::id(),
-                'status' => PostStatus::DRAFT,
+                'status' => PostStatus::DRAFT
             ]);
 
             $newPost->accounts()->attach($post->accounts->pluck('id'));

@@ -8,10 +8,10 @@ use Inovector\Mixpost\Support\SocialProviderResponse;
 trait ManagesOAuth
 {
     public string $oAuthVersion = 'v2';
-
     public string $oAuthUrl = 'https://www.linkedin.com/oauth';
 
     /** Scopes are defined in LinkedinProvider **/
+
     public function getAuthUrl(): string
     {
         $params = [
@@ -45,13 +45,13 @@ trait ManagesOAuth
 
         if (isset($response['serviceErrorCode'])) {
             return [
-                'error' => $response['message'],
+                'error' => $response['message']
             ];
         }
 
         if (isset($response['error'])) {
             return [
-                'error' => $response['error_description'],
+                'error' => $response['error_description']
             ];
         }
 
@@ -62,7 +62,7 @@ trait ManagesOAuth
         ];
     }
 
-    public function refreshToken(?string $refreshToken = null): SocialProviderResponse
+    public function refreshToken(string $refreshToken = null): SocialProviderResponse
     {
         $params = [
             'grant_type' => 'refresh_token',

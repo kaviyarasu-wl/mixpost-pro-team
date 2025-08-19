@@ -1,123 +1,55 @@
 <script setup>
-import { inject } from 'vue'
-import { Head, useForm, Link, usePage } from '@inertiajs/vue3'
-import { useI18n } from 'vue-i18n'
-import { Trans } from '@/Services/Internationalization'
-import useEnterpriseConsole from '../../Composables/useEnterpriseConsole'
-import MinimalLayout from '@/Layouts/Minimal.vue'
-import Panel from '@/Components/Surface/Panel.vue'
-import HorizontalGroup from '@/Components/Layout/HorizontalGroup.vue'
-import Error from '@/Components/Form/Error.vue'
-import Input from '@/Components/Form/Input.vue'
-import PrimaryButton from '@/Components/Button/PrimaryButton.vue'
-import Label from '../../Components/Form/Label.vue'
-import Checkbox from '../../Components/Form/Checkbox.vue'
-import Flex from '../../Components/Layout/Flex.vue'
+import {Head, usePage} from '@inertiajs/vue3';
+import {computed} from "vue";
+import MinimalLayout from "@/Layouts/Minimal.vue";
+import Error from "@/Components/Form/Error.vue";
+import Panel from "@/Components/Surface/Panel.vue";
 
-defineOptions({ layout: MinimalLayout })
-
-const I18n = useI18n()
+defineOptions({layout: MinimalLayout});
 
 const props = defineProps({
-  locales: {
-    type: Array,
-    required: true
-  },
-  isForgotPasswordEnabled: {
-    type: Boolean,
-    required: true
-  }
-})
-
-const routePrefix = inject('routePrefix')
-
-const form = useForm({
-  email: '',
-  password: '',
-  remember: true
-})
-
-const getLocaleDirection = locale => {
-  return props.locales.find(item => item.long === locale).direction || 'ltr'
-}
-
-const submit = () => {
-  form.post(route('mixpost.login'), {
-    onSuccess() {
-      const userLocale = usePage().props.mixpost.settings.locale
-      Trans.changeLocale(I18n, userLocale, getLocaleDirection(userLocale))
+    locales: {
+        type: Array,
+        required: true,
+    },
+    is_forgot_password_enabled: {
+        type: Boolean,
+        required: true,
     }
-  })
-}
+});
 
-const { enterpriseConsole } = useEnterpriseConsole()
+// Get the errors from the Inertia shared data and add a computed property to safely check for errors
+const page = usePage();
+const hasError = computed(() => page.props.errors && page.props.errors.error);
+const errorMessage = computed(() => hasError.value ? page.props.errors.error : '');
 </script>
+
 <template>
-  <Head :title="$t('auth.sign_in')" />
+    <Head :title="$t('auth.sign_in')"/>
 
-  <div class="w-full sm:max-w-(--container-lg) mx-auto">
-    <form @submit.prevent="submit">
-      <Panel>
-        <template #title>
-          {{ $t('auth.login_account') }}
-        </template>
+    <div class="w-full sm:max-w-lg mx-auto">
+        <form>
+            <Panel>
+                <template #title>
+                    {{ $t('auth.login_account') }}
+                </template>
 
-        <template #description>
-          {{ $t('auth.enter_details') }}
-        </template>
+                <!-- Show error message if it exists -->
+                <div class="mb-md">
+                    <Error v-if="hasError" :message="errorMessage" class="mb-xs"/>
+                </div>
 
-        <Error v-for="(error, key) in form.errors" :key="key" :message="error" class="mb-xs" />
+                <!-- <template #description>
+                    {{ $t('auth.enter_details') }}
+                </template> -->
 
-        <HorizontalGroup>
-          <template #title>
-            <label for="email">{{ $t('general.email') }}</label>
-          </template>
+                <div>
+                    <a :href="route('mixpost.login.oauth', 'gravity')" class="link-primary">
+                        Sign in with Gravity Write
+                    </a>
+                </div>
 
-          <div class="w-full">
-            <Input id="email" v-model="form.email" type="email" class="w-full" required />
-          </div>
-        </HorizontalGroup>
-
-        <HorizontalGroup class="mt-md">
-          <template #title>
-            <label for="password">{{ $t('auth.password') }}</label>
-          </template>
-
-          <div class="w-full">
-            <Input id="password" v-model="form.password" type="password" class="w-full" required />
-          </div>
-        </HorizontalGroup>
-
-        <div class="mt-md">
-          <Label>
-            <Checkbox v-model:checked="form.remember" />
-            {{ $t('auth.remember_me') }}
-          </Label>
-        </div>
-
-        <Flex class="justify-between mt-lg">
-          <PrimaryButton :disabled="form.processing" :is-loading="form.processing" type="submit">
-            {{ $t('auth.login') }}
-          </PrimaryButton>
-
-          <template v-if="$page.props.isForgotPasswordEnabled">
-            <Link :href="route(`${routePrefix}.password.request`)" class="link-primary"
-              >{{ $t('auth.forgot_password') }}
-            </Link>
-          </template>
-        </Flex>
-
-        <template v-if="enterpriseConsole.registration_url">
-          <div class="text-center mt-2xl">
-            <p class="text-black">
-              {{ $t('auth.dont_have_account') }}
-              <a :href="enterpriseConsole.registration_url" class="link-primary"
-                >{{ $t('auth.register_here') }}
-              </a>
-            </p>
-          </div>
-        </template>
-      </Panel>
-    </form>
-  </div>
+            </Panel>
+        </form>
+    </div>
 </template>

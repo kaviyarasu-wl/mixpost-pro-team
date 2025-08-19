@@ -18,9 +18,9 @@ class UpdatePage extends FormRequest
             'meta_title' => ['sometimes', 'nullable', 'max:255'],
             'meta_description' => ['sometimes', 'nullable', 'max:1000'],
             'slug' => ['required', 'max:255', Rule::unique('mixpost_pages', 'slug')->ignore($this->route('page'), 'uuid')],
-            'status' => ['required', 'integer', new ResourceStatusRule],
+            'status' => ['required', 'integer', new ResourceStatusRule()],
             'layout' => ['required', Rule::in(['default', 'medium', 'small'])],
-            'blocks' => ['array'],
+            'blocks' => ['array']
         ];
     }
 
@@ -35,14 +35,14 @@ class UpdatePage extends FormRequest
                 'meta_title' => $this->input('meta_title'),
                 'meta_description' => $this->input('meta_description'),
                 'layout' => $this->input('layout'),
-                'status' => $this->input('status'),
+                'status' => $this->input('status')
             ]);
 
             $page->blocks()->detach();
 
             foreach ($this->input('blocks', []) as $sortOrder => $blockId) {
                 $page->blocks()->attach($blockId, [
-                    'sort_order' => $sortOrder,
+                    'sort_order' => $sortOrder
                 ]);
             }
         });

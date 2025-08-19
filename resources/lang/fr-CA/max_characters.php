@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'max_characters' => 'Maximum de :count caractères autorisés.',
+  'max_characters' => 'Maximum de :count caractères autorisés.',
 ];

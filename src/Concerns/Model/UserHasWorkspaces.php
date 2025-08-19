@@ -22,13 +22,13 @@ trait UserHasWorkspaces
     {
         if (is_array($role)) {
             foreach ($role as $roleItem) {
-                if (! $roleItem instanceof WorkspaceUserRole) {
+                if (!$roleItem instanceof WorkspaceUserRole) {
                     throw new InvalidArgumentException("'$roleItem' role must be an instance of WorkspaceUserRole");
                 }
             }
 
             return $this->workspaces()->where('workspace_id', $workspace instanceof Workspace ? $workspace->id : $workspace)
-                ->whereIn('mixpost_workspace_user.role', array_map(fn ($roleItem) => $roleItem->value, $role))
+                ->whereIn('mixpost_workspace_user.role', array_map(fn($roleItem) => $roleItem->value, $role))
                 ->exists();
         }
 
@@ -42,6 +42,6 @@ trait UserHasWorkspaces
     {
         $relation = $this->workspaces()->where('workspace_id', $workspace instanceof Workspace ? $workspace->id : $workspace)->first();
 
-        return boolval($relation->pivot->can_approve);
+        return boolval($relation?->pivot->can_approve) || $this->isAdmin();
     }
 }

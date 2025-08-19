@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Inovector\Mixpost\Features;
 use Inovector\Mixpost\Http\Base\Controllers\Auth\AuthenticatedController;
@@ -7,12 +8,17 @@ use Inovector\Mixpost\Http\Base\Controllers\Auth\InstallationController;
 use Inovector\Mixpost\Http\Base\Controllers\Auth\NewPasswordController;
 use Inovector\Mixpost\Http\Base\Controllers\Auth\PasswordResetLinkController;
 use Inovector\Mixpost\Http\Base\Controllers\Auth\TwoFactorAuthSessionController;
+use Inovector\Mixpost\Http\Base\Controllers\Workspace\ExternalMediaShareController;
 use Inovector\Mixpost\Http\Base\Middleware\RedirectIfAuthenticated;
 use Inovector\Mixpost\Mixpost;
 
 Route::middleware(RedirectIfAuthenticated::class)->group(function () {
+    Route::get('/', fn() => redirect()->route('mixpost.login'));
     Route::get('login', [AuthenticatedController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedController::class, 'store']);
+
+    Route::get('oauth/{driver}', [AuthenticatedController::class, 'redirect'])->name('login.oauth');
+    Route::get('login/{driver}/callback', [AuthenticatedController::class, 'callback'])->name('login.callback');
 
     Route::get('installation', [InstallationController::class, 'create'])->name('installation');
     Route::post('installation', [InstallationController::class, 'store']);
@@ -31,5 +37,13 @@ Route::middleware(RedirectIfAuthenticated::class)->group(function () {
 });
 
 Route::middleware(Mixpost::getWebDashboardMiddlewares())
-    ->post('logout', [AuthenticatedController::class, 'destroy'])
+    ->any('logout', [AuthenticatedController::class, 'destroy'])
     ->name('logout');
+
+Route::middleware(Mixpost::getWebDashboardMiddlewares())
+    ->get('sso/logout', [AuthenticatedController::class, 'globalLogout'])
+    ->name('sso.logout');
+
+Route::get('share-media', ExternalMediaShareController::class)
+    ->name('share-media')
+    ->withoutMiddleware([VerifyCsrfToken::class]);

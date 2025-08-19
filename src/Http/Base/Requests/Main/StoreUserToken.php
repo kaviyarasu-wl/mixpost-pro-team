@@ -15,7 +15,7 @@ class StoreUserToken extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'expiration' => ['required', Rule::in(['days-7', 'days-30', 'days-60', 'days-90', 'never-expires', 'custom'])],
+            'expiration' => ['required', Rule::in(['days-7', 'days-30', 'days-60', 'days-90', 'never-expires', 'custom'])]
         ];
 
         if ($this->input('expiration') === 'custom') {

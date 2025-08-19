@@ -23,7 +23,7 @@ class PostCommentChildrenController extends Controller
             activityUuid: $request->route('activity')
         );
 
-        if (! $activity) {
+        if (!$activity) {
             abort(404);
         }
 

@@ -54,7 +54,7 @@ trait ManagesOAuth
 
         if (Arr::has($response, 'error')) {
             return [
-                'error' => $response['error_description'],
+                'error' => $response['error_description']
             ];
         }
 
@@ -67,13 +67,13 @@ trait ManagesOAuth
         ];
     }
 
-    public function refreshToken(?string $refreshToken = null): SocialProviderResponse
+    public function refreshToken(string $refreshToken = null): SocialProviderResponse
     {
         $params = [
             'client_key' => $this->clientId,
             'client_secret' => $this->clientSecret,
             'grant_type' => 'refresh_token',
-            'refresh_token' => $refreshToken ?: $this->getAccessToken()['refresh_token'],
+            'refresh_token' => $refreshToken ?: $this->getAccessToken()['refresh_token']
         ];
 
         $response = $this->getHttpClient()::asForm()->post("$this->apiUrl/$this->apiVersion/oauth/token/", $params);
@@ -95,7 +95,7 @@ trait ManagesOAuth
         $params = [
             'client_key' => $this->clientId,
             'client_secret' => $this->clientSecret,
-            'token' => $this->getAccessToken()['access_token'],
+            'token' => $this->getAccessToken()['access_token']
         ];
 
         $response = $this->getHttpClient()::asForm()->post("$this->apiUrl/$this->apiVersion/oauth/revoke/", $params);

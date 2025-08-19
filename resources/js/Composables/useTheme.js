@@ -1,26 +1,26 @@
-import { usePage } from '@inertiajs/vue3'
+import {usePage} from "@inertiajs/vue3";
 
 const useTheme = () => {
-  const getLogo = () => {
-    return usePage().props.mixpost.theme.logo
-  }
-  const getColors = () => {
-    return usePage().props.mixpost.theme.colors
-  }
-
-  const getDefaultChartDataSetColors = () => {
-    return {
-      borderColor: getColors().primary_colors[500],
-      pointBackgroundColor: getColors().primary_colors[500],
-      pointBorderColor: getColors().primary_colors[500]
+    const getLogo = () => {
+        return usePage().props.mixpost.theme.logo;
     }
-  }
+    const getColors = () => {
+        return usePage().props.mixpost.theme.colors;
+    }
 
-  return {
-    getLogo,
-    getColors,
-    getDefaultChartDataSetColors
-  }
-}
+    const getDefaultChartDataSetColors = () => {
+        return {
+            borderColor: getColors().primary_colors[500],
+            pointBackgroundColor: getColors().primary_colors[500],
+            pointBorderColor: getColors().primary_colors[500],
+        }
+    }
 
-export default useTheme
+    return {
+        getLogo,
+        getColors,
+        getDefaultChartDataSetColors,
+    }
+};
+
+export default useTheme;

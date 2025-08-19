@@ -15,7 +15,7 @@ class GeneratePageSamples extends FormRequest
             'logo_url' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'register_url' => ['sometimes', 'nullable', 'max:255'],
-            'destroy' => ['required', 'boolean'],
+            'destroy' => ['required', 'boolean']
         ];
     }
 

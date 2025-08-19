@@ -25,7 +25,7 @@ interface SocialProvider
 
     public function useAccessToken(array $token = []): static;
 
-    public function buildResponse($response, ?Closure $okResult = null): SocialProviderResponse;
+    public function buildResponse($response, Closure $okResult = null): SocialProviderResponse;
 
     public function getAccount(): SocialProviderResponse;
 
@@ -33,9 +33,7 @@ interface SocialProvider
 
     public function publishComment(string $text, string $postId, array $params = []): SocialProviderResponse;
 
-    public function deletePost(string $id, array $params = []): SocialProviderResponse;
-
-    public static function supportPostDeletion(): bool|array;
+    public function deletePost($id): SocialProviderResponse;
 
     public static function postConfigs(): SocialProviderPostConfigs;
 

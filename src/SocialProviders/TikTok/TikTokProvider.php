@@ -3,8 +3,8 @@
 namespace Inovector\Mixpost\SocialProviders\TikTok;
 
 use Inovector\Mixpost\Abstracts\SocialProvider;
-use Inovector\Mixpost\Contracts\AccountResource;
 use Inovector\Mixpost\Contracts\SocialProviderPostOptions as SocialProviderPostOptionsContract;
+use Inovector\Mixpost\Contracts\AccountResource;
 use Inovector\Mixpost\Services\TikTokService;
 use Inovector\Mixpost\SocialProviders\TikTok\Concerns\ManagesConfig;
 use Inovector\Mixpost\SocialProviders\TikTok\Concerns\ManagesOAuth;
@@ -19,8 +19,8 @@ class TikTokProvider extends SocialProvider
     public array $callbackResponseKeys = ['code'];
 
     use ManagesConfig;
-    use ManagesOAuth;
     use ManagesRateLimit;
+    use ManagesOAuth;
     use ManagesResources;
 
     public function identifier(): string
@@ -53,12 +53,12 @@ class TikTokProvider extends SocialProvider
 
     public static function postOptions(): SocialProviderPostOptionsContract
     {
-        return new TikTokPostOptions;
+        return new TikTokPostOptions();
     }
 
     public static function externalPostUrl(AccountResource $accountResource): string
     {
-        if (! $accountResource->pivot->provider_post_id) {
+        if (!$accountResource->pivot->provider_post_id) {
             return '';
         }
 
@@ -74,10 +74,5 @@ class TikTokProvider extends SocialProvider
             'content_disclosure_required' => __('mixpost::service.tiktok.content_disclosure_required'),
             default => $key
         };
-    }
-
-    public static function supportPostDeletion(): bool|array
-    {
-        return false;
     }
 }

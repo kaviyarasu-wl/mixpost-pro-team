@@ -1,12 +1,12 @@
-import { createI18n } from 'vue-i18n'
+import {createI18n} from 'vue-i18n'
 
 const i18n = createI18n({
-  legacy: false,
-  locale: 'start',
-  fallbackLocale: 'start',
-  messages: {
-    ['start']: {}
-  }
-})
+    legacy: false,
+    locale: 'start',
+    fallbackLocale: 'start',
+    messages: {
+        ['start']: {}
+    }
+});
 
-export { i18n }
+export  {i18n};

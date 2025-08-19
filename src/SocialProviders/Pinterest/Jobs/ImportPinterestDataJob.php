@@ -20,17 +20,17 @@ use Inovector\Mixpost\Models\ImportedPost;
 use Inovector\Mixpost\SocialProviders\Mastodon\MastodonProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-class ImportPinterestDataJob implements QueueWorkspaceAware, ShouldQueue
+class ImportPinterestDataJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
     public Account $account;
-
     public array $params;
 
     public function __construct(Account $account, array $params = [])
@@ -45,7 +45,7 @@ class ImportPinterestDataJob implements QueueWorkspaceAware, ShouldQueue
             return;
         }
 
-        if (! $this->account->isServiceActive()) {
+        if (!$this->account->isServiceActive()) {
             return;
         }
 
@@ -57,7 +57,6 @@ class ImportPinterestDataJob implements QueueWorkspaceAware, ShouldQueue
 
         /**
          * @see MastodonProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = $this->connectProvider($this->account)->getPins($this->params['bookmark'] ?? '');
@@ -123,10 +122,10 @@ class ImportPinterestDataJob implements QueueWorkspaceAware, ShouldQueue
                     'text' => $item['description'],
                     'link' => $item['link'],
                     'board_id' => $item['board_id'],
-                    'media' => $item['media'],
+                    'media' => $item['media']
                 ]),
                 'metrics' => json_encode([]),
-                'created_at' => Carbon::parse($item['created_at'], 'UTC')->toDateTimeString(),
+                'created_at' => Carbon::parse($item['created_at'], 'UTC')->toDateTimeString()
             ];
         });
 

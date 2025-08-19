@@ -11,8 +11,8 @@ class HandleWorkspaceWebhookEvent
 {
     public function handle(WebhookEvent $event): void
     {
-        if (! WorkspaceManager::current()) {
-            throw new Exception('Current workspace is not set.');
+        if (!WorkspaceManager::current()) {
+            throw new Exception("Current workspace is not set.");
         }
 
         ProcessWorkspaceWebhooksJob::dispatch($event);

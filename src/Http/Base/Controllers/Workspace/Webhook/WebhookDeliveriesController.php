@@ -34,8 +34,8 @@ class WebhookDeliveriesController extends Controller
             'filter' => [
                 'status' => $request->query('status'),
             ],
-            'webhook' => fn () => (new WebhookResource($webhook))->resolve(),
-            'deliveries' => fn () => WebhookDeliveryResource::collection($deliveries)->except(['payload', 'response']),
+            'webhook' => fn() => (new WebhookResource($webhook))->resolve(),
+            'deliveries' => fn() => WebhookDeliveryResource::collection($deliveries)->except(['payload', 'response'])
         ]);
     }
 
@@ -46,7 +46,7 @@ class WebhookDeliveriesController extends Controller
         if ($webhook->isSystem()) {
             abort(404);
         }
-
+        
         $delivery = $webhook->deliveries()->where('uuid', $request->route('delivery'))->firstOrFail();
 
         return new WebhookDeliveryResource($delivery);

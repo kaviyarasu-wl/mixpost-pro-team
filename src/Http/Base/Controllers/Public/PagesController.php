@@ -13,7 +13,7 @@ class PagesController extends Controller
         $page = Page::where('status', true)->where('slug', $slug ?: 'home')->firstOrFail();
 
         return view('mixpost::public.page', [
-            'page' => $page,
+            'page' => $page
         ]);
     }
 }

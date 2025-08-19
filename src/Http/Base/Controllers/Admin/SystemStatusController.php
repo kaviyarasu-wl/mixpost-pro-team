@@ -23,15 +23,15 @@ class SystemStatusController extends Controller
         return Inertia::render('Admin/System/Status', [
             'env' => App::environment(),
             'debug' => config('app.debug'),
-            'horizonStatus' => resolve(HorizonStatus::class)->get(),
-            'hasQueueConnection' => config('queue.connections.mixpost-redis') && ! empty(config('queue.connections.mixpost-redis')),
-            'lastScheduledRun' => $this->getLastScheduleRun(),
-            'broadcastDriver' => Broadcast::driver(),
-            'cacheDriver' => config('cache.default'),
-            'basePath' => base_path(),
+            'horizon_status' => resolve(HorizonStatus::class)->get(),
+            'has_queue_connection' => config('queue.connections.mixpost-redis') && !empty(config('queue.connections.mixpost-redis')),
+            'last_scheduled_run' => $this->getLastScheduleRun(),
+            'broadcast_driver' => Broadcast::driver(),
+            'cache_driver' => config('cache.default'),
+            'base_path' => base_path(),
             'disk' => config('mixpost.disk'),
-            'logChannel' => config('mixpost.log_channel') ? config('mixpost.log_channel') : config('logging.default'),
-            'userAgent' => $request->userAgent(),
+            'log_channel' => config('mixpost.log_channel') ? config('mixpost.log_channel') : config('logging.default'),
+            'user_agent' => $request->userAgent(),
             'versions' => [
                 'php' => PHP_VERSION,
                 'laravel' => App::version(),
@@ -39,8 +39,7 @@ class SystemStatusController extends Controller
                 'mysql' => $this->mysqlVersion(),
                 'mixpost' => InstalledVersions::getVersion('inovector/mixpost-pro-team'),
                 'mixpost_enterprise' => Mixpost::getEnterpriseVersion(),
-            ],
-            'ffmpegStatus' => Util::isFFmpegInstalled() ? __('mixpost::system.backend.installed') : __('mixpost::system.backend.not_installed'),
+            ]
         ]);
     }
 
@@ -48,36 +47,36 @@ class SystemStatusController extends Controller
     {
         $lastScheduleRun = Cache::get('mixpost-last-schedule-run');
 
-        if (! $lastScheduleRun) {
+        if (!$lastScheduleRun) {
             return [
                 'variant' => 'error',
-                'message' => __('mixpost::system.never_started'),
+                'message' => __('mixpost::system.never_started')
             ];
         }
 
-        $diff = (int) abs(Carbon::now('UTC')->diffInMinutes($lastScheduleRun));
+        $diff = (int)abs(Carbon::now('UTC')->diffInMinutes($lastScheduleRun));
 
         if ($diff < 10) {
             return [
                 'variant' => 'success',
-                'message' => __('mixpost::system.ran_time_ago', ['time' => $diff]),
+                'message' => __('mixpost::system.ran_time_ago', ['time' => $diff])
             ];
         }
 
         return [
             'variant' => 'warning',
-            'message' => __('mixpost::system.ran_time_ago', ['time' => $diff]),
+            'message' => __('mixpost::system.ran_time_ago', ['time' => $diff])
         ];
     }
 
     protected function mysqlVersion(): string
     {
-        if (! Util::isMysqlDatabase()) {
+        if (!Util::isMysqlDatabase()) {
             return '';
         }
 
         $results = DB::select('select version() as version');
 
-        return (string) $results[0]->version;
+        return (string)$results[0]->version;
     }
 }

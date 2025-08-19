@@ -16,15 +16,15 @@ class GoogleService extends Service
     {
         return [
             'client_id' => '',
-            'client_secret' => '',
+            'client_secret' => ''
         ];
     }
 
     public static function formRules(): array
     {
         return [
-            'client_id' => ['required'],
-            'client_secret' => ['required'],
+            "client_id" => ['required'],
+            "client_secret" => ['required'],
         ];
     }
 

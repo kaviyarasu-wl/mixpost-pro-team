@@ -20,12 +20,12 @@ class LinkedInService extends Service
         return 'linkedin';
     }
 
-    public static function form(): array
+    static function form(): array
     {
         return [
             'client_id' => '',
             'client_secret' => '',
-            'product' => 'sign_open_id_share',
+            'product' => 'sign_open_id_share'
         ];
     }
 
@@ -43,7 +43,7 @@ class LinkedInService extends Service
         return [
             'client_id' => __('validation.required', ['attribute' => 'Client ID']),
             'client_secret' => __('validation.required', ['attribute' => 'Client Secret']),
-            'product' => __('validation.in', ['attribute' => 'Product']),
+            'product' => __('validation.in', ['attribute' => 'Product'])
         ];
     }
 }

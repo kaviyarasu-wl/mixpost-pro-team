@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         $workspace = Auth::user()->getActiveWorkspace();
 
-        if (! $workspace) {
+        if (!$workspace) {
             $workspace = Auth::user()->workspaces()->recentlyUpdated()->first();
 
             // If there is a recently updated workspace, set it as user active workspace
@@ -25,7 +25,7 @@ class HomeController extends Controller
             }
         }
 
-        if (! $workspace) {
+        if (!$workspace) {
             if (Auth::user()->isAdmin()) {
                 return redirect()->to(route('mixpost.workspaces.create'));
             }

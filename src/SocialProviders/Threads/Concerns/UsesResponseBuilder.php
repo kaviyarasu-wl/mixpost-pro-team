@@ -11,9 +11,9 @@ use Inovector\Mixpost\Support\SocialProviderResponse;
 trait UsesResponseBuilder
 {
     /**
-     * @param  $response  Response
+     * @param $response Response
      */
-    public function buildResponse($response, ?Closure $okResult = null): SocialProviderResponse
+    public function buildResponse($response, Closure $okResult = null): SocialProviderResponse
     {
         $businessUsage = $this->getBusinessUsage($response->headers());
 
@@ -26,7 +26,7 @@ trait UsesResponseBuilder
             $retryAfter = $businessUsage['retry_after'] === 0 ? 60 * 60 : $businessUsage['retry_after'];
         }
 
-        if (! Arr::has($response->json(), 'error')) {
+        if (!Arr::has($response->json(), 'error')) {
             return $this->response(
                 SocialProviderResponseStatus::OK,
                 $okResult ? $okResult() : $response->json(),
@@ -66,15 +66,15 @@ trait UsesResponseBuilder
      *
      * @see https://developers.facebook.com/docs/threads/overview#rate-limiting
      */
-    public function getBusinessUsage(array $headers): ?array
+    public function getBusinessUsage(array $headers): array|null
     {
-        if (! Arr::has($this->values, 'provider_id')) {
+        if (!Arr::has($this->values, 'provider_id')) {
             return null;
         }
 
         $usage = Arr::get($headers, 'x-business-use-case-usage.0', []);
 
-        if (! is_array($usage)) {
+        if (!is_array($usage)) {
             $usage = json_decode($usage, true);
         }
 
@@ -86,7 +86,7 @@ trait UsesResponseBuilder
             'call_count' => Arr::get($usage, '0.call_count', 0),
             'total_cputime' => Arr::get($usage, '0.total_cputime', 0),
             'total_time' => Arr::get($usage, '0.total_time', 0),
-            'retry_after' => Arr::get($usage, '0.estimated_time_to_regain_access', 0) * 60,
+            'retry_after' => Arr::get($usage, '0.estimated_time_to_regain_access', 0) * 60
         ];
     }
 }

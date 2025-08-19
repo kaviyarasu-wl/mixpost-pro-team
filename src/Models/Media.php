@@ -2,24 +2,23 @@
 
 namespace Inovector\Mixpost\Models;
 
-use Exception;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inovector\Mixpost\Concerns\Model\HasUuid;
-use Inovector\Mixpost\Concerns\Model\Media\HasImageData;
 use Inovector\Mixpost\Concerns\OwnedByWorkspace;
-use Inovector\Mixpost\Support\TemporaryFile;
+use Inovector\Mixpost\Support\MediaFilesystem;
+use Inovector\Mixpost\Support\MediaTemporaryDirectory;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use Exception;
 
 class Media extends Model
 {
     use HasFactory;
-    use HasImageData;
     use HasUuid;
     use OwnedByWorkspace;
 
@@ -31,50 +30,61 @@ class Media extends Model
         'disk',
         'path',
         'data',
-        'data->alt_text',
-        'data->adobe_express_doc_id',
         'size',
         'size_total',
-        'conversions',
+        'conversions'
     ];
 
     protected $casts = [
         'id' => 'string',
         'data' => 'array',
-        'conversions' => 'array',
+        'conversions' => 'array'
     ];
 
     protected function source(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => json_decode($attributes['data'], true)['source'] ?? null,
+            get: fn(mixed $value, array $attributes) => json_decode($attributes['data'], true)['source'] ?? null,
         );
     }
 
     protected function author(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => json_decode($attributes['data'], true)['author'] ?? null,
+            get: fn(mixed $value, array $attributes) => json_decode($attributes['data'], true)['author'] ?? null,
         );
     }
 
-    protected function altText(): Attribute
+    /**
+     * Filter media by type.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string|array  $types
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfType($query, string|array $types)
     {
-        return Attribute::make(
-            get: fn (mixed $value, array $attributes) => json_decode($attributes['data'], true)['alt_text'] ?? null,
-        );
-    }
+        $types = (array) $types;
 
-    protected function adobeExpressDocId(): Attribute
-    {
-        return Attribute::make(
-            get: fn (mixed $value, array $attributes) => json_decode($attributes['data'], true)['adobe_express_doc_id'] ?? null,
-        );
-    }
-
-    public function mimeType(): string
-    {
-        return $this->mime_type;
+        return $query->where(function ($query) use ($types) {
+            foreach ($types as $type) {
+                $query->orWhere(function ($query) use ($type) {
+                    match ($type) {
+                        'video' => $query->where('mime_type', 'like', 'video/%'),
+                        'gif' => $query->where(function ($q) {
+                            $q->where('mime_type', 'like', 'image/%')
+                                ->where('mime_type', 'like', '%gif');
+                        }),
+                        'image' => $query->where(function ($q) {
+                            $q->where('mime_type', 'like', 'image/%')
+                                ->where('mime_type', 'not like', '%gif');
+                        }),
+                        default => $query
+                    };
+                });
+            }
+        });
     }
 
     public function getFullPath(): string
@@ -135,15 +145,14 @@ class Media extends Model
         }
 
         // Download from external adapter (s3...etc.) and read the stream
-        if (! $this->isLocalAdapter()) {
-            $temporaryFile = TemporaryFile::make()->fromDisk(
-                sourceDisk: $disk,
-                sourceFilepath: $path
-            );
+        if (!$this->isLocalAdapter()) {
+            $temporaryDirectory = MediaTemporaryDirectory::create();
+            $tempFilePath = $temporaryDirectory->path($path);
+            MediaFilesystem::copyFromDisk($path, $disk, $tempFilePath);
 
             return [
-                'stream' => $temporaryFile->readStream(),
-                'temporaryDirectory' => $temporaryFile->directory(),
+                'stream' => fopen($tempFilePath, 'r'),
+                'temporaryDirectory' => $temporaryDirectory,
             ];
         }
 
@@ -162,14 +171,13 @@ class Media extends Model
         $disk = $this->disk;
         $path = $this->path;
 
-        $temporaryFile = TemporaryFile::make()->fromDisk(
-            sourceDisk: $disk,
-            sourceFilepath: $path
-        );
+        $temporaryDirectory = MediaTemporaryDirectory::create();
+        $tempFilePath = $temporaryDirectory->path($path);
+        MediaFilesystem::copyFromDisk($path, $disk, $tempFilePath);
 
         return [
-            'temporaryDirectory' => $temporaryFile->directory(),
-            'fullPath' => $temporaryFile->path(),
+            'temporaryDirectory' => $temporaryDirectory,
+            'fullPath' => $tempFilePath,
         ];
     }
 

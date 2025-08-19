@@ -12,9 +12,9 @@ use Inovector\Mixpost\Support\SocialProviderResponse;
 trait ManagesRateLimit
 {
     /**
-     * @param  $response  Response
+     * @param $response Response
      */
-    public function buildResponse($response, ?Closure $okResult = null): SocialProviderResponse
+    public function buildResponse($response, Closure $okResult = null): SocialProviderResponse
     {
         $usage = $this->getRateLimitUsage($response);
 
@@ -63,7 +63,7 @@ trait ManagesRateLimit
             SocialProviderResponseStatus::ERROR,
             [
                 'data' => $response->json(),
-                'reason' => $response->reason(),
+                'reason' => $response->reason()
             ],
             $rateLimitAboutToBeExceeded,
             $retryAfter,
@@ -100,7 +100,7 @@ trait ManagesRateLimit
         return [
             'limit' => $limit,
             'about_to_be_exceeded' => $rateLimit->isAboutToBeExceeded(20),
-            'retry_after' => $timeframeInMinutes * 60,
+            'retry_after' => $timeframeInMinutes * 60
         ];
     }
 }

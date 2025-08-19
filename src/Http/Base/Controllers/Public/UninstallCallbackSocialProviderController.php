@@ -2,11 +2,11 @@
 
 namespace Inovector\Mixpost\Http\Base\Controllers\Public;
 
-use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Http\Request;
 use Inovector\Mixpost\Facades\SocialProviderManager;
+use Exception;
 
 class UninstallCallbackSocialProviderController extends Controller
 {
@@ -15,7 +15,7 @@ class UninstallCallbackSocialProviderController extends Controller
         try {
             $connection = SocialProviderManager::connect($providerName);
 
-            if (! method_exists($connection, 'handleUninstallRequest')) {
+            if (!method_exists($connection, 'handleUninstallRequest')) {
                 return $this->redirectHome();
             }
 

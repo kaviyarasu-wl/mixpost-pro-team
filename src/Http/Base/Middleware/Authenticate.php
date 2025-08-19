@@ -15,21 +15,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Authenticate
 {
-    use UsesAuth;
     use UsesUserModel;
+    use UsesAuth;
 
     public function handle(Request $request, Closure $next)
     {
-        if (! Auth::check()) {
+        if (!Auth::check()) {
             return $this->redirectTo($request);
         }
 
-        if (! Gate::allows('viewMixpost')) {
+        if (!Gate::allows('viewMixpost')) {
             abort(403);
         }
 
         // TODO: Find a better way to use the custom model instance
-        if (! Auth::user() instanceof User) {
+        if (!Auth::user() instanceof User) {
             $user = self::getUserClass()::make(Auth::user()
                 ->only('name', 'email'))
                 ->setAttribute('email_verified_at', Auth::user()->email_verified_at)
@@ -43,7 +43,7 @@ class Authenticate
 
     protected function redirectTo(Request $request): JsonResponse|Response
     {
-        if (! $request->expectsJson()) {
+        if (!$request->expectsJson()) {
             $request->session()->put('url.intended', url()->current());
 
             return Inertia::location(route(config('mixpost.redirect_unauthorized_users_to_route')));

@@ -40,7 +40,6 @@ class CreateAdmin extends Command
         if ($user = self::getUserClass()::where('email', $email)->first()) {
             if ($user->isAdmin()) {
                 $this->error('This user is already a Mixpost admin!');
-
                 return self::FAILURE;
             }
 
@@ -48,7 +47,6 @@ class CreateAdmin extends Command
                 $user->admin()->create();
 
                 $this->success("You have granted admin access to $email");
-
                 return self::SUCCESS;
             } else {
                 return self::FAILURE;
@@ -60,7 +58,7 @@ class CreateAdmin extends Command
 
         $validator = Validator::make([
             'name' => $name,
-            'password' => $password,
+            'password' => $password
         ], [
             'name' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string'],
@@ -80,14 +78,13 @@ class CreateAdmin extends Command
             $user = self::getUserClass()::create([
                 'name' => $name,
                 'email' => $email,
-                'password' => bcrypt($password),
+                'password' => bcrypt($password)
             ]);
 
             $user->admin()->create();
         });
 
         $this->success("Admin $email created!");
-
         return self::SUCCESS;
     }
 

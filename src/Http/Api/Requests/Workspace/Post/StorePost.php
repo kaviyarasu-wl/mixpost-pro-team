@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inovector\Mixpost\Concerns\Approval;
 use Inovector\Mixpost\Enums\PostStatus;
-use Inovector\Mixpost\Events\Post\PostCreated;
 use Inovector\Mixpost\Events\Post\PostScheduled;
 use Inovector\Mixpost\Events\Post\SchedulingPost;
 use Inovector\Mixpost\Models\Post;
@@ -35,8 +34,6 @@ class StorePost extends PostFormRequest
 
             return $record;
         });
-
-        PostCreated::dispatch($post);
 
         if ($this->canSchedule()) {
             SchedulingPost::dispatch($post, $this);
@@ -69,6 +66,6 @@ class StorePost extends PostFormRequest
 
     protected function canSchedule(): bool
     {
-        return $this->getScheduledAt() && ! empty($this->input('accounts')) && ($this->input('schedule') || $this->input('schedule_now') || $this->input('queue'));
+        return $this->getScheduledAt() && !empty($this->input('accounts')) && ($this->input('schedule') || $this->input('schedule_now') || $this->input('queue'));
     }
 }

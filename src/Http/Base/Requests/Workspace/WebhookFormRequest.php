@@ -25,7 +25,7 @@ abstract class WebhookFormRequest extends FormRequest
                 'string',
                 Rule::in(WorkspaceManager::current() ?
                     WebhookManager::getWorkspaceSelectionOptionKeys() :
-                    WebhookManager::getSystemSelectionOptionKeys()),
+                    WebhookManager::getSystemSelectionOptionKeys())
             ],
             'active' => ['required', 'boolean'],
         ];

@@ -4,9 +4,9 @@ namespace Inovector\Mixpost\Http\Api\Middleware;
 
 use Closure;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Support\Facades\Gate;
 use Inovector\Mixpost\Concerns\UsesUserModel;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Symfony\Component\HttpFoundation\Response;
 
 class Authenticate extends Middleware
@@ -21,7 +21,7 @@ class Authenticate extends Middleware
             return response()->json(['message' => 'Unauthenticated.'], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (! Gate::allows('viewMixpost')) {
+        if (!Gate::allows('viewMixpost')) {
             return response()->json(['message' => 'Access forbidden.'], Response::HTTP_FORBIDDEN);
         }
 

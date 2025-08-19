@@ -15,7 +15,7 @@ trait ManagesComments
     {
         $parentModel = $parent instanceof PostActivity ? $parent : $this->activities()->find($parent);
 
-        if ($parentModel && ! $parentModel->isComment()) {
+        if ($parentModel && !$parentModel->isComment()) {
             throw new LogicException('Parent activity is not a comment');
         }
 

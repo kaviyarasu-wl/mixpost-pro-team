@@ -20,9 +20,8 @@ class AccountEntitiesController extends Controller
     {
         $providerName = $request->route('provider');
 
-        if (! $request->session()->has('mixpost_callback_response')) {
-            return redirect()->route('mixpost.accounts.index', ['workspace' => WorkspaceManager::current()->uuid])
-                ->with('error', __('mixpost::error.backend.missing_callback_response'));
+        if (!$request->session()->has('mixpost_callback_response')) {
+            return redirect()->route('mixpost.accounts.index', ['workspace' => WorkspaceManager::current()->uuid]);
         }
 
         $provider = SocialProviderManager::connect($providerName);
@@ -49,7 +48,7 @@ class AccountEntitiesController extends Controller
         $existingAccounts = Account::select('provider', 'provider_id')->get();
 
         $entities = collect($response->context())->map(function ($entity) use ($providerName, $existingAccounts) {
-            $entity['connected'] = (bool) $existingAccounts
+            $entity['connected'] = !!$existingAccounts
                 ->where('provider', $providerName)
                 ->where('provider_id', $entity['id'])
                 ->first();
@@ -59,14 +58,14 @@ class AccountEntitiesController extends Controller
             return $account['connected'];
         })->values();
 
-        if ($entities->isEmpty()) {
+        if (empty($entities)) {
             return redirect()->route('mixpost.accounts.index', ['workspace' => WorkspaceManager::current()->uuid])
                 ->with('warning', __('mixpost::account.account_no_entities'));
         }
 
         return Inertia::render('Workspace/Accounts/AccountEntities', [
             'provider' => $providerName,
-            'entities' => $entities,
+            'entities' => $entities
         ]);
     }
 

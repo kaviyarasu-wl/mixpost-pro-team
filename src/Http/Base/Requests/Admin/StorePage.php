@@ -20,8 +20,8 @@ class StorePage extends FormRequest
             'meta_description' => ['sometimes', 'nullable', 'max:1000'],
             'slug' => ['required', 'max:255', 'unique:mixpost_pages,slug'],
             'layout' => ['required', Rule::in(['default', 'medium', 'small'])],
-            'status' => ['required', 'integer', new ResourceStatusRule],
-            'blocks' => ['array'],
+            'status' => ['required', 'integer', new ResourceStatusRule()],
+            'blocks' => ['array']
         ];
     }
 
@@ -36,13 +36,13 @@ class StorePage extends FormRequest
                 'meta_title' => $this->input('meta_title'),
                 'meta_description' => $this->input('meta_description'),
                 'layout' => $this->input('layout'),
-                'status' => $this->input('status'),
+                'status' => $this->input('status')
             ]);
 
             foreach ($this->input('blocks', []) as $sortOrder => $blockId) {
                 if (in_array($blockId, $blocks->toArray())) {
                     $page->blocks()->attach($blockId, [
-                        'sort_order' => $sortOrder,
+                        'sort_order' => $sortOrder
                     ]);
                 }
             }

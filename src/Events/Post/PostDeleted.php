@@ -11,7 +11,6 @@ class PostDeleted implements WebhookEvent
     use Dispatchable, SerializesModels;
 
     public array $uuids;
-
     public bool $toTrash;
 
     public function __construct(array $uuids, bool $toTrash = false)
@@ -36,7 +35,7 @@ class PostDeleted implements WebhookEvent
             'uuids' => $this->uuids,
         ];
 
-        if (! $this->toTrash) {
+        if (!$this->toTrash) {
             $data['deleted'] = true;
         }
 

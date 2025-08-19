@@ -19,7 +19,7 @@ class StorePinterestBorder extends FormRequest
     {
         return [
             'account_uuid' => ['required', 'string'],
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:100']
         ];
     }
 
@@ -38,7 +38,6 @@ class StorePinterestBorder extends FormRequest
     {
         /**
          * @var $response SocialProviderResponse
-         *
          * @see PinterestProvider
          */
         $response = $this->connectProvider($this->account)->createBoard($this->input('name'));
@@ -59,9 +58,9 @@ class StorePinterestBorder extends FormRequest
         $this->account->update([
             'data' => [
                 'relationships' => [
-                    'boards' => $boards,
-                ],
-            ],
+                    'boards' => $boards
+                ]
+            ]
         ]);
 
         return $response;

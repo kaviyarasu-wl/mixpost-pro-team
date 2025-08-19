@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config as ConfigApp;
-use Inovector\Mixpost\Contracts\Config as ConfigContract;
 use Inovector\Mixpost\Models\Config as ConfigModel;
+use Inovector\Mixpost\Contracts\Config as ConfigContract;
 
 abstract class Config implements ConfigContract
 {
-    public function __construct(public readonly ?Request $request = null) {}
+    public function __construct(public readonly ?Request $request = null)
+    {
+
+    }
 
     public function save(array $data = []): void
     {
@@ -31,7 +34,7 @@ abstract class Config implements ConfigContract
     public function insert(string $name, mixed $payload): void
     {
         ConfigModel::updateOrCreate(['name' => $name, 'group' => $this->group()], [
-            'payload' => $payload,
+            'payload' => $payload
         ]);
     }
 
@@ -68,7 +71,7 @@ abstract class Config implements ConfigContract
 
     public function forgetCache(?string $name = null): void
     {
-        if (! $name) {
+        if (!$name) {
             foreach ($this->all() as $name) {
                 $this->forgetCache($name);
             }
@@ -81,6 +84,6 @@ abstract class Config implements ConfigContract
 
     private function resolveCacheKey(string $key): string
     {
-        return ConfigApp::get('mixpost.cache_prefix').".configs.{$this->group()}.$key";
+        return ConfigApp::get('mixpost.cache_prefix') . ".configs.{$this->group()}.$key";
     }
 }

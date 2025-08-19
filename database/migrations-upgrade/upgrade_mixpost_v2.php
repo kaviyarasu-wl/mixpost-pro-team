@@ -5,18 +5,18 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Inovector\Mixpost\Models\Service;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         if (Schema::hasTable('mixpost_services')) {
-            if (Schema::hasColumn('mixpost_services', 'credentials') && ! Schema::hasColumn('mixpost_services', 'configuration')) {
+            if (Schema::hasColumn('mixpost_services', 'credentials') && !Schema::hasColumn('mixpost_services', 'configuration')) {
                 Schema::table('mixpost_services', function (Blueprint $table) {
                     $table->renameColumn('credentials', 'configuration');
                 });
             }
 
-            if (! Schema::hasColumn('mixpost_services', 'active')) {
+
+            if (!Schema::hasColumn('mixpost_services', 'active')) {
                 Schema::table('mixpost_services', function (Blueprint $table) {
                     $table->boolean('active')->default(false);
                 });
@@ -25,7 +25,7 @@ return new class extends Migration
             Service::query()->update(['active' => true]);
         }
 
-        if (! Schema::hasTable('mixpost_user_tokens')) {
+        if (!Schema::hasTable('mixpost_user_tokens')) {
             Schema::create('mixpost_user_tokens', function (Blueprint $table) {
                 $table->id();
                 $table->bigInteger('user_id')->unsigned()->index();
@@ -38,7 +38,7 @@ return new class extends Migration
             });
         }
 
-        if (! Schema::hasTable('mixpost_webhooks')) {
+        if (!Schema::hasTable('mixpost_webhooks')) {
             Schema::create('mixpost_webhooks', function (Blueprint $table) {
                 $table->id();
                 $table->uuid('uuid')->unique();
@@ -58,7 +58,7 @@ return new class extends Migration
             });
         }
 
-        if (! Schema::hasTable('mixpost_webhook_deliveries')) {
+        if (!Schema::hasTable('mixpost_webhook_deliveries')) {
             Schema::create('mixpost_webhook_deliveries', function (Blueprint $table) {
                 $table->id();
                 $table->uuid('uuid')->unique();

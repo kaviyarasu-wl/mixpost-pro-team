@@ -13,10 +13,7 @@ use Inovector\Mixpost\Util;
 trait ManagesYoutubeResources
 {
     protected string $apiVersion = 'v3';
-
     protected string $apiUrl = 'https://www.googleapis.com/youtube';
-
-    protected string $apiUploadUrl = 'https://www.googleapis.com/upload/youtube';
 
     public function getAccount(): SocialProviderResponse
     {
@@ -49,7 +46,7 @@ trait ManagesYoutubeResources
             ->get("$this->apiUrl/$this->apiVersion/channels", [
                 'part' => 'snippet',
                 'maxResults' => 50,
-                'mine' => true,
+                'mine' => true
             ]);
 
         return $this->buildResponse($response, function () use ($response) {
@@ -58,7 +55,7 @@ trait ManagesYoutubeResources
                     'id' => Arr::get($item, 'id'),
                     'name' => Arr::get($item, 'snippet.title'),
                     'username' => Str::of(Arr::get($item, 'snippet.customUrl', ''))->replace('@', ''),
-                    'image' => Arr::get($item, 'snippet.thumbnails.medium.url'),
+                    'image' => Arr::get($item, 'snippet.thumbnails.medium.url')
                 ];
             })->toArray();
         });
@@ -79,7 +76,7 @@ trait ManagesYoutubeResources
         /** @var $mediaItem Media * */
         $mediaItem = $media->first();
 
-        if (! $mediaItem?->isVideo()) {
+        if (!$mediaItem?->isVideo()) {
             return $this->response(SocialProviderResponseStatus::ERROR, ['video_not_selected']);
         }
 
@@ -90,7 +87,7 @@ trait ManagesYoutubeResources
             ],
             'status' => [
                 'privacyStatus' => $params['status'] ?? 'public',
-            ],
+            ]
         ]);
 
         $session = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
@@ -99,7 +96,7 @@ trait ManagesYoutubeResources
                 'X-Upload-Content-Type' => 'video/*',
             ])
             ->withBody($data, 'application/json; charset=UTF-8')
-            ->post("$this->apiUploadUrl/$this->apiVersion/videos?uploadType=resumable&part=snippet,status");
+            ->post("https://www.googleapis.com/upload/youtube/$this->apiVersion/videos?uploadType=resumable&part=snippet,status");
 
         if ($session->status() !== 200) {
             return $this->response(SocialProviderResponseStatus::ERROR, $session->json());
@@ -111,7 +108,7 @@ trait ManagesYoutubeResources
         $upload = function ($timeout) use ($uploadUrl, $stream) {
             return $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
                 ->timeout($timeout)
-                ->withBody($stream['stream'], 'video/*')
+                ->withBody($stream['stream'], "video/*")
                 ->put($uploadUrl);
         };
 
@@ -119,55 +116,17 @@ trait ManagesYoutubeResources
 
         Util::closeAndDeleteStreamResource($stream);
 
-        $videoId = $result->json('id');
-
-        $thumbId = collect($params['video_thumbs'] ?? [])->firstWhere('media_id', $mediaItem->id)['thumb_id'] ?? null;
-
-        if ($thumbId) {
-            $customVideoThumb = Media::where('id', $thumbId)->first();
-
-            $session = $this->getHttpClient()::withToken($this->getAccessToken()['access_token'])
-                ->withBody($customVideoThumb->contents(), 'application/octet-stream')
-                ->post("$this->apiUploadUrl/$this->apiVersion/thumbnails/set?videoId=$videoId&uploadType=multipart");
-
-            if ($session->status() !== 200) {
-                return $this->response(SocialProviderResponseStatus::ERROR, $session->json());
-            }
-        }
-
         return $this->buildResponse($result, function () use ($result) {
             $data = $result->json();
 
             return [
-                'id' => $data['id'],
+                'id' => $data['id']
             ];
         });
     }
 
-    public function deletePost(string $id, array $params = []): SocialProviderResponse
+    public function deletePost($id): SocialProviderResponse
     {
-        if ($this->tokenIsAboutToExpire()) {
-            $newAccessToken = $this->refreshToken();
-
-            if ($newAccessToken->hasError()) {
-                return $newAccessToken;
-            }
-
-            $this->updateToken($newAccessToken->context());
-        }
-
-        $token = $this->getAccessToken()['access_token'];
-
-        $response = $this->getHttpClient()::withToken($token)->delete("$this->apiUrl/$this->apiVersion/videos?id=$id");
-
-        if ($response->notFound()) {
-            /**
-             * Handle 404 response when attempting to delete a post that no longer exists on the platform.
-             * This occurs when we have a stored post_provider_id but the post has already been deleted directly on the platform.
-             */
-            return $this->response(SocialProviderResponseStatus::OK, []);
-        }
-
-        return $this->buildResponse($response);
+        return $this->response(SocialProviderResponseStatus::OK, []);
     }
 }

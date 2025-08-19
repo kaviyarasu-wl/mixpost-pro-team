@@ -37,14 +37,14 @@ class TagsController extends Controller
     public function update(UpdateTag $updateTag): JsonResponse
     {
         return response()->json([
-            'success' => (bool) $updateTag->handle(),
+            'success' => (bool)$updateTag->handle(),
         ]);
     }
 
     public function destroy(Request $request): JsonResponse
     {
         return response()->json([
-            'success' => (bool) Tag::where('uuid', $request->route('tag'))->delete(),
+            'success' => (bool)Tag::where('uuid', $request->route('tag'))->delete()
         ]);
     }
 }

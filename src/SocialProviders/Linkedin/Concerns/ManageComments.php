@@ -14,8 +14,8 @@ trait ManageComments
                 'actor' => "urn:li:{$this->author()}:{$this->values['provider_id']}",
                 'object' => $postId,
                 'message' => [
-                    'text' => $text,
-                ],
+                    'text' => $text
+                ]
             ]);
 
         return $this->buildResponse($response);

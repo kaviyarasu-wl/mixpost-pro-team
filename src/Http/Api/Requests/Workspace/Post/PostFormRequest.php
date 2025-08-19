@@ -16,7 +16,7 @@ abstract class PostFormRequest extends BasePostForm
                     return;
                 }
 
-                if (! in_array($value, $this->inputAccounts())) {
+                if (!in_array($value, $this->inputAccounts())) {
                     $fail('The account_id must be in the accounts field.');
                 }
             }],

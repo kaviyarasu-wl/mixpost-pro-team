@@ -9,7 +9,7 @@ class SubscribePostToActivitiesNotification
 {
     public function handle(ShouldReceivePostModel $event): void
     {
-        if (! Features::isAutoSubscribePostActivitiesEnabled()) {
+        if (!Features::isAutoSubscribePostActivitiesEnabled()) {
             return;
         }
 

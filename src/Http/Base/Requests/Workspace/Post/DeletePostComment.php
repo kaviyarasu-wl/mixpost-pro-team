@@ -31,7 +31,7 @@ class DeletePostComment extends PostFormRequest
             $isAuthor = $this->activity?->user_id === Auth::id();
             $isAdmin = Auth::user()->hasWorkspace(WorkspaceManager::current(), WorkspaceUserRole::ADMIN);
 
-            if ($this->activity && ! $isAuthor && ! $isAdmin) {
+            if ($this->activity && !$isAuthor && !$isAdmin) {
                 $validator->errors()->add('user', 'You are not allowed to update this comment.');
             }
         });
@@ -39,7 +39,7 @@ class DeletePostComment extends PostFormRequest
 
     public function handle(): bool
     {
-        if (! $this->activity || ! $this->activity->isComment()) {
+        if (!$this->activity || !$this->activity->isComment()) {
             abort(404);
         }
 

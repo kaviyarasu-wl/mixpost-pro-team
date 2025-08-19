@@ -18,13 +18,14 @@ use Inovector\Mixpost\Http\Base\Resources\AccountResource;
 use Inovector\Mixpost\SocialProviders\Meta\InstagramProvider;
 use Inovector\Mixpost\Support\SocialProviderResponse;
 
-// / TODO: Integrate this Job
-class UpdateInstagramPostShortcodeJob implements QueueWorkspaceAware, ShouldBeUnique, ShouldQueue
+/// TODO: Integrate this Job
+class UpdateInstagramPostShortcodeJob implements ShouldQueue, ShouldBeUnique, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use UsesSocialProviderManager;
     use HasSocialProviderJobRateLimit;
     use SocialProviderException;
-    use UsesSocialProviderManager;
 
     public $deleteWhenMissingModels = true;
 
@@ -49,7 +50,6 @@ class UpdateInstagramPostShortcodeJob implements QueueWorkspaceAware, ShouldBeUn
 
         /**
          * @see InstagramProvider
-         *
          * @var SocialProviderResponse $response
          */
         $response = $this->connectProvider($this->account->resource)->getPost($this->account->pivot->provider_post_id, 'shortcode');
@@ -83,13 +83,13 @@ class UpdateInstagramPostShortcodeJob implements QueueWorkspaceAware, ShouldBeUn
             ->where('provider_post_id', $this->account->pivot->provider_post_id)
             ->update([
                 'data' => [
-                    'shortcode' => $response->shortcode,
-                ],
+                    'shortcode' => $response->shortcode
+                ]
             ]);
     }
 
     public function uniqueId(): string
     {
-        return $this->account->id.$this->account->pivot->provider_post_id;
+        return $this->account->id . $this->account->pivot->provider_post_id;
     }
 }

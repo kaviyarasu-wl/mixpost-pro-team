@@ -26,7 +26,7 @@ class UpdateAuthUser extends FormRequest
 
         $user->update([
             'name' => $this->input('name'),
-            'email' => $this->input('email'),
+            // 'email' => $this->input('email'),
         ]);
     }
 }

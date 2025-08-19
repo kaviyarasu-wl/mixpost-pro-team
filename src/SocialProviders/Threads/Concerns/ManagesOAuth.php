@@ -12,12 +12,12 @@ trait ManagesOAuth
         $params = [
             'client_id' => $this->clientId,
             'redirect_uri' => $this->redirectUrl,
-            'scope' => 'threads_basic,threads_delete,threads_content_publish,threads_manage_replies,threads_manage_insights',
+            'scope' => 'threads_basic,threads_content_publish,threads_manage_replies,threads_manage_insights',
             'response_type' => 'code',
-            'state' => $this->values['state'],
+            'state' => $this->values['state']
         ];
 
-        return $this->buildUrlFromBase('https://threads.net/oauth/authorize', $params);
+        return $this->buildUrlFromBase("https://threads.net/oauth/authorize", $params);
     }
 
     public function requestAccessToken(array $params = []): array
@@ -34,13 +34,7 @@ trait ManagesOAuth
 
         if (isset($response['error_message'])) {
             return [
-                'error' => $response['error_message'],
-            ];
-        }
-
-        if (! isset($response['access_token'])) {
-            return [
-                'error' => __('mixpost::error.invalid_grant'),
+                'error' => $response['error_message']
             ];
         }
 
@@ -52,14 +46,14 @@ trait ManagesOAuth
         $params = [
             'grant_type' => 'th_exchange_token',
             'client_secret' => $this->clientSecret,
-            'access_token' => $shortLivedAccessToken ?: $this->getAccessToken()['access_token'],
+            'access_token' => $shortLivedAccessToken ?: $this->getAccessToken()['access_token']
         ];
 
         $response = $this->getHttpClient()::get("$this->graphUrl/access_token", $params)->json();
 
         if (isset($response['error_message'])) {
             return [
-                'error' => $response['error_message'],
+                'error' => $response['error_message']
             ];
         }
 
@@ -69,7 +63,7 @@ trait ManagesOAuth
         ];
     }
 
-    public function refreshToken(?string $refreshToken = null): SocialProviderResponse
+    public function refreshToken(string $refreshToken = null): SocialProviderResponse
     {
         $params = [
             'grant_type' => 'th_refresh_token',

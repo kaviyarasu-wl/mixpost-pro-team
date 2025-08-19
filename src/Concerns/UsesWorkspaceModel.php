@@ -11,7 +11,7 @@ trait UsesWorkspaceModel
     {
         $model = Mixpost::getCustomWorkspaceModel();
 
-        if (! $model) {
+        if (!$model) {
             return Workspace::class;
         }
 

@@ -23,19 +23,23 @@ class Theme
 
     public function colors(): array
     {
-        if (! empty($this->customColors)) {
+        if (!empty($this->customColors)) {
             return $this->customColors;
         }
 
         return [
             'primary_colors' => [
-                '50' => '#EDECF8',
-                '100' => '#DCDAF1',
-                '200' => '#B8B4E4',
-                '500' => '#4F46BB',
-                '700' => '#2F2970',
-                '800' => '#1F1B4B',
-                '900' => '#100E25',
+                '50' => "#ebf4ff",
+                '100' => "#dbe9ff",
+                '200' => "#bed7ff",
+                '300' => "#97bbff",
+                '400' => "#6e92ff",
+                '500' => "#2E41FF",
+                '600' => "#2e42ff",
+                '700' => "#202fe2",
+                '800' => "#1d2bb6",
+                '900' => "#202d8f",
+                '950' => "#131953",
             ],
             'primary_ring_focus' => 'rgba(184,180,228,0.5)',
             'primary_context' => '#ffffff',

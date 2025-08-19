@@ -11,7 +11,7 @@ class UpdateHashtagGroup extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'content' => ['required', 'string', 'max:3000'],
+            'content' => ['required', 'string', 'max:3000']
         ];
     }
 

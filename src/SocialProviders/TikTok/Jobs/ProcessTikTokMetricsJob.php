@@ -15,7 +15,7 @@ use Inovector\Mixpost\Models\Account;
 use Inovector\Mixpost\Models\ImportedPost;
 use Inovector\Mixpost\Models\Metric;
 
-class ProcessTikTokMetricsJob implements QueueWorkspaceAware, ShouldQueue
+class ProcessTikTokMetricsJob implements ShouldQueue, QueueWorkspaceAware
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -50,7 +50,7 @@ class ProcessTikTokMetricsJob implements QueueWorkspaceAware, ShouldQueue
                     'shares' => $item->shares,
                     'comments' => $item->comments,
                     'views' => $item->views,
-                ]),
+                ])
             ];
         });
 

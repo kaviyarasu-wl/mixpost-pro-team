@@ -10,9 +10,9 @@ use RuntimeException;
 
 trait CarouselPost
 {
+    use UsesAccessToken;
     use ManagesContainer;
     use ManagesContainerPublishing;
-    use UsesAccessToken;
 
     protected function createCarouselPost(Collection $media, array $data = []): SocialProviderResponse
     {
@@ -63,7 +63,7 @@ trait CarouselPost
         $response = $this->createContainer(
             data: array_merge([
                 'media_type' => 'CAROUSEL',
-                'children' => implode(',', $creationIds),
+                'children' => implode(',', $creationIds)
             ], $data)
         );
 

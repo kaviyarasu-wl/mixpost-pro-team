@@ -11,9 +11,9 @@ use Inovector\Mixpost\Contracts\QueueWorkspaceAware;
 use Inovector\Mixpost\Http\Base\Resources\PostActivityResource;
 use Inovector\Mixpost\Models\PostActivity;
 
-class PostCommentUpdated implements QueueWorkspaceAware, ShouldBroadcast
+class PostCommentUpdated implements ShouldBroadcast, QueueWorkspaceAware
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels, InteractsWithSockets;
 
     public $deleteWhenMissingModels = true;
 
@@ -26,7 +26,7 @@ class PostCommentUpdated implements QueueWorkspaceAware, ShouldBroadcast
 
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('mixpost_posts.'.$this->activity->post?->uuid);
+        return new PrivateChannel('mixpost_posts.' . $this->activity->post?->uuid);
     }
 
     public function broadcastWith(): array

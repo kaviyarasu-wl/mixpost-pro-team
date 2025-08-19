@@ -4,6 +4,7 @@ namespace Inovector\Mixpost\SocialProviders\Twitter\Concerns;
 
 use Abraham\TwitterOAuth\TwitterOAuthException;
 use Illuminate\Validation\ValidationException;
+use Inovector\Mixpost\Support\Log;
 
 trait ManagesOAuth
 {
@@ -12,11 +13,12 @@ trait ManagesOAuth
         try {
             $result = $this->connection->oauth('oauth/request_token', [
                 'x_auth_access_type' => 'write',
-                'oauth_callback' => "$this->redirectUrl?state={$this->values['state']}",
+                'oauth_callback' => "$this->redirectUrl?state={$this->values['state']}"
             ]);
 
             return $this->connection->url('oauth/authorize', ['oauth_token' => $result['oauth_token']]);
         } catch (TwitterOAuthException $e) {
+            Log::error("Twitter Get Auth Url Exception:", [$e]);
             throw ValidationException::withMessages([
                 'service_auth' => [__('mixpost::error.service_auth_failed', ['service' => 'X'])],
             ]);
@@ -29,7 +31,7 @@ trait ManagesOAuth
 
         return [
             'oauth_token' => $result['oauth_token'],
-            'oauth_token_secret' => $result['oauth_token_secret'],
+            'oauth_token_secret' => $result['oauth_token_secret']
         ];
     }
 

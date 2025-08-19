@@ -14,7 +14,7 @@ class ApprovePostController extends Controller
     {
         $approvePost->handle();
 
-        $scheduledAt = $approvePost->getDateTime()->tz(Settings::get('timezone'))->translatedFormat('D, M j, '.Util::timeFormat());
+        $scheduledAt = $approvePost->getDateTime()->tz(Settings::get('timezone'))->translatedFormat("D, M j, " . Util::timeFormat());
 
         return response()->json([
             'scheduled_at' => $scheduledAt,
